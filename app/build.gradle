@@ -69,4 +69,6 @@ dependencies {
     annotationProcessor 'com.gabrielittner.auto.value:auto-value-with:1.0.0'
     provided 'com.google.auto.value:auto-value:1.2'
     provided 'com.ryanharter.auto.value:auto-value-gson:0.4.6'
+    compile 'commons-validator:commons-validator:1.4.0'
+    compile 'commons-codec:commons-codec:1.4'
 }
