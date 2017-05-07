@@ -8,10 +8,13 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import butterknife.BindView;
 import butterknife.Unbinder;
 import hr.lordsofsmell.parfume.AndroidApplication;
+import hr.lordsofsmell.parfume.R;
 import hr.lordsofsmell.parfume.dagger.components.AppComponent;
 import hr.lordsofsmell.parfume.feature.core.ICore;
 
@@ -20,6 +23,9 @@ public abstract class ActivityView extends AppCompatActivity implements ICore.Vi
     private ICore.Presenter presenter;
     private Dialog dialog;
     private Unbinder unbinder;
+
+    @BindView(R.id.tv_perfume_company)
+    TextView sd;
 
     @LayoutRes
     protected abstract int getLayoutResId();
@@ -54,22 +60,25 @@ public abstract class ActivityView extends AppCompatActivity implements ICore.Vi
     @Override
     protected void onResume() {
         super.onResume();
-        if(presenter != null) {
-        presenter.onResume();}
+        if (presenter != null) {
+            presenter.onResume();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if(presenter != null) {
-        presenter.onPause();}
+        if (presenter != null) {
+            presenter.onPause();
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if(presenter != null) {
-        presenter.onStop();}
+        if (presenter != null) {
+            presenter.onStop();
+        }
     }
 
     @Override
@@ -80,8 +89,9 @@ public abstract class ActivityView extends AppCompatActivity implements ICore.Vi
         dialog = null;
         unbinder.unbind();
 
-        if(presenter != null) {
-        presenter.onDestroy();}
+        if (presenter != null) {
+            presenter.onDestroy();
+        }
     }
 
     @Override

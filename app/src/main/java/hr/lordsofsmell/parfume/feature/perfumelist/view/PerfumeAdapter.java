@@ -32,7 +32,7 @@ public class PerfumeAdapter extends MjolnirRecyclerAdapter<PerfumeItem> {
         return new ViewHolder(view);
     }
 
-    private class ViewHolder extends MjolnirViewHolder<PerfumeItem> {
+    class ViewHolder extends MjolnirViewHolder<PerfumeItem> {
 
         @BindView(R.id.item_perfume_root)
         View rootView;

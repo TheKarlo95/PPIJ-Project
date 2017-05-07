@@ -10,17 +10,19 @@ import com.google.gson.annotations.SerializedName;
 import hr.lordsofsmell.parfume.annotations.Redacted;
 import hr.lordsofsmell.parfume.domain.model.Gender;
 
+import static android.R.attr.password;
+
 @AutoValue
 public abstract class User implements Parcelable {
 
     public static User create(Long id,
                               String token,
-                              String password,
+                              String username,
                               String email,
                               String name,
                               String surname,
                               Gender gender) {
-        return new AutoValue_User(id, token, password, email, name, surname, gender);
+        return new AutoValue_User(id, token, username, email, name, surname, gender);
     }
 
     @SerializedName("id")
