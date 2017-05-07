@@ -5,6 +5,8 @@
     <string name="get_liked_perfumes_error">Error happened while getting list of all liked perfumes</string>
     <string name="get_wishlisted_perfumes_error">Error happened while getting list of all perfumes from wishlist</string>
     <string name="get_owned_perfumes_error">Error happened while getting list of all owned perfumes</string>
+    <string name="login_error">Error happened while logging in</string>
+
 
     <string name="title_activity_perfume_list">PerfumeListActivity</string>
 
@@ -12,4 +14,5 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="perfume_image">Perfume image</string>
+    <string name="login_username">Username</string>
 </resources>
