@@ -4,6 +4,7 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import hr.lordsofsmell.parfume.dagger.modules.PerfumeListModule;
+import hr.lordsofsmell.parfume.dagger.modules.RegisterModule;
 import hr.lordsofsmell.parfume.dagger.modules.core.ApiModule;
 import hr.lordsofsmell.parfume.dagger.modules.core.ClientModule;
 import hr.lordsofsmell.parfume.dagger.modules.core.ConverterModule;
@@ -27,4 +28,6 @@ import hr.lordsofsmell.parfume.dagger.modules.core.ThreadModule;
 @Singleton
 public interface AppComponent {
     PerfumeListComponent plus(PerfumeListModule module);
+
+    RegisterComponent plus(RegisterModule module);
 }
