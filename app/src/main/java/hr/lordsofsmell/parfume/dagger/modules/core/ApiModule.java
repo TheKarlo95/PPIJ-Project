@@ -5,31 +5,16 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import hr.lordsofsmell.parfume.features.core.data.network.ApiService;
+import hr.lordsofsmell.parfume.domain.repository.network.ApiService;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import retrofit2.CallAdapter;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 
-/**
- * Dagger 2 module that provides API related stuff.
- *
- * @author Karlo Vrbic
- */
 @Module
-class ApiModule {
+public class ApiModule {
 
-    /**
-     * Provides singleton {@link ApiService} object that handles all API calls.
-     *
-     * @param client      HTTP client used for making API requests and getting responses
-     * @param callFactory
-     * @param gson
-     * @param scalar
-     * @param endpoint
-     * @return
-     */
     @Provides
     @Singleton
     ApiService provideApiService(OkHttpClient client,

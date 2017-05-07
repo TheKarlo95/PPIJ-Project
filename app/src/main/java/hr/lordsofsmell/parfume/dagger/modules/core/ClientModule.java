@@ -13,15 +13,8 @@ import okhttp3.logging.HttpLoggingInterceptor;
  * Created by Karlo Vrbic on 03.03.17.
  */
 @Module
-class ClientModule {
+public class ClientModule {
 
-    /**
-     * Provdes {@link OkHttpClient} which is used for sending HTTP requests and receiving HTTP responses.
-     *
-     * @param logger               logs HTTP requests and responses
-     * @param networkTimoutSeconds number of seconds before connection closes
-     * @return {@link OkHttpClient} which is used for sending HTTP requests and receiving HTTP responses
-     */
     @Provides
     @Singleton
     OkHttpClient provideOkHttpClient(HttpLoggingInterceptor logger, Integer networkTimoutSeconds) {

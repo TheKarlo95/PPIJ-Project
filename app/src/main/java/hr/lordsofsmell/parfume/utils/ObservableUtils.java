@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.functions.Predicate;
 
 import static io.reactivex.Observable.concat;
 
@@ -12,33 +13,17 @@ import static io.reactivex.Observable.concat;
  */
 public class ObservableUtils {
 
-    private static <T> Observable<T> getFirstNonNull(@NonNull ObservableSource<? extends T> source1,
-                                                     @NonNull ObservableSource<? extends T> source2,
-                                                     @NonNull ObservableSource<? extends T> source3,
-                                                     @NonNull ObservableSource<? extends T> source4) {
-        return Observable
-                .concat(source1, source2, source3, source4)
-                .filter(obj -> obj != null)
-                .firstElement()
-                .toObservable();
-    }
+    @SafeVarargs
+    public static <T> Observable<T> getFirstNonNull(Observable<T>... objects) {
+        Observable<T> out = null;
 
-    private static <T> Observable<T> getFirstNonNull(@NonNull ObservableSource<? extends T> source1,
-                                                     @NonNull ObservableSource<? extends T> source2,
-                                                     @NonNull ObservableSource<? extends T> source3) {
-        return
-                concat(source1, source2, source3)
-                .filter(obj -> obj != null)
-                .firstElement()
-                .toObservable();
-    }
+        for(Observable<T> object : objects) {
+            if(object != null) {
+                out = object;
+                break;
+            }
+        }
 
-    private static <T> Observable<T> getFirstNonNull(@NonNull ObservableSource<? extends T> source1,
-                                                     @NonNull ObservableSource<? extends T> source2) {
-        return
-                concat(source1, source2)
-                .filter(obj -> obj != null)
-                .firstElement()
-                .toObservable();
+        return out;
     }
 }

@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Parfume</string>
+
+    <string name="get_all_perfumes_error">Error happened while getting list of all perfumes</string>
+    <string name="get_liked_perfumes_error">Error happened while getting list of all liked perfumes</string>
+    <string name="get_wishlisted_perfumes_error">Error happened while getting list of all perfumes from wishlist</string>
+    <string name="get_owned_perfumes_error">Error happened while getting list of all owned perfumes</string>
+    <string name="title_activity_perfume_list">PerfumeListActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

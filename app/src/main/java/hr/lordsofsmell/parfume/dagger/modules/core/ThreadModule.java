@@ -9,30 +9,15 @@ import hr.lordsofsmell.parfume.threads.ThreadExecutor;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-/**
- * Dagger 2 module that provides thread related stuff.
- *
- * @author Karlo Vrbic
- */
 @Module
-class ThreadModule {
+public class ThreadModule {
 
-    /**
-     * Provides singleton {@link ThreadExecutor} for executing tasks on new thread.
-     *
-     * @return {@link ThreadExecutor} for executing tasks
-     */
     @Provides
     @Singleton
     ThreadExecutor provideThreadExecutor() {
         return new ThreadExecutor(Schedulers.newThread());
     }
 
-    /**
-     * Provides singleton {@link PostExecutionThread} for executing post execution tasks on main thread.
-     *
-     * @return {@link PostExecutionThread} for executing post execution tasks
-     */
     @Provides
     @Singleton
     PostExecutionThread providePostExecutionThread() {
