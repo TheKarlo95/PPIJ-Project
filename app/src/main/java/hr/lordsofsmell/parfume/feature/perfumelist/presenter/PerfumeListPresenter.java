@@ -7,14 +7,18 @@ import java.util.List;
 import javax.inject.Inject;
 
 import hr.lordsofsmell.parfume.R;
+import hr.lordsofsmell.parfume.domain.model.request.LikedRequest;
+import hr.lordsofsmell.parfume.domain.model.request.OwnedRequest;
+import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
+import hr.lordsofsmell.parfume.domain.model.response.User;
 import hr.lordsofsmell.parfume.feature.core.observer.Observer;
 import hr.lordsofsmell.parfume.feature.core.presenter.Presenter;
 import hr.lordsofsmell.parfume.feature.perfumelist.IPerfumeList;
-
-/**
- * Created by thekarlo95 on 5/7/17.
- */
+import hr.lordsofsmell.parfume.feature.perfumelist.usecase.ChangeLikedUseCase;
+import hr.lordsofsmell.parfume.feature.perfumelist.usecase.ChangeOwnedUseCase;
+import hr.lordsofsmell.parfume.feature.perfumelist.usecase.ChangeWishlistedUseCase;
+import hr.lordsofsmell.parfume.utils.PreferencesUtil;
 
 public class PerfumeListPresenter extends Presenter implements IPerfumeList.Presenter {
 
@@ -29,32 +33,119 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
     private IPerfumeList.GetLikedPerfumesUseCase getLikedPerfumesUseCase;
     private IPerfumeList.GetWishlistedPerfumesUseCase getWishlistedPerfumesUseCase;
     private IPerfumeList.GetOwnedPerfumesUseCase getOwnedPerfumesUseCase;
+    private IPerfumeList.ChangeLikedUseCase changeLikedUseCase;
+    private IPerfumeList.ChangeWishlistedUseCase changeWishlistedUseCase;
+    private IPerfumeList.ChangeOwnedUseCase changeOwnedUseCase;
 
     @Inject
-    public PerfumeListPresenter(IPerfumeList.View view,
-                                IPerfumeList.GetAllPerfumesUseCase getAllPerfumesUseCase,
-                                IPerfumeList.GetLikedPerfumesUseCase getLikedPerfumesUseCase,
-                                IPerfumeList.GetWishlistedPerfumesUseCase getWishlistedPerfumesUseCase,
-                                IPerfumeList.GetOwnedPerfumesUseCase getOwnedPerfumesUseCase) {
+    PerfumeListPresenter(IPerfumeList.View view,
+                         IPerfumeList.GetAllPerfumesUseCase getAllPerfumesUseCase,
+                         IPerfumeList.GetLikedPerfumesUseCase getLikedPerfumesUseCase,
+                         IPerfumeList.GetWishlistedPerfumesUseCase getWishlistedPerfumesUseCase,
+                         IPerfumeList.GetOwnedPerfumesUseCase getOwnedPerfumesUseCase,
+                         IPerfumeList.ChangeLikedUseCase changeLikedUseCase,
+                         IPerfumeList.ChangeWishlistedUseCase changeWishlistedUseCase,
+                         IPerfumeList.ChangeOwnedUseCase changeOwnedUseCase) {
         super(view);
         this.getAllPerfumesUseCase = getAllPerfumesUseCase;
         this.getLikedPerfumesUseCase = getLikedPerfumesUseCase;
         this.getWishlistedPerfumesUseCase = getWishlistedPerfumesUseCase;
         this.getOwnedPerfumesUseCase = getOwnedPerfumesUseCase;
+        this.changeLikedUseCase = changeLikedUseCase;
+        this.changeWishlistedUseCase = changeWishlistedUseCase;
+        this.changeOwnedUseCase = changeOwnedUseCase;
     }
 
     @Override
     public void loadPerfumes(int parfumeListType) {
+        final IPerfumeList.View view = (IPerfumeList.View) getView();
+        view.showLoading();
+
         switch (parfumeListType) {
             case ALL_PERFUMES_LIST:
                 getAllPerfumesUseCase.execute(null, getListObserver(R.string.get_all_perfumes_error));
+                break;
             case LIKED_PERFUMES_LIST:
                 getLikedPerfumesUseCase.execute(null, getListObserver(R.string.get_liked_perfumes_error));
+                break;
             case WISHLISTED_PERFUMES_LIST:
                 getWishlistedPerfumesUseCase.execute(null, getListObserver(R.string.get_wishlisted_perfumes_error));
+                break;
             case OWNED_PERFUMES_LIST:
                 getOwnedPerfumesUseCase.execute(null, getListObserver(R.string.get_owned_perfumes_error));
+                break;
         }
+    }
+
+    @Override
+    public void changeLiked(final LikedRequest request) {
+        final IPerfumeList.View view = (IPerfumeList.View) getView();
+        view.showLoading();
+
+        User user = PreferencesUtil.getUser();
+        ChangeLikedUseCase.Params params = null;
+
+        if (user != null) {
+            params = new ChangeLikedUseCase.Params(user.token(), user.id(), request);
+        }
+        changeLikedUseCase.execute(params, new Observer<Void>(view, TAG, R.string.change_liked_error) {
+            @Override
+            public void onNext(Void value) {
+                super.onNext(value);
+                view.likeChanged(request.parfumeId());
+            }
+        });
+    }
+
+    @Override
+    public void changeWishlisted(final WishlistRequest request) {
+        final IPerfumeList.View view = (IPerfumeList.View) getView();
+        view.showLoading();
+
+        User user = PreferencesUtil.getUser();
+        ChangeWishlistedUseCase.Params params = null;
+
+        if (user != null) {
+            params = new ChangeWishlistedUseCase.Params(user.token(), user.id(), request);
+        }
+        changeWishlistedUseCase.execute(params, new Observer<Void>(view, TAG, R.string.change_wishlisted_error) {
+            @Override
+            public void onNext(Void value) {
+                super.onNext(value);
+                view.wishlistedChanged(request.parfumeId());
+            }
+        });
+    }
+
+    @Override
+    public void changeOwned(final OwnedRequest request) {
+        final IPerfumeList.View view = (IPerfumeList.View) getView();
+        view.showLoading();
+
+        User user = PreferencesUtil.getUser();
+        ChangeOwnedUseCase.Params params = null;
+
+        if (user != null) {
+            params = new ChangeOwnedUseCase.Params(user.token(), user.id(), request);
+        }
+        changeOwnedUseCase.execute(params, new Observer<Void>(view, TAG, R.string.change_owned_error) {
+            @Override
+            public void onNext(Void value) {
+                super.onNext(value);
+                view.ownedChanged(request.parfumeId());
+            }
+        });
+    }
+
+    @Override
+    protected void cancel() {
+        getAllPerfumesUseCase.cancel();
+        getLikedPerfumesUseCase.cancel();
+        getWishlistedPerfumesUseCase.cancel();
+        getOwnedPerfumesUseCase.cancel();
+        changeLikedUseCase.cancel();
+        changeWishlistedUseCase.cancel();
+        changeOwnedUseCase.cancel();
     }
 
     private Observer<List<PerfumeItem>> getListObserver(@StringRes int errorId) {

@@ -18,6 +18,7 @@ public abstract class LoginRequest implements Parcelable {
 
     @SerializedName("username")
     public abstract String username();
+
     @SerializedName("password")
     @Redacted
     public abstract String password();

@@ -7,7 +7,9 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import hr.lordsofsmell.parfume.AndroidApplication;
 import hr.lordsofsmell.parfume.domain.repository.IRepository;
+import hr.lordsofsmell.parfume.domain.repository.MockRepository;
 import hr.lordsofsmell.parfume.domain.repository.Repository;
 import hr.lordsofsmell.parfume.domain.repository.network.ApiService;
 import hr.lordsofsmell.parfume.domain.repository.network.NetworkDataSource;
@@ -16,21 +18,36 @@ import hr.lordsofsmell.parfume.utils.PreferencesUtil;
 @Module
 public class RepositoryModule {
 
+    private static final boolean USE_MOCK_REPOSITORY = true;
+
     @Provides
     @Singleton
-    IRepository provideRepository(NetworkDataSource networkDataSource) {
+    IRepository provideRepository(@Named("real") IRepository realRepository,
+                                  @Named("mock") IRepository mockRepository) {
+        if (USE_MOCK_REPOSITORY) {
+            return mockRepository;
+        } else {
+            return realRepository;
+        }
+    }
+
+    @Provides
+    @Singleton
+    @Named("mock")
+    IRepository provideMockRepository() {
+        return new MockRepository();
+    }
+
+    @Provides
+    @Singleton
+    @Named("real")
+    IRepository provideRealRepository(NetworkDataSource networkDataSource) {
         return new Repository(networkDataSource);
     }
 
     @Provides
     @Singleton
-    NetworkDataSource provideNetworkDataSource(ApiService apiService, PreferencesUtil preferencesUtil) {
-        return new NetworkDataSource(apiService, preferencesUtil);
-    }
-
-    @Provides
-    @Singleton
-    PreferencesUtil providePreferencesUtil() {
-        return new PreferencesUtil();
+    NetworkDataSource provideNetworkDataSource(ApiService apiService) {
+        return new NetworkDataSource(apiService);
     }
 }

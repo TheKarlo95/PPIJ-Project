@@ -20,9 +20,9 @@ public class GetLikedPerfumesUseCase extends UseCase<Long, List<PerfumeItem>>
     private IRepository repository;
 
     @Inject
-    public GetLikedPerfumesUseCase(@NonNull ThreadExecutor threadExecutor,
-                                   @NonNull PostExecutionThread postExecutionThread,
-                                   @NonNull IRepository repository) {
+    GetLikedPerfumesUseCase(@NonNull ThreadExecutor threadExecutor,
+                            @NonNull PostExecutionThread postExecutionThread,
+                            @NonNull IRepository repository) {
         super(threadExecutor, postExecutionThread);
         this.repository = repository;
     }

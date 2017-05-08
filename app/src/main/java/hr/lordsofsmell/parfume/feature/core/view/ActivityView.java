@@ -1,7 +1,6 @@
 package hr.lordsofsmell.parfume.feature.core.view;
 
-import android.app.Activity;
-import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -12,13 +11,14 @@ import android.widget.Toast;
 
 import butterknife.Unbinder;
 import hr.lordsofsmell.parfume.AndroidApplication;
+import hr.lordsofsmell.parfume.R;
 import hr.lordsofsmell.parfume.dagger.components.AppComponent;
 import hr.lordsofsmell.parfume.feature.core.ICore;
 
 public abstract class ActivityView extends AppCompatActivity implements ICore.View {
 
     private ICore.Presenter presenter;
-    private Dialog dialog;
+    private ProgressDialog dialog;
     private Unbinder unbinder;
 
     @LayoutRes
@@ -40,6 +40,8 @@ public abstract class ActivityView extends AppCompatActivity implements ICore.Vi
         injectDependencies(((AndroidApplication) getApplication()).getApplicationComponent());
         setContentView(getLayoutResId());
 
+        initProgressDialog();
+
         unbinder = bind();
 
         Intent intent = getIntent();
@@ -54,22 +56,25 @@ public abstract class ActivityView extends AppCompatActivity implements ICore.Vi
     @Override
     protected void onResume() {
         super.onResume();
-        if(presenter != null) {
-        presenter.onResume();}
+        if (presenter != null) {
+            presenter.onResume();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if(presenter != null) {
-        presenter.onPause();}
+        if (presenter != null) {
+            presenter.onPause();
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if(presenter != null) {
-        presenter.onStop();}
+        if (presenter != null) {
+            presenter.onStop();
+        }
     }
 
     @Override
@@ -80,8 +85,9 @@ public abstract class ActivityView extends AppCompatActivity implements ICore.Vi
         dialog = null;
         unbinder.unbind();
 
-        if(presenter != null) {
-        presenter.onDestroy();}
+        if (presenter != null) {
+            presenter.onDestroy();
+        }
     }
 
     @Override
@@ -108,13 +114,16 @@ public abstract class ActivityView extends AppCompatActivity implements ICore.Vi
         Toast.makeText(this, getString(messageId), Toast.LENGTH_LONG).show();
     }
 
-    protected void setDialog(@NonNull Dialog dialog) {
-        this.dialog = dialog;
-    }
-
     protected void executeOnNonFirstRun(@NonNull Bundle savedInstanceState, Intent intent) {
     }
 
     protected void executeOnFirstRun(Intent intent) {
+    }
+
+    private void initProgressDialog() {
+        dialog = new ProgressDialog(this);
+        dialog.setMessage(getResources().getString(R.string.loading_message));
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setCancelable(false);
     }
 }
