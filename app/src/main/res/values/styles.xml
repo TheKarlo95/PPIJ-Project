@@ -17,4 +17,19 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
+    <style name="TextPrimaryBig" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/primaryText</item>
+        <item name="android:textSize">@dimen/text_size_big</item>
+    </style>
+
+    <style name="TextPrimaryNormal" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/primaryText</item>
+        <item name="android:textSize">@dimen/text_size_normal</item>
+    </style>
+
+    <style name="TextSecondaryNormal" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/secondaryText</item>
+        <item name="android:textSize">@dimen/text_size_normal</item>
+    </style>
+
 </resources>
