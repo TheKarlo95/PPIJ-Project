@@ -1,5 +1,6 @@
 package hr.lordsofsmell.parfume.dagger.modules.core;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -14,27 +15,36 @@ import hr.lordsofsmell.parfume.utils.PreferencesUtil;
 @Module
 public class RepositoryModule {
 
-    private static final boolean USE_MOCK = false;
+    private static final boolean USE_MOCK_REPOSITORY = true;
 
     @Provides
     @Singleton
-    IRepository provideRepository(NetworkDataSource networkDataSource) {
-        if (USE_MOCK) {
-            return new MockRepository();
+    IRepository provideRepository(@Named("real") IRepository realRepository,
+                                  @Named("mock") IRepository mockRepository) {
+        if (USE_MOCK_REPOSITORY) {
+            return mockRepository;
         } else {
-            return new Repository(networkDataSource);
+            return realRepository;
         }
     }
 
     @Provides
     @Singleton
-    NetworkDataSource provideNetworkDataSource(ApiService apiService, PreferencesUtil preferencesUtil) {
-        return new NetworkDataSource(apiService, preferencesUtil);
+    @Named("mock")
+    IRepository provideMockRepository() {
+        return new MockRepository();
     }
 
     @Provides
     @Singleton
-    PreferencesUtil providePreferencesUtil() {
-        return new PreferencesUtil();
+    @Named("real")
+    IRepository provideRealRepository(NetworkDataSource networkDataSource) {
+        return new Repository(networkDataSource);
+    }
+
+    @Provides
+    @Singleton
+    NetworkDataSource provideNetworkDataSource(ApiService apiService) {
+        return new NetworkDataSource(apiService);
     }
 }

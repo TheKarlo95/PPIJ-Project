@@ -12,11 +12,9 @@ import hr.lordsofsmell.parfume.feature.login.usecase.LoginUseCase;
 public class LoginModule {
 
     private final ILogin.View view;
-    private final Context applicationContext;
 
     public LoginModule( ILogin.View view, Context applicationContext) {
         this.view = view;
-        this.applicationContext = applicationContext;
     }
 
     @Provides
@@ -25,17 +23,12 @@ public class LoginModule {
     }
 
     @Provides
-    public Context provideApplicationContext() {
-        return applicationContext;
-    }
-
-    @Provides
     public  ILogin.Presenter providePresenter(LoginPresenter presenter) {
         return presenter;
     }
 
     @Provides
-    public  ILogin.LoginUseCase provideGetAllPerfumesUseCase(LoginUseCase useCase) {
+    public  ILogin.LoginUseCase provideLoginUseCase(LoginUseCase useCase) {
         return useCase;
     }
 }

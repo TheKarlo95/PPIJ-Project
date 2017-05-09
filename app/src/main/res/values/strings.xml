@@ -15,4 +15,5 @@
 
     <string name="perfume_image">Perfume image</string>
     <string name="login_username">Username</string>
+    <string name="title_activity_login">Login</string>
 </resources>

@@ -1,6 +1,5 @@
 package hr.lordsofsmell.parfume.feature.login.view;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -30,12 +29,10 @@ public class LoginActivity extends ActivityView implements ILogin.View {
 
     @Inject
     ILogin.Presenter presenter;
-    @Inject
-    PreferencesUtil preferencesUtil;
 
     @Override
     public void loginSuccesful(User user) {
-        preferencesUtil.persistUser(user);
+        PreferencesUtil.persistUser(user);
     }
 
     @OnClick(R.id.btn_login)
