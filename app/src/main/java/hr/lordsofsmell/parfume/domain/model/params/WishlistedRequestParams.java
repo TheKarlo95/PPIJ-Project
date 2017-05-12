@@ -2,7 +2,6 @@ package hr.lordsofsmell.parfume.domain.model.params;
 
 import com.google.auto.value.AutoValue;
 
-import hr.lordsofsmell.parfume.domain.model.request.LikedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
 
 @AutoValue

@@ -3,6 +3,9 @@ package hr.lordsofsmell.parfume.feature.perfumelist;
 import java.util.Collection;
 import java.util.List;
 
+import hr.lordsofsmell.parfume.domain.model.params.LikedRequestParams;
+import hr.lordsofsmell.parfume.domain.model.params.OwnedRequestParams;
+import hr.lordsofsmell.parfume.domain.model.params.WishlistedRequestParams;
 import hr.lordsofsmell.parfume.domain.model.request.LikedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.OwnedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
@@ -43,12 +46,12 @@ public interface IPerfumeList {
     interface GetOwnedPerfumesUseCase extends ICore.Interactor<Long, List<PerfumeItem>> {
     }
 
-    interface ChangeLikedUseCase extends ICore.Interactor<hr.lordsofsmell.parfume.feature.perfumelist.usecase.ChangeLikedUseCase.Params, Void> {
+    interface ChangeLikedUseCase extends ICore.Interactor<LikedRequestParams, Void> {
     }
 
-    interface ChangeWishlistedUseCase extends ICore.Interactor<hr.lordsofsmell.parfume.feature.perfumelist.usecase.ChangeWishlistedUseCase.Params, Void> {
+    interface ChangeWishlistedUseCase extends ICore.Interactor<WishlistedRequestParams, Void> {
     }
 
-    interface ChangeOwnedUseCase extends ICore.Interactor<hr.lordsofsmell.parfume.feature.perfumelist.usecase.ChangeOwnedUseCase.Params, Void> {
+    interface ChangeOwnedUseCase extends ICore.Interactor<OwnedRequestParams, Void> {
     }
 }
