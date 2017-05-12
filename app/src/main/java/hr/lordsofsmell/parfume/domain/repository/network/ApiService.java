@@ -27,7 +27,7 @@ public interface ApiService {
     Observable<User> register(@Body RegisterRequest request);
 
     @GET("parfumes")
-    Observable<List<PerfumeItem>> getAllParfumes(@Header("X-Authorization") String token);
+    Observable<List<PerfumeItem>> getAllParfumes();
 
     @GET("users/{id}/liked")
     Observable<List<PerfumeItem>> getLikedParfumes(@Header("X-Authorization") String token, @Path("id") Long id);

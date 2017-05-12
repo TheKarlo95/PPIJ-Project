@@ -39,7 +39,7 @@ public class NetworkDataSource implements IRepository {
 
     @Override
     public Observable<List<PerfumeItem>> getAllParfumes() {
-        return service.getAllParfumes(PreferencesUtil.getToken());
+        return service.getAllParfumes();
     }
 
     @Override
