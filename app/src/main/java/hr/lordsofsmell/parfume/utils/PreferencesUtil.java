@@ -64,6 +64,12 @@ public class PreferencesUtil {
                 .getString(USER_TOKEN, null);
     }
 
+    public static int getUserId() {
+        return AndroidApplication.getContext()
+                .getSharedPreferences(USER_PREFERENCES_KEY, Context.MODE_PRIVATE)
+                .getInt(USER_ID, -1);
+    }
+
     public static boolean isLoggedIn() {
         return getToken() != null;
     }

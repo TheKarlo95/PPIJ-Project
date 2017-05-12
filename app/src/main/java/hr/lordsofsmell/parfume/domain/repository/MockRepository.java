@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -115,7 +116,11 @@ public class MockRepository implements IRepository {
         return Observable.fromCallable(new Callable<List<PerfumeItem>>() {
             @Override
             public List<PerfumeItem> call() throws Exception {
-                return perfumes.subList(from - 1, from + numOfItems - 1);
+                if (from > perfumes.size()) {
+                    return Collections.emptyList();
+                } else {
+                    return perfumes.subList(from - 1, from + numOfItems - 1);
+                }
             }
         });
     }
@@ -127,13 +132,17 @@ public class MockRepository implements IRepository {
         return Observable.fromCallable(new Callable<List<PerfumeItem>>() {
             @Override
             public List<PerfumeItem> call() throws Exception {
-                List<PerfumeItem> liked = new ArrayList<>(perfumes.size() / 2);
-                for (PerfumeItem perfume : perfumes) {
-                    if (perfume.liked()) {
-                        liked.add(perfume);
+                if (from > perfumes.size()) {
+                    return Collections.emptyList();
+                } else {
+                    List<PerfumeItem> liked = new ArrayList<>(perfumes.size() / 2);
+                    for (PerfumeItem perfume : perfumes) {
+                        if (perfume.liked()) {
+                            liked.add(perfume);
+                        }
                     }
+                    return liked.subList(from - 1, from + numOfItems - 1);
                 }
-                return liked.subList(from - 1, from + numOfItems - 1);
             }
         });
     }
@@ -145,13 +154,17 @@ public class MockRepository implements IRepository {
         return Observable.fromCallable(new Callable<List<PerfumeItem>>() {
             @Override
             public List<PerfumeItem> call() throws Exception {
-                List<PerfumeItem> wishlisted = new ArrayList<>(perfumes.size() / 2);
-                for (PerfumeItem perfume : perfumes) {
-                    if (perfume.wishlisted()) {
-                        wishlisted.add(perfume);
+                if (from > perfumes.size()) {
+                    return Collections.emptyList();
+                } else {
+                    List<PerfumeItem> wishlisted = new ArrayList<>(perfumes.size() / 2);
+                    for (PerfumeItem perfume : perfumes) {
+                        if (perfume.wishlisted()) {
+                            wishlisted.add(perfume);
+                        }
                     }
+                    return wishlisted.subList(from - 1, from + numOfItems - 1);
                 }
-                return wishlisted.subList(from - 1, from + numOfItems - 1);
             }
         });
     }
@@ -163,13 +176,17 @@ public class MockRepository implements IRepository {
         return Observable.fromCallable(new Callable<List<PerfumeItem>>() {
             @Override
             public List<PerfumeItem> call() throws Exception {
-                List<PerfumeItem> owned = new ArrayList<>(perfumes.size() / 2);
-                for (PerfumeItem perfume : perfumes) {
-                    if (perfume.owned()) {
-                        owned.add(perfume);
+                if (from > perfumes.size()) {
+                    return Collections.emptyList();
+                } else {
+                    List<PerfumeItem> owned = new ArrayList<>(perfumes.size() / 2);
+                    for (PerfumeItem perfume : perfumes) {
+                        if (perfume.owned()) {
+                            owned.add(perfume);
+                        }
                     }
+                    return owned.subList(from - 1, from + numOfItems - 1);
                 }
-                return owned.subList(from - 1, from + numOfItems - 1);
             }
         });
     }

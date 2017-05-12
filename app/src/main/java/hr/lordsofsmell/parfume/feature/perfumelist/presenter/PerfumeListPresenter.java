@@ -7,6 +7,10 @@ import java.util.List;
 import javax.inject.Inject;
 
 import hr.lordsofsmell.parfume.R;
+import hr.lordsofsmell.parfume.domain.model.params.GetAllPerfumesParams;
+import hr.lordsofsmell.parfume.domain.model.params.GetLikedPerfumesParams;
+import hr.lordsofsmell.parfume.domain.model.params.GetOwnedPerfumesParams;
+import hr.lordsofsmell.parfume.domain.model.params.GetWishlistedPerfumesParams;
 import hr.lordsofsmell.parfume.domain.model.params.LikedRequestParams;
 import hr.lordsofsmell.parfume.domain.model.params.OwnedRequestParams;
 import hr.lordsofsmell.parfume.domain.model.params.WishlistedRequestParams;
@@ -61,6 +65,8 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
         this.changeOwnedUseCase = changeOwnedUseCase;
 
         perfumeListType = 0;
+        lastPerfumeIndex = 1;
+        reachedLastPerfume = false;
     }
 
     @Override
@@ -70,34 +76,46 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
 
     @Override
     public void loadPerfumes(boolean clearAfter, boolean userSwipe) {
-        if (!reachedLastPerfume) {
-            final IPerfumeList.View view = (IPerfumeList.View) getView();
-            if (userSwipe || !view.isRefreshing()) {
-                view.setRefreshing(true);
+        final IPerfumeList.View view = (IPerfumeList.View) getView();
+        if (userSwipe || (!reachedLastPerfume && !view.isRefreshing())) {
+            view.setRefreshing(true);
 
-                if (clearAfter) {
-                    lastPerfumeIndex = 0;
-                    reachedLastPerfume = false;
-                }
+            if (clearAfter) {
+                lastPerfumeIndex = 1;
+                reachedLastPerfume = false;
+            }
 
-                switch (perfumeListType) {
-                    case ALL_PERFUMES_LIST:
-                        getAllPerfumesUseCase.execute(null,
-                                getListObserver(R.string.get_all_perfumes_error));
-                        break;
-                    case LIKED_PERFUMES_LIST:
-                        getLikedPerfumesUseCase.execute(null,
-                                getListObserver(R.string.get_liked_perfumes_error));
-                        break;
-                    case WISHLISTED_PERFUMES_LIST:
-                        getWishlistedPerfumesUseCase.execute(null,
-                                getListObserver(R.string.get_wishlisted_perfumes_error));
-                        break;
-                    case OWNED_PERFUMES_LIST:
-                        getOwnedPerfumesUseCase.execute(null,
-                                getListObserver(R.string.get_owned_perfumes_error));
-                        break;
-                }
+            int userId = PreferencesUtil.getUserId();
+
+            switch (perfumeListType) {
+                case ALL_PERFUMES_LIST:
+                    GetAllPerfumesParams allParams = GetAllPerfumesParams.create(lastPerfumeIndex,
+                            LOAD_ITEMS);
+                    getAllPerfumesUseCase.execute(allParams,
+                            getListObserver(userSwipe, R.string.get_all_perfumes_error));
+                    break;
+                case LIKED_PERFUMES_LIST:
+                    GetLikedPerfumesParams likedParams = GetLikedPerfumesParams.create(userId,
+                            lastPerfumeIndex,
+                            LOAD_ITEMS);
+                    getLikedPerfumesUseCase.execute(likedParams,
+                            getListObserver(userSwipe, R.string.get_liked_perfumes_error));
+                    break;
+                case WISHLISTED_PERFUMES_LIST:
+                    GetWishlistedPerfumesParams wishlistedParams = GetWishlistedPerfumesParams.create(
+                            userId,
+                            lastPerfumeIndex,
+                            LOAD_ITEMS);
+                    getWishlistedPerfumesUseCase.execute(wishlistedParams,
+                            getListObserver(userSwipe, R.string.get_wishlisted_perfumes_error));
+                    break;
+                case OWNED_PERFUMES_LIST:
+                    GetOwnedPerfumesParams ownedParams = GetOwnedPerfumesParams.create(userId,
+                            lastPerfumeIndex,
+                            LOAD_ITEMS);
+                    getOwnedPerfumesUseCase.execute(ownedParams,
+                            getListObserver(userSwipe, R.string.get_owned_perfumes_error));
+                    break;
             }
         }
     }
@@ -176,13 +194,29 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
         changeOwnedUseCase.cancel();
     }
 
-    private Observer<List<PerfumeItem>> getListObserver(@StringRes int errorId) {
+    private Observer<List<PerfumeItem>> getListObserver(final boolean clearAdapter,
+                                                        @StringRes int errorId) {
         final IPerfumeList.View view = (IPerfumeList.View) getView();
         return new Observer<List<PerfumeItem>>(view, TAG, errorId) {
             @Override
             public void onNext(List<PerfumeItem> perfumes) {
                 super.onNext(perfumes);
-                view.addPerfumes(perfumes, false);
+
+                lastPerfumeIndex += perfumes.size();
+                reachedLastPerfume = perfumes.size() < LOAD_ITEMS;
+
+                view.addPerfumes(perfumes, clearAdapter);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                view.setRefreshing(false);
+            }
+
+            @Override
+            public void onComplete() {
+                super.onComplete();
                 view.setRefreshing(false);
             }
         };
