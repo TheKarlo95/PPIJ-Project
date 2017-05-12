@@ -208,7 +208,6 @@ public class PerfumeListActivity extends ActivityView
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -224,8 +223,6 @@ public class PerfumeListActivity extends ActivityView
 
         if (id == R.id.nav_login) {
             // Handle the camera action
-        } else if (id == R.id.nav_register) {
-
         } else if (id == R.id.nav_all_perfumes) {
             startActivity(createIntent(this, ALL_PERFUMES_LIST));
         } else if (id == R.id.nav_favorites) {

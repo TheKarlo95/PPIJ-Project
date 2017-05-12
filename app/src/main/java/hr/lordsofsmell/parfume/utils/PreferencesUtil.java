@@ -11,6 +11,7 @@ import hr.lordsofsmell.parfume.domain.model.response.User;
 
 public class PreferencesUtil {
 
+
     private static final String USER_PREFERENCES_KEY = BuildConfig.APPLICATION_ID + ".UserPrefs";
 
     private static final String USER_ID = "id";

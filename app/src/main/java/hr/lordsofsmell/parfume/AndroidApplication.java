@@ -6,7 +6,7 @@ import android.content.Context;
 import hr.lordsofsmell.parfume.dagger.components.AppComponent;
 import hr.lordsofsmell.parfume.dagger.components.DaggerAppComponent;
 
-public class AndroidApplication extends Application {
+public class AndroidApplication extends Application  {
 
     private static Context applicationContext;
     private AppComponent appComponent;

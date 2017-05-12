@@ -27,7 +27,8 @@ public abstract class UseCase<Params, T> implements ICore.Interactor<Params, T> 
 
     @Override
     public void execute(Params params, DisposableObserver<T> observer) {
-        Disposable disposable = execute(params)
+        Observable<T> observable = createObservable(params);
+        Disposable disposable = observable
                 .subscribeOn(threadExecutor.getScheduler())
                 .observeOn(postExecutionThread.getScheduler())
                 .subscribeWith(observer);

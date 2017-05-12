@@ -7,8 +7,10 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import butterknife.BindView;
 import butterknife.Unbinder;
 import hr.lordsofsmell.parfume.AndroidApplication;
 import hr.lordsofsmell.parfume.R;

@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import hr.lordsofsmell.parfume.domain.model.Gender;
 import hr.lordsofsmell.parfume.domain.model.request.LikedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.LoginRequest;
 import hr.lordsofsmell.parfume.domain.model.request.OwnedRequest;
@@ -103,7 +104,13 @@ public class MockRepository implements IRepository {
 
     @Override
     public Observable<User> login(@NonNull LoginRequest request) {
-        return null;
+        return Observable.fromArray(User.create(1L,
+                "dsasdsadasas",
+                request.username(),
+                "example@example.com",
+                "ivan",
+                "ivic",
+                Gender.MALE));
     }
 
     @Override

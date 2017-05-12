@@ -1,19 +1,15 @@
 package hr.lordsofsmell.parfume.dagger.modules.core;
 
-import android.content.Context;
-
 import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import hr.lordsofsmell.parfume.AndroidApplication;
 import hr.lordsofsmell.parfume.domain.repository.IRepository;
 import hr.lordsofsmell.parfume.domain.repository.MockRepository;
 import hr.lordsofsmell.parfume.domain.repository.Repository;
 import hr.lordsofsmell.parfume.domain.repository.network.ApiService;
 import hr.lordsofsmell.parfume.domain.repository.network.NetworkDataSource;
-import hr.lordsofsmell.parfume.utils.PreferencesUtil;
 
 @Module
 public class RepositoryModule {
