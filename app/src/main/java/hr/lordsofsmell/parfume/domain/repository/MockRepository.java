@@ -111,17 +111,19 @@ public class MockRepository implements IRepository {
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getAllParfumes() {
+    public Observable<List<PerfumeItem>> getAllParfumes(final int from, final int numOfItems) {
         return Observable.fromCallable(new Callable<List<PerfumeItem>>() {
             @Override
             public List<PerfumeItem> call() throws Exception {
-                return perfumes;
+                return perfumes.subList(from - 1, from + numOfItems - 1);
             }
         });
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getLikedParfumes(@NonNull Long userId) {
+    public Observable<List<PerfumeItem>> getLikedParfumes(@NonNull Long userId,
+                                                          final int from,
+                                                          final int numOfItems) {
         return Observable.fromCallable(new Callable<List<PerfumeItem>>() {
             @Override
             public List<PerfumeItem> call() throws Exception {
@@ -131,13 +133,15 @@ public class MockRepository implements IRepository {
                         liked.add(perfume);
                     }
                 }
-                return liked;
+                return liked.subList(from - 1, from + numOfItems - 1);
             }
         });
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getWishlistedParfumes(@NonNull Long userId) {
+    public Observable<List<PerfumeItem>> getWishlistedParfumes(@NonNull Long userId,
+                                                               final int from,
+                                                               final int numOfItems) {
         return Observable.fromCallable(new Callable<List<PerfumeItem>>() {
             @Override
             public List<PerfumeItem> call() throws Exception {
@@ -147,13 +151,15 @@ public class MockRepository implements IRepository {
                         wishlisted.add(perfume);
                     }
                 }
-                return wishlisted;
+                return wishlisted.subList(from - 1, from + numOfItems - 1);
             }
         });
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getOwnedParfumes(@NonNull Long userId) {
+    public Observable<List<PerfumeItem>> getOwnedParfumes(@NonNull Long userId,
+                                                          final int from,
+                                                          final int numOfItems) {
         return Observable.fromCallable(new Callable<List<PerfumeItem>>() {
             @Override
             public List<PerfumeItem> call() throws Exception {
@@ -163,7 +169,7 @@ public class MockRepository implements IRepository {
                         owned.add(perfume);
                     }
                 }
-                return owned;
+                return owned.subList(from - 1, from + numOfItems - 1);
             }
         });
     }
@@ -176,7 +182,7 @@ public class MockRepository implements IRepository {
                 for (int i = 0, max = perfumes.size(); i < max; i++) {
                     PerfumeItem perfume = perfumes.get(i);
 
-                    if(perfume.id().equals(request.parfumeId())){
+                    if (perfume.id().equals(request.parfumeId())) {
                         PerfumeItem changedPerfume = perfume.withLiked(request.liked());
                         perfumes.remove(i);
                         perfumes.add(i, changedPerfume);
@@ -196,7 +202,7 @@ public class MockRepository implements IRepository {
                 for (int i = 0, max = perfumes.size(); i < max; i++) {
                     PerfumeItem perfume = perfumes.get(i);
 
-                    if(perfume.id().equals(request.parfumeId())){
+                    if (perfume.id().equals(request.parfumeId())) {
                         PerfumeItem changedPerfume = perfume.withWishlisted(request.wishlisted());
                         perfumes.remove(i);
                         perfumes.add(i, changedPerfume);
@@ -215,7 +221,7 @@ public class MockRepository implements IRepository {
                 for (int i = 0, max = perfumes.size(); i < max; i++) {
                     PerfumeItem perfume = perfumes.get(i);
 
-                    if(perfume.id().equals(request.parfumeId())){
+                    if (perfume.id().equals(request.parfumeId())) {
                         PerfumeItem changedPerfume = perfume.withOwned(request.owned());
                         perfumes.remove(i);
                         perfumes.add(i, changedPerfume);

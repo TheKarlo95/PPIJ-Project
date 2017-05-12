@@ -26,17 +26,26 @@ public interface ApiService {
     @POST("users")
     Observable<User> register(@Body RegisterRequest request);
 
-    @GET("parfumes")
-    Observable<List<PerfumeItem>> getAllParfumes();
+    @GET("parfumes/{from}/{to}")
+    Observable<List<PerfumeItem>> getAllParfumes(@Path("from") int from, @Path("to") int to);
 
-    @GET("users/{id}/liked")
-    Observable<List<PerfumeItem>> getLikedParfumes(@Header("X-Authorization") String token, @Path("id") Long id);
+    @GET("users/{id}/liked/{from}/{to}")
+    Observable<List<PerfumeItem>> getLikedParfumes(@Header("X-Authorization") String token,
+                                                   @Path("id") long userId,
+                                                   @Path("from") int from,
+                                                   @Path("to") int to);
 
-    @GET("users/{id}/wishlist")
-    Observable<List<PerfumeItem>> getWishlistedParfumes(@Header("X-Authorization") String token, @Path("id") Long id);
+    @GET("users/{id}/wishlist/{from}/{to}")
+    Observable<List<PerfumeItem>> getWishlistedParfumes(@Header("X-Authorization") String token,
+                                                        @Path("id") long userId,
+                                                        @Path("from") int from,
+                                                        @Path("to") int to);
 
-    @GET("users/{id}/owned")
-    Observable<List<PerfumeItem>> getOwnedParfumes(@Header("X-Authorization") String token, @Path("id") Long id);
+    @GET("users/{id}/owned/{from}/{to}")
+    Observable<List<PerfumeItem>> getOwnedParfumes(@Header("X-Authorization") String token,
+                                                   @Path("id") long userId,
+                                                   @Path("from") int from,
+                                                   @Path("to") int to);
 
     @POST("users/{id}/liked")
     Observable<Void> changeLiked(@Header("X-Authorization") String token,

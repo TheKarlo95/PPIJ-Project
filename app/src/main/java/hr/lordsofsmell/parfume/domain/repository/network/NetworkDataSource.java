@@ -15,10 +15,6 @@ import hr.lordsofsmell.parfume.domain.repository.IRepository;
 import hr.lordsofsmell.parfume.utils.PreferencesUtil;
 import io.reactivex.Observable;
 
-/**
- * Created by thekarlo95 on 5/7/17.
- */
-
 public class NetworkDataSource implements IRepository {
 
     private ApiService service;
@@ -38,23 +34,38 @@ public class NetworkDataSource implements IRepository {
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getAllParfumes() {
-        return service.getAllParfumes();
+    public Observable<List<PerfumeItem>> getAllParfumes(int from, int numOfItems) {
+        return service.getAllParfumes(from, from + numOfItems - 1);
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getLikedParfumes(@NonNull Long userId) {
-        return service.getLikedParfumes(PreferencesUtil.getToken(), userId);
+    public Observable<List<PerfumeItem>> getLikedParfumes(@NonNull Long userId,
+                                                          int from,
+                                                          int numOfItems) {
+        return service.getLikedParfumes(PreferencesUtil.getToken(),
+                userId,
+                from,
+                from + numOfItems - 1);
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getWishlistedParfumes(@NonNull Long userId) {
-        return service.getWishlistedParfumes(PreferencesUtil.getToken(), userId);
+    public Observable<List<PerfumeItem>> getWishlistedParfumes(@NonNull Long userId,
+                                                               int from,
+                                                               int numOfItems) {
+        return service.getWishlistedParfumes(PreferencesUtil.getToken(),
+                userId,
+                from,
+                from + numOfItems - 1);
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getOwnedParfumes(@NonNull Long userId) {
-        return service.getOwnedParfumes(PreferencesUtil.getToken(), userId);
+    public Observable<List<PerfumeItem>> getOwnedParfumes(@NonNull Long userId,
+                                                          int from,
+                                                          int numOfItems) {
+        return service.getOwnedParfumes(PreferencesUtil.getToken(),
+                userId,
+                from,
+                from + numOfItems - 1);
     }
 
     @Override
@@ -63,7 +74,8 @@ public class NetworkDataSource implements IRepository {
     }
 
     @Override
-    public Observable<Void> changeWishlisted(@NonNull Long userId, @NonNull WishlistRequest request) {
+    public Observable<Void> changeWishlisted(@NonNull Long userId,
+                                             @NonNull WishlistRequest request) {
         return service.changeWishlisted(PreferencesUtil.getToken(), userId, request);
     }
 
