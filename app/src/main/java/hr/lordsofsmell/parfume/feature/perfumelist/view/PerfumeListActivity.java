@@ -1,5 +1,6 @@
 package hr.lordsofsmell.parfume.feature.perfumelist.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,6 +8,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,7 +36,6 @@ import hr.lordsofsmell.parfume.feature.core.OnScrollToBottomListener;
 import hr.lordsofsmell.parfume.feature.core.adapter.PerfumeAdapter;
 import hr.lordsofsmell.parfume.feature.core.view.ActivityView;
 import hr.lordsofsmell.parfume.feature.perfumelist.IPerfumeList;
-import hr.lordsofsmell.parfume.feature.perfumelist.presenter.PerfumeListPresenter;
 
 public class PerfumeListActivity extends ActivityView
         implements IPerfumeList.View,
@@ -44,6 +45,13 @@ public class PerfumeListActivity extends ActivityView
         PerfumeAdapter.OnPerfumeOwnedClickListener {
 
     private static final String TAG = "PerfumeList";
+
+    public static final int ALL_PERFUMES_LIST = 0;
+    public static final int FAVORITED_PERFUMES_LIST = 1;
+    public static final int WISHLISTED_PERFUMES_LIST = 2;
+    public static final int OWNED_PERFUMES_LIST = 3;
+
+    private static final String EXTRA_LIST_TYPE = "list_type";
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -63,6 +71,14 @@ public class PerfumeListActivity extends ActivityView
     IPerfumeList.Presenter presenter;
 
     private PerfumeAdapter adapter;
+
+    public static Intent createIntent(Context context, int listType) {
+        Intent intent = new Intent(context, PerfumeListActivity.class);
+
+        intent.putExtra(EXTRA_LIST_TYPE, listType);
+
+        return intent;
+    }
 
     @Override
     public void addPerfumes(Collection<PerfumeItem> newPerfumes, boolean clearAdapter) {
@@ -95,18 +111,24 @@ public class PerfumeListActivity extends ActivityView
     }
 
     @Override
-    public void onLikeClick(View view, PerfumeItem perfume, int position) {
-        presenter.changeLiked(LikedRequest.create(perfume.liked(), perfume.id()));
+    public void onLikeClick(View view, PerfumeItem perfume, int position, boolean enabled) {
+        if (enabled) {
+            presenter.changeLiked(LikedRequest.create(perfume.liked(), perfume.id()));
+        }
     }
 
     @Override
-    public void onWishlistClick(View view, PerfumeItem perfume, int position) {
-        presenter.changeWishlisted(WishlistRequest.create(perfume.liked(), perfume.id()));
+    public void onWishlistClick(View view, PerfumeItem perfume, int position, boolean enabled) {
+        if (enabled) {
+            presenter.changeWishlisted(WishlistRequest.create(perfume.liked(), perfume.id()));
+        }
     }
 
     @Override
-    public void onOwnedClick(View view, PerfumeItem perfume, int position) {
-        presenter.changeOwned(OwnedRequest.create(perfume.liked(), perfume.id()));
+    public void onOwnedClick(View view, PerfumeItem perfume, int position, boolean enabled) {
+        if (enabled) {
+            presenter.changeOwned(OwnedRequest.create(perfume.liked(), perfume.id()));
+        }
     }
 
 //    void updateList() {
@@ -142,8 +164,6 @@ public class PerfumeListActivity extends ActivityView
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView.setNavigationItemSelectedListener(this);
-
         mrvPerfumesList.setLayoutManager(new LinearLayoutManager(this));
         mrvPerfumesList.setEmptyView(emptyView);
 
@@ -156,17 +176,21 @@ public class PerfumeListActivity extends ActivityView
             }
         });
 
-        presenter.setPerfumeListType(PerfumeListPresenter.ALL_PERFUMES_LIST);
+        if (intent != null) {
+            int listType = intent.getIntExtra(EXTRA_LIST_TYPE, ALL_PERFUMES_LIST);
 
-        srlPerfumesList.setOnRefreshListener(
-                new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        Log.i(TAG, "onRefresh called from SwipeRefreshLayout");
-                        presenter.loadPerfumes(true, true);
-                    }
-                }
-        );
+            setMenu(listType);
+            setTitleHelper(listType);
+            presenter.setPerfumeListType(listType);
+        }
+
+        srlPerfumesList.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.i(TAG, "onRefresh called from SwipeRefreshLayout");
+                presenter.loadPerfumes(true, true);
+            }
+        });
 
         presenter.loadPerfumes(false, false);
     }
@@ -203,17 +227,57 @@ public class PerfumeListActivity extends ActivityView
         } else if (id == R.id.nav_register) {
 
         } else if (id == R.id.nav_all_perfumes) {
-
+            startActivity(createIntent(this, ALL_PERFUMES_LIST));
         } else if (id == R.id.nav_favorites) {
-
+            startActivity(createIntent(this, FAVORITED_PERFUMES_LIST));
         } else if (id == R.id.nav_wishlist) {
-
+            startActivity(createIntent(this, WISHLISTED_PERFUMES_LIST));
         } else if (id == R.id.nav_owned) {
-
+            startActivity(createIntent(this, OWNED_PERFUMES_LIST));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void setMenu(int listType) {
+        navigationView.setNavigationItemSelectedListener(this);
+        switch (listType) {
+            case ALL_PERFUMES_LIST:
+                navigationView.inflateMenu(R.menu.all_perfumes_drawer);
+                break;
+            case FAVORITED_PERFUMES_LIST:
+                navigationView.inflateMenu(R.menu.favorites_drawer);
+                break;
+            case WISHLISTED_PERFUMES_LIST:
+                navigationView.inflateMenu(R.menu.wishlist_drawer);
+                break;
+            case OWNED_PERFUMES_LIST:
+                navigationView.inflateMenu(R.menu.owned_perfumes_drawer);
+                break;
+            default:
+                navigationView.inflateMenu(R.menu.activity_perfume_list_drawer);
+        }
+    }
+
+    private void setTitleHelper(int listType) {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            switch (listType) {
+                case ALL_PERFUMES_LIST:
+                    setTitle(R.string.all_perfumes_title);
+                    break;
+                case FAVORITED_PERFUMES_LIST:
+                    getSupportActionBar().setTitle(R.string.favorite_perfumes_title);
+                    break;
+                case WISHLISTED_PERFUMES_LIST:
+                    getSupportActionBar().setTitle(R.string.wishlist_perfumes_title);
+                    break;
+                case OWNED_PERFUMES_LIST:
+                    getSupportActionBar().setTitle(R.string.owned_perfumes_title);
+                    break;
+            }
+        }
     }
 }

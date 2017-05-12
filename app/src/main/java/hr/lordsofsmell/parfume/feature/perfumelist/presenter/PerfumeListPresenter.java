@@ -22,16 +22,13 @@ import hr.lordsofsmell.parfume.domain.model.response.User;
 import hr.lordsofsmell.parfume.feature.core.observer.Observer;
 import hr.lordsofsmell.parfume.feature.core.presenter.Presenter;
 import hr.lordsofsmell.parfume.feature.perfumelist.IPerfumeList;
+import hr.lordsofsmell.parfume.feature.perfumelist.view.PerfumeListActivity;
 import hr.lordsofsmell.parfume.utils.PreferencesUtil;
 
 public class PerfumeListPresenter extends Presenter implements IPerfumeList.Presenter {
 
-    public static final int ALL_PERFUMES_LIST = 0;
-    public static final int LIKED_PERFUMES_LIST = 1;
-    public static final int WISHLISTED_PERFUMES_LIST = 2;
-    public static final int OWNED_PERFUMES_LIST = 3;
-
     private static final String TAG = "PerfumeList";
+
     private static final int LOAD_ITEMS = 5;
 
     private IPerfumeList.GetAllPerfumesUseCase getAllPerfumesUseCase;
@@ -70,6 +67,11 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
     }
 
     @Override
+    public int getPerfumeListType() {
+        return perfumeListType;
+    }
+
+    @Override
     public void setPerfumeListType(int perfumeListType) {
         this.perfumeListType = perfumeListType;
     }
@@ -88,20 +90,20 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
             int userId = PreferencesUtil.getUserId();
 
             switch (perfumeListType) {
-                case ALL_PERFUMES_LIST:
+                case PerfumeListActivity.ALL_PERFUMES_LIST:
                     GetAllPerfumesParams allParams = GetAllPerfumesParams.create(lastPerfumeIndex,
                             LOAD_ITEMS);
                     getAllPerfumesUseCase.execute(allParams,
                             getListObserver(userSwipe, R.string.get_all_perfumes_error));
                     break;
-                case LIKED_PERFUMES_LIST:
+                case PerfumeListActivity.FAVORITED_PERFUMES_LIST:
                     GetLikedPerfumesParams likedParams = GetLikedPerfumesParams.create(userId,
                             lastPerfumeIndex,
                             LOAD_ITEMS);
                     getLikedPerfumesUseCase.execute(likedParams,
                             getListObserver(userSwipe, R.string.get_liked_perfumes_error));
                     break;
-                case WISHLISTED_PERFUMES_LIST:
+                case PerfumeListActivity.WISHLISTED_PERFUMES_LIST:
                     GetWishlistedPerfumesParams wishlistedParams = GetWishlistedPerfumesParams.create(
                             userId,
                             lastPerfumeIndex,
@@ -109,7 +111,7 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
                     getWishlistedPerfumesUseCase.execute(wishlistedParams,
                             getListObserver(userSwipe, R.string.get_wishlisted_perfumes_error));
                     break;
-                case OWNED_PERFUMES_LIST:
+                case PerfumeListActivity.OWNED_PERFUMES_LIST:
                     GetOwnedPerfumesParams ownedParams = GetOwnedPerfumesParams.create(userId,
                             lastPerfumeIndex,
                             LOAD_ITEMS);

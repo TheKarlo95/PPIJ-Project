@@ -33,6 +33,8 @@ public interface IPerfumeList {
     }
 
     interface Presenter extends ICore.Presenter {
+        int getPerfumeListType();
+
         void setPerfumeListType(int perfumeListType);
 
         void loadPerfumes(boolean clearAdapter, boolean userSwipe);

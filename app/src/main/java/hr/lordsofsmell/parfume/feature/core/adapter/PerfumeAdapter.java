@@ -38,8 +38,11 @@ public class PerfumeAdapter extends MjolnirRecyclerAdapter<PerfumeItem> {
     }
 
     @Override
-    protected MjolnirViewHolder<PerfumeItem> onCreateItemViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_perfume, parent, false);
+    protected MjolnirViewHolder<PerfumeItem> onCreateItemViewHolder(ViewGroup parent,
+                                                                    int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_perfume,
+                parent,
+                false);
         return new ViewHolder(view);
     }
 
@@ -51,7 +54,7 @@ public class PerfumeAdapter extends MjolnirRecyclerAdapter<PerfumeItem> {
         @BindView(R.id.tv_perfume_company) TextView tvCompany;
         @BindView(R.id.tv_perfume_name) TextView tvModel;
         @BindView(R.id.tv_perfume_year) TextView tvYear;
-        @BindView(R.id.cb_perfume_like) CheckBox cbLike;
+        @BindView(R.id.cb_perfume_like) CheckBox cbFavorite;
         @BindView(R.id.cb_perfume_wishlist) CheckBox cbWishlist;
         @BindView(R.id.cb_perfume_owned) CheckBox cbOwned;
 
@@ -90,13 +93,12 @@ public class PerfumeAdapter extends MjolnirRecyclerAdapter<PerfumeItem> {
             tvYear.setText(perfume.year());
 
             boolean isLoggedIn = PreferencesUtil.isLoggedIn();
-            isLoggedIn = true; // use to bypass login
-            cbLike.setEnabled(isLoggedIn);
-            cbWishlist.setEnabled(isLoggedIn);
-            cbOwned.setEnabled(isLoggedIn);
+//            isLoggedIn = true; // use to bypass login
+
+            setEnabled(isLoggedIn);
 
             if (isLoggedIn) {
-                cbLike.setChecked(perfume.liked());
+                cbFavorite.setChecked(perfume.liked());
                 cbWishlist.setChecked(perfume.wishlisted());
                 cbOwned.setChecked(perfume.owned());
             }
@@ -104,12 +106,34 @@ public class PerfumeAdapter extends MjolnirRecyclerAdapter<PerfumeItem> {
             setListeners(perfume, position);
         }
 
+        private void setEnabled(boolean enabled) {
+            cbFavorite.setTag(enabled);
+            cbFavorite.setFocusable(enabled);
+            cbWishlist.setTag(enabled);
+            cbWishlist.setFocusable(enabled);
+            cbOwned.setTag(enabled);
+            cbOwned.setFocusable(enabled);
+
+            if (enabled) {
+                cbFavorite.setButtonDrawable(R.drawable.ic_favorite);
+                cbWishlist.setButtonDrawable(R.drawable.ic_wishlist);
+                cbOwned.setButtonDrawable(R.drawable.ic_owned);
+            } else {
+                cbFavorite.setButtonDrawable(R.drawable.ic_favorite_disabled);
+                cbWishlist.setButtonDrawable(R.drawable.ic_wishlist_disabled);
+                cbOwned.setButtonDrawable(R.drawable.ic_owned_disabled);
+            }
+        }
+
         private void setListeners(final PerfumeItem perfume, final int position) {
             if (likeListener != null) {
-                cbLike.setOnClickListener(new View.OnClickListener() {
+                cbFavorite.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        likeListener.onLikeClick(itemView, perfume, position);
+                        likeListener.onLikeClick(itemView,
+                                perfume,
+                                position,
+                                (Boolean) cbFavorite.getTag());
                     }
                 });
             }
@@ -117,7 +141,10 @@ public class PerfumeAdapter extends MjolnirRecyclerAdapter<PerfumeItem> {
                 cbWishlist.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        wishlistListener.onWishlistClick(itemView, perfume, position);
+                        wishlistListener.onWishlistClick(itemView,
+                                perfume,
+                                position,
+                                (Boolean) cbWishlist.getTag());
                     }
                 });
             }
@@ -125,7 +152,10 @@ public class PerfumeAdapter extends MjolnirRecyclerAdapter<PerfumeItem> {
                 cbOwned.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ownedListener.onOwnedClick(itemView, perfume, position);
+                        ownedListener.onOwnedClick(itemView,
+                                perfume,
+                                position,
+                                (Boolean) cbOwned.getTag());
                     }
                 });
             }
@@ -133,14 +163,14 @@ public class PerfumeAdapter extends MjolnirRecyclerAdapter<PerfumeItem> {
     }
 
     public interface OnPerfumeLikeClickListener {
-        void onLikeClick(View view, PerfumeItem perfume, int position);
+        void onLikeClick(View view, PerfumeItem perfume, int position, boolean enabled);
     }
 
     public interface OnPerfumeWishlistClickListener {
-        void onWishlistClick(View view, PerfumeItem perfume, int position);
+        void onWishlistClick(View view, PerfumeItem perfume, int position, boolean enabled);
     }
 
     public interface OnPerfumeOwnedClickListener {
-        void onOwnedClick(View view, PerfumeItem perfume, int position);
+        void onOwnedClick(View view, PerfumeItem perfume, int position, boolean enabled);
     }
 }

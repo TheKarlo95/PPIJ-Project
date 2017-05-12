@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Parfume</string>
+    <string name="app_name">Perfume</string>
 
     <string name="loading_message">Loading…</string>
 
@@ -10,11 +10,14 @@
     <string name="change_liked_error">Error happened while changing like state of perfume</string>
     <string name="change_wishlisted_error">Error happened while changing wishlist state of perfume</string>
     <string name="change_owned_error">Error happened while changing owned state of perfume</string>
-    <string name="title_activity_perfume_list">PerfumeListActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="all_perfumes_title">Perfume list</string>
+    <string name="favorite_perfumes_title">Favorites</string>
+    <string name="wishlist_perfumes_title">Wishlist</string>
+    <string name="owned_perfumes_title">Owned perfumes</string>
     <string name="action_settings">Settings</string>
     <string name="perfume_image">Perfume image</string>
     <string name="empty_perfumes_list">No perfumes</string>
