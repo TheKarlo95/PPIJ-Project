@@ -198,17 +198,17 @@ public class PerfumeListActivity extends ActivityView
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_login) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_register) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_all_perfumes) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_favorites) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_wishlist) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_owned) {
 
         }
 
