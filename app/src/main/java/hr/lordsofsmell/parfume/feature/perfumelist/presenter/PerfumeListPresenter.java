@@ -7,6 +7,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 import hr.lordsofsmell.parfume.R;
+import hr.lordsofsmell.parfume.domain.model.params.LikedRequestParams;
+import hr.lordsofsmell.parfume.domain.model.params.OwnedRequestParams;
+import hr.lordsofsmell.parfume.domain.model.params.WishlistedRequestParams;
 import hr.lordsofsmell.parfume.domain.model.request.LikedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.OwnedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
@@ -83,10 +86,10 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
         view.showLoading();
 
         User user = PreferencesUtil.getUser();
-        ChangeLikedUseCase.Params params = null;
+        LikedRequestParams params = null;
 
         if (user != null) {
-            params = new ChangeLikedUseCase.Params(user.token(), user.id(), request);
+            params = LikedRequestParams.create(user.token(), user.id(), request);
         }
         changeLikedUseCase.execute(params, new Observer<Void>(view, TAG, R.string.change_liked_error) {
             @Override
@@ -103,10 +106,10 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
         view.showLoading();
 
         User user = PreferencesUtil.getUser();
-        ChangeWishlistedUseCase.Params params = null;
+        WishlistedRequestParams params = null;
 
         if (user != null) {
-            params = new ChangeWishlistedUseCase.Params(user.token(), user.id(), request);
+            params = WishlistedRequestParams.create(user.token(), user.id(), request);
         }
         changeWishlistedUseCase.execute(params, new Observer<Void>(view, TAG, R.string.change_wishlisted_error) {
             @Override
@@ -123,10 +126,10 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
         view.showLoading();
 
         User user = PreferencesUtil.getUser();
-        ChangeOwnedUseCase.Params params = null;
+        OwnedRequestParams params = null;
 
         if (user != null) {
-            params = new ChangeOwnedUseCase.Params(user.token(), user.id(), request);
+            params = OwnedRequestParams.create(user.token(), user.id(), request);
         }
         changeOwnedUseCase.execute(params, new Observer<Void>(view, TAG, R.string.change_owned_error) {
             @Override
