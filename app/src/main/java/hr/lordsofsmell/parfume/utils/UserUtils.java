@@ -3,12 +3,6 @@ package hr.lordsofsmell.parfume.utils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
-import java.util.regex.Pattern;
-
-/**
- * Created by thekarlo95 on 5/7/17.
- */
-
 public class UserUtils {
 
     private static final String USERNAME_PATTERN = "[a-zA-Z0-9-_]{4,}";
@@ -32,4 +26,5 @@ public class UserUtils {
     public static String hashPassword(String password) {
         return new String(DigestUtils.sha(password));
     }
+
 }
