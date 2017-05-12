@@ -43,6 +43,12 @@ public abstract class PerfumeItem {
     @SerializedName("wishlisted")
     public abstract Boolean wishlisted();
 
+    public abstract PerfumeItem withLiked(Boolean liked);
+
+    public abstract PerfumeItem withOwned(Boolean wishlisted);
+
+    public abstract PerfumeItem withWishlisted(Boolean liked);
+
     public static TypeAdapter<PerfumeItem> typeAdapter(Gson gson) {
         return new AutoValue_PerfumeItem.GsonTypeAdapter(gson);
     }
