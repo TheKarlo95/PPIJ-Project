@@ -6,11 +6,13 @@ import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
 
+import hr.lordsofsmell.parfume.AndroidApplication;
 import hr.lordsofsmell.parfume.BuildConfig;
 import hr.lordsofsmell.parfume.domain.model.Gender;
 import hr.lordsofsmell.parfume.domain.model.response.User;
 
 public class PreferencesUtil {
+
 
     private static final String USER_PREFERENCES_KEY = BuildConfig.APPLICATION_ID + ".UserPrefs";
 
@@ -22,17 +24,13 @@ public class PreferencesUtil {
     private static final String USER_SURNAME = "surname";
     private static final String USER_GENDER = "gender";
 
-    private Context applicationContext;
-
-    @Inject
-    public void setApplicationContext(Context applicationContext) {
-        this.applicationContext = applicationContext;
+    private PreferencesUtil() {
     }
 
-    public void persistUser(@NonNull User user) {
-        SharedPreferences prefs = applicationContext.getSharedPreferences(USER_PREFERENCES_KEY, Context.MODE_PRIVATE);
-
-        prefs.edit()
+    public static void persistUser(@NonNull User user) {
+        AndroidApplication.getContext()
+                .getSharedPreferences(USER_PREFERENCES_KEY, Context.MODE_PRIVATE)
+                .edit()
                 .putLong(USER_ID, user.id())
                 .putString(USER_TOKEN, user.token())
                 .putString(USER_USERNAME, user.username())
@@ -43,8 +41,9 @@ public class PreferencesUtil {
                 .apply();
     }
 
-    public User getUser() {
-        SharedPreferences prefs = applicationContext.getSharedPreferences(USER_PREFERENCES_KEY, Context.MODE_PRIVATE);
+    public static User getUser() {
+        SharedPreferences prefs = AndroidApplication.getContext()
+                .getSharedPreferences(USER_PREFERENCES_KEY, Context.MODE_PRIVATE);
         User user = null;
 
         Long id = prefs.getLong(USER_ID, -1);
@@ -62,8 +61,13 @@ public class PreferencesUtil {
         return user;
     }
 
-    public String getToken() {
-        SharedPreferences prefs = applicationContext.getSharedPreferences(USER_PREFERENCES_KEY, Context.MODE_PRIVATE);
-        return prefs.getString(USER_TOKEN, null);
+    public static String getToken() {
+        return AndroidApplication.getContext()
+                .getSharedPreferences(USER_PREFERENCES_KEY, Context.MODE_PRIVATE)
+                .getString(USER_TOKEN, null);
+    }
+
+    public static boolean isLoggedIn() {
+        return getToken() != null;
     }
 }

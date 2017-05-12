@@ -3,6 +3,7 @@ package hr.lordsofsmell.parfume.dagger.components;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import hr.lordsofsmell.parfume.dagger.modules.LoginModule;
 import hr.lordsofsmell.parfume.dagger.modules.PerfumeListModule;
 import hr.lordsofsmell.parfume.dagger.modules.RegisterModule;
 import hr.lordsofsmell.parfume.dagger.modules.core.ApiModule;
@@ -29,5 +30,8 @@ import hr.lordsofsmell.parfume.dagger.modules.core.ThreadModule;
 public interface AppComponent {
     PerfumeListComponent plus(PerfumeListModule module);
 
+    LoginComponent plus(LoginModule module);
+
     RegisterComponent plus(RegisterModule module);
+
 }

@@ -24,9 +24,6 @@ public abstract class ActivityView extends AppCompatActivity implements ICore.Vi
     private Dialog dialog;
     private Unbinder unbinder;
 
-    @BindView(R.id.tv_perfume_company)
-    TextView sd;
-
     @LayoutRes
     protected abstract int getLayoutResId();
 
