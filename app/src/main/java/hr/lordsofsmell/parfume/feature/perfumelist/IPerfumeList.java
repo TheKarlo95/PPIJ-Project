@@ -3,6 +3,10 @@ package hr.lordsofsmell.parfume.feature.perfumelist;
 import java.util.Collection;
 import java.util.List;
 
+import hr.lordsofsmell.parfume.domain.model.params.GetAllPerfumesParams;
+import hr.lordsofsmell.parfume.domain.model.params.GetLikedPerfumesParams;
+import hr.lordsofsmell.parfume.domain.model.params.GetOwnedPerfumesParams;
+import hr.lordsofsmell.parfume.domain.model.params.GetWishlistedPerfumesParams;
 import hr.lordsofsmell.parfume.domain.model.params.LikedRequestParams;
 import hr.lordsofsmell.parfume.domain.model.params.OwnedRequestParams;
 import hr.lordsofsmell.parfume.domain.model.params.WishlistedRequestParams;
@@ -15,7 +19,11 @@ import hr.lordsofsmell.parfume.feature.core.ICore;
 public interface IPerfumeList {
 
     interface View extends ICore.View {
-        void addPerfumes(Collection<PerfumeItem> perfumes);
+        void addPerfumes(Collection<PerfumeItem> perfumes, boolean clearAdapter);
+
+        void setRefreshing(boolean refreshing);
+
+        boolean isRefreshing();
 
         void likeChanged(Long parfumeId);
 
@@ -25,7 +33,9 @@ public interface IPerfumeList {
     }
 
     interface Presenter extends ICore.Presenter {
-        void loadPerfumes(int parfumeListType);
+        void setPerfumeListType(int perfumeListType);
+
+        void loadPerfumes(boolean clearAdapter, boolean userSwipe);
 
         void changeLiked(LikedRequest request);
 
@@ -34,16 +44,16 @@ public interface IPerfumeList {
         void changeOwned(OwnedRequest request);
     }
 
-    interface GetAllPerfumesUseCase extends ICore.Interactor<Void, List<PerfumeItem>> {
+    interface GetAllPerfumesUseCase extends ICore.Interactor<GetAllPerfumesParams, List<PerfumeItem>> {
     }
 
-    interface GetLikedPerfumesUseCase extends ICore.Interactor<Long, List<PerfumeItem>> {
+    interface GetLikedPerfumesUseCase extends ICore.Interactor<GetLikedPerfumesParams, List<PerfumeItem>> {
     }
 
-    interface GetWishlistedPerfumesUseCase extends ICore.Interactor<Long, List<PerfumeItem>> {
+    interface GetWishlistedPerfumesUseCase extends ICore.Interactor<GetWishlistedPerfumesParams, List<PerfumeItem>> {
     }
 
-    interface GetOwnedPerfumesUseCase extends ICore.Interactor<Long, List<PerfumeItem>> {
+    interface GetOwnedPerfumesUseCase extends ICore.Interactor<GetOwnedPerfumesParams, List<PerfumeItem>> {
     }
 
     interface ChangeLikedUseCase extends ICore.Interactor<LikedRequestParams, Void> {

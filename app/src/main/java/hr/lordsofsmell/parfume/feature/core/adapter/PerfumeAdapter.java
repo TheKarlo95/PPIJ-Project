@@ -90,7 +90,7 @@ public class PerfumeAdapter extends MjolnirRecyclerAdapter<PerfumeItem> {
             tvYear.setText(perfume.year());
 
             boolean isLoggedIn = PreferencesUtil.isLoggedIn();
-            //isLoggedIn = true; use to bypass login
+            isLoggedIn = true; // use to bypass login
             cbLike.setEnabled(isLoggedIn);
             cbWishlist.setEnabled(isLoggedIn);
             cbOwned.setEnabled(isLoggedIn);
