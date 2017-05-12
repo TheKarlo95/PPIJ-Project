@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="hr.lordsofsmell.parfume">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
     <application
         android:name=".AndroidApplication"
         android:allowBackup="true"
@@ -11,7 +14,6 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".feature.perfumelist.view.PerfumeListActivity"
-            android:label="@string/title_activity_perfume_list"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>

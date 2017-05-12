@@ -10,7 +10,6 @@ import hr.lordsofsmell.parfume.domain.repository.MockRepository;
 import hr.lordsofsmell.parfume.domain.repository.Repository;
 import hr.lordsofsmell.parfume.domain.repository.network.ApiService;
 import hr.lordsofsmell.parfume.domain.repository.network.NetworkDataSource;
-import hr.lordsofsmell.parfume.utils.PreferencesUtil;
 
 @Module
 public class RepositoryModule {

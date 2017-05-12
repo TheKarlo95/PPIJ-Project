@@ -25,8 +25,6 @@ public interface ICore {
         void onStop();
 
         void onDestroy();
-
-        void onError(@StringRes int stringId);
     }
 
     interface Interactor<Params, T> {

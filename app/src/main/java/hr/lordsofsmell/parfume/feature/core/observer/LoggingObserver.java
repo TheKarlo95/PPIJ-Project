@@ -37,9 +37,4 @@ public class LoggingObserver<T> extends DisposableObserver<T> {
     protected ICore.View getView() {
         return view;
     }
-
-    @NonNull
-    protected String getTag() {
-        return tag;
-    }
 }

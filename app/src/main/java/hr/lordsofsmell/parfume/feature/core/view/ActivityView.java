@@ -1,7 +1,6 @@
 package hr.lordsofsmell.parfume.feature.core.view;
 
-import android.app.Activity;
-import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -21,7 +20,7 @@ import hr.lordsofsmell.parfume.feature.core.ICore;
 public abstract class ActivityView extends AppCompatActivity implements ICore.View {
 
     private ICore.Presenter presenter;
-    private Dialog dialog;
+    private ProgressDialog dialog;
     private Unbinder unbinder;
 
     @LayoutRes
@@ -42,6 +41,8 @@ public abstract class ActivityView extends AppCompatActivity implements ICore.Vi
         super.onCreate(savedInstanceState);
         injectDependencies(((AndroidApplication) getApplication()).getApplicationComponent());
         setContentView(getLayoutResId());
+
+        initProgressDialog();
 
         unbinder = bind();
 
@@ -115,13 +116,16 @@ public abstract class ActivityView extends AppCompatActivity implements ICore.Vi
         Toast.makeText(this, getString(messageId), Toast.LENGTH_LONG).show();
     }
 
-    protected void setDialog(@NonNull Dialog dialog) {
-        this.dialog = dialog;
-    }
-
     protected void executeOnNonFirstRun(@NonNull Bundle savedInstanceState, Intent intent) {
     }
 
     protected void executeOnFirstRun(Intent intent) {
+    }
+
+    private void initProgressDialog() {
+        dialog = new ProgressDialog(this);
+        dialog.setMessage(getResources().getString(R.string.loading_message));
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setCancelable(false);
     }
 }

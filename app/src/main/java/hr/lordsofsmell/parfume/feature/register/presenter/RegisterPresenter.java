@@ -13,13 +13,15 @@ import hr.lordsofsmell.parfume.feature.register.IRegister;
 import hr.lordsofsmell.parfume.utils.UserUtils;
 
 public class RegisterPresenter extends Presenter implements IRegister.Presenter {
+
     private IRegister.RegisterUseCase useCase;
 
-    public RegisterPresenter(@NonNull IRegister.View view, @NonNull IRegister.RegisterUseCase useCase) {
+    @Inject
+    public RegisterPresenter(@NonNull IRegister.View view,
+                             @NonNull IRegister.RegisterUseCase useCase) {
         super(view);
-        this.useCase=useCase;
+        this.useCase = useCase;
     }
-
 
     @Override
     public void register(@NonNull String username,
@@ -31,12 +33,20 @@ public class RegisterPresenter extends Presenter implements IRegister.Presenter 
                          @NonNull Gender gender) {
 
         if (password.equals(passwordConfirmation)) {
-           RegisterRequest request= RegisterRequest.create(username, UserUtils.hashPassword(password), email, name, surname, gender);
+            RegisterRequest request = RegisterRequest.create(username,
+                    UserUtils.hashPassword(password),
+                    email,
+                    name,
+                    surname,
+                    gender);
             useCase.execute(request);
-        }
-        else {
-            ((IRegister.View)getView()).passwordError();
+        } else {
+            ((IRegister.View) getView()).passwordError();
         }
     }
 
+    @Override
+    protected void cancel() {
+        useCase.cancel();
+    }
 }

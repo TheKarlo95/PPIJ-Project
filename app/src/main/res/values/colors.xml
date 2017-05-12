@@ -5,10 +5,17 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="perfumeImageBackground">#1F000000</color>
+    <color name="perfumeItemBackground">#FFFFF8</color>
 
-    <color name="white">#FFFFFF</color>
     <color name="primaryText">#212121</color>
     <color name="secondaryText">#757575</color>
+    <color name="iconsOff">#212121</color>
+    <color name="iconsDisabled">#60212121</color>
+    <color name="iconsLiked">#e95950</color>
+    <color name="iconWishlist">#0097a7</color>
+    <color name="iconOwned">#4caf50</color>
+
+    <color name="white">#FFFFFF</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
 </resources>

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
-import javax.inject.Inject;
-
 import hr.lordsofsmell.parfume.AndroidApplication;
 import hr.lordsofsmell.parfume.BuildConfig;
 import hr.lordsofsmell.parfume.domain.model.Gender;
@@ -65,6 +63,12 @@ public class PreferencesUtil {
         return AndroidApplication.getContext()
                 .getSharedPreferences(USER_PREFERENCES_KEY, Context.MODE_PRIVATE)
                 .getString(USER_TOKEN, null);
+    }
+
+    public static int getUserId() {
+        return AndroidApplication.getContext()
+                .getSharedPreferences(USER_PREFERENCES_KEY, Context.MODE_PRIVATE)
+                .getInt(USER_ID, -1);
     }
 
     public static boolean isLoggedIn() {

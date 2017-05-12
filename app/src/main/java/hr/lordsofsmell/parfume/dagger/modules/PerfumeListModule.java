@@ -1,13 +1,12 @@
 package hr.lordsofsmell.parfume.dagger.modules;
 
-import android.content.Context;
-
-import javax.inject.Named;
-
 import dagger.Module;
 import dagger.Provides;
 import hr.lordsofsmell.parfume.feature.perfumelist.IPerfumeList;
 import hr.lordsofsmell.parfume.feature.perfumelist.presenter.PerfumeListPresenter;
+import hr.lordsofsmell.parfume.feature.perfumelist.usecase.ChangeLikedUseCase;
+import hr.lordsofsmell.parfume.feature.perfumelist.usecase.ChangeOwnedUseCase;
+import hr.lordsofsmell.parfume.feature.perfumelist.usecase.ChangeWishlistedUseCase;
 import hr.lordsofsmell.parfume.feature.perfumelist.usecase.GetAllPerfumesUseCase;
 import hr.lordsofsmell.parfume.feature.perfumelist.usecase.GetLikedPerfumesUseCase;
 import hr.lordsofsmell.parfume.feature.perfumelist.usecase.GetOwnedPerfumesUseCase;
@@ -17,21 +16,14 @@ import hr.lordsofsmell.parfume.feature.perfumelist.usecase.GetWishlistedPerfumes
 public class PerfumeListModule {
 
     private final IPerfumeList.View view;
-    private final Context applicationContext;
 
-    public PerfumeListModule(IPerfumeList.View view, Context applicationContext) {
+    public PerfumeListModule(IPerfumeList.View view) {
         this.view = view;
-        this.applicationContext = applicationContext;
     }
 
     @Provides
     public IPerfumeList.View provideView() {
         return view;
-    }
-
-    @Provides
-    public Context provideApplicationContext() {
-        return applicationContext;
     }
 
     @Provides
@@ -56,6 +48,21 @@ public class PerfumeListModule {
 
     @Provides
     public IPerfumeList.GetOwnedPerfumesUseCase provideGetOwnedPerfumesUseCase(GetOwnedPerfumesUseCase useCase) {
+        return useCase;
+    }
+
+    @Provides
+    public IPerfumeList.ChangeLikedUseCase provideChangeLikedUseCase(ChangeLikedUseCase useCase) {
+        return useCase;
+    }
+
+    @Provides
+    public IPerfumeList.ChangeWishlistedUseCase provideChangeWishlistedUseCase(ChangeWishlistedUseCase useCase) {
+        return useCase;
+    }
+
+    @Provides
+    public IPerfumeList.ChangeOwnedUseCase provideChangeOwnedUseCase(ChangeOwnedUseCase useCase) {
         return useCase;
     }
 }

@@ -35,23 +35,29 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getAllParfumes() {
-        return ObservableUtils.getFirstNonNull(network.getAllParfumes());
+    public Observable<List<PerfumeItem>> getAllParfumes(int from, int numOfItems) {
+        return ObservableUtils.getFirstNonNull(network.getAllParfumes(from, numOfItems));
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getLikedParfumes(@NonNull Long userId) {
-        return ObservableUtils.getFirstNonNull(network.getLikedParfumes(userId));
+    public Observable<List<PerfumeItem>> getLikedParfumes(@NonNull Long userId,
+                                                          int from,
+                                                          int numOfItems) {
+        return ObservableUtils.getFirstNonNull(network.getLikedParfumes(userId, from, numOfItems));
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getWishlistedParfumes(@NonNull Long userId) {
-        return ObservableUtils.getFirstNonNull(network.getWishlistedParfumes(userId));
+    public Observable<List<PerfumeItem>> getWishlistedParfumes(@NonNull Long userId,
+                                                               int from,
+                                                               int numOfItems) {
+        return ObservableUtils.getFirstNonNull(network.getWishlistedParfumes(userId, from, numOfItems));
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getOwnedParfumes(@NonNull Long userId) {
-        return ObservableUtils.getFirstNonNull(network.getOwnedParfumes(userId));
+    public Observable<List<PerfumeItem>> getOwnedParfumes(@NonNull Long userId,
+                                                          int from,
+                                                          int numOfItems) {
+        return ObservableUtils.getFirstNonNull(network.getOwnedParfumes(userId, from, numOfItems));
     }
 
     @Override
@@ -60,7 +66,8 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public Observable<Void> changeWishlisted(@NonNull Long userId, @NonNull WishlistRequest request) {
+    public Observable<Void> changeWishlisted(@NonNull Long userId,
+                                             @NonNull WishlistRequest request) {
         return ObservableUtils.getFirstNonNull(network.changeWishlisted(userId, request));
     }
 

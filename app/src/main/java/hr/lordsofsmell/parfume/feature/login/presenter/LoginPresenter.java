@@ -1,24 +1,20 @@
 package hr.lordsofsmell.parfume.feature.login.presenter;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
 
 import javax.inject.Inject;
 
 import hr.lordsofsmell.parfume.R;
 import hr.lordsofsmell.parfume.domain.model.request.LoginRequest;
 import hr.lordsofsmell.parfume.domain.model.response.User;
-import hr.lordsofsmell.parfume.feature.core.ICore;
 import hr.lordsofsmell.parfume.feature.core.observer.Observer;
 import hr.lordsofsmell.parfume.feature.core.presenter.Presenter;
 import hr.lordsofsmell.parfume.feature.login.ILogin;
-import io.reactivex.observers.DisposableObserver;
 
 public class LoginPresenter extends Presenter implements ILogin.Presenter {
 
     private static final String TAG = "LoginPresenter";
 
-    private ILogin.View view;
     private ILogin.LoginUseCase loginUseCase;
 
     @Inject
@@ -38,5 +34,10 @@ public class LoginPresenter extends Presenter implements ILogin.Presenter {
                 view.loginSuccesful(value);
             }
         });
+    }
+
+    @Override
+    protected void cancel() {
+        loginUseCase.cancel();
     }
 }

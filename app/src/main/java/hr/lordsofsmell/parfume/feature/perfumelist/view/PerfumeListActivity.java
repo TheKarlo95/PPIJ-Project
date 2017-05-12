@@ -7,34 +7,51 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
+import co.infinum.mjolnirrecyclerview.MjolnirRecyclerView;
 import hr.lordsofsmell.parfume.R;
 import hr.lordsofsmell.parfume.dagger.components.AppComponent;
 import hr.lordsofsmell.parfume.dagger.modules.PerfumeListModule;
+import hr.lordsofsmell.parfume.domain.model.request.LikedRequest;
+import hr.lordsofsmell.parfume.domain.model.request.OwnedRequest;
+import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
+import hr.lordsofsmell.parfume.feature.core.OnScrollToBottomListener;
+import hr.lordsofsmell.parfume.feature.core.adapter.PerfumeAdapter;
 import hr.lordsofsmell.parfume.feature.core.view.ActivityView;
 import hr.lordsofsmell.parfume.feature.perfumelist.IPerfumeList;
-import hr.lordsofsmell.parfume.feature.perfumelist.presenter.PerfumeListPresenter;
 
 public class PerfumeListActivity extends ActivityView
         implements IPerfumeList.View,
-        NavigationView.OnNavigationItemSelectedListener {
+        NavigationView.OnNavigationItemSelectedListener,
+        PerfumeAdapter.OnPerfumeLikeClickListener,
+        PerfumeAdapter.OnPerfumeWishlistClickListener,
+        PerfumeAdapter.OnPerfumeOwnedClickListener {
 
-    private static final String LIST_TYPE_KEY = "list_type";
+    private static final String TAG = "PerfumeList";
+
+    public static final int ALL_PERFUMES_LIST = 0;
+    public static final int FAVORITED_PERFUMES_LIST = 1;
+    public static final int WISHLISTED_PERFUMES_LIST = 2;
+    public static final int OWNED_PERFUMES_LIST = 3;
+
+    private static final String EXTRA_LIST_TYPE = "list_type";
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -43,28 +60,85 @@ public class PerfumeListActivity extends ActivityView
     @BindView(R.id.nav_view)
     NavigationView navigationView;
 
+    @BindView(R.id.srl_perfumes_list)
+    SwipeRefreshLayout srlPerfumesList;
+    @BindView(R.id.mrv_perfumes_list)
+    MjolnirRecyclerView mrvPerfumesList;
+    @BindView(R.id.empty_view_perfume_list)
+    View emptyView;
+
     @Inject
     IPerfumeList.Presenter presenter;
-    private List<PerfumeItem> perfumes;
+
+    private PerfumeAdapter adapter;
 
     public static Intent createIntent(Context context, int listType) {
         Intent intent = new Intent(context, PerfumeListActivity.class);
 
-        intent.putExtra(LIST_TYPE_KEY, listType);
+        intent.putExtra(EXTRA_LIST_TYPE, listType);
 
         return intent;
     }
 
     @Override
-    public void addPerfumes(Collection<PerfumeItem> newPerfumes) {
-        if (newPerfumes != null) {
-            if (this.perfumes == null) {
-                this.perfumes = new ArrayList<>(newPerfumes);
-            } else {
-                this.perfumes.addAll(newPerfumes);
-            }
+    public void addPerfumes(Collection<PerfumeItem> newPerfumes, boolean clearAdapter) {
+        if (clearAdapter) {
+            adapter.clear();
+        }
+        adapter.addAll(newPerfumes);
+    }
+
+    @Override
+    public void setRefreshing(boolean refreshing) {
+        srlPerfumesList.setRefreshing(refreshing);
+    }
+
+    @Override
+    public boolean isRefreshing() {
+        return srlPerfumesList.isRefreshing();
+    }
+
+    @Override
+    public void likeChanged(Long parfumeId) {
+    }
+
+    @Override
+    public void wishlistedChanged(Long parfumeId) {
+    }
+
+    @Override
+    public void ownedChanged(Long parfumeId) {
+    }
+
+    @Override
+    public void onLikeClick(View view, PerfumeItem perfume, int position, boolean enabled) {
+        if (enabled) {
+            presenter.changeLiked(LikedRequest.create(perfume.liked(), perfume.id()));
         }
     }
+
+    @Override
+    public void onWishlistClick(View view, PerfumeItem perfume, int position, boolean enabled) {
+        if (enabled) {
+            presenter.changeWishlisted(WishlistRequest.create(perfume.liked(), perfume.id()));
+        }
+    }
+
+    @Override
+    public void onOwnedClick(View view, PerfumeItem perfume, int position, boolean enabled) {
+        if (enabled) {
+            presenter.changeOwned(OwnedRequest.create(perfume.liked(), perfume.id()));
+        }
+    }
+
+//    void updateList() {
+//        List<Item> newList = new ArrayList<>();
+//        newList.add(new Item(1, "Car"));
+//        newList.add(new Item(2, "Plane"));
+//        newList.add(new Item(3, UUID.randomUUID().toString()));
+//
+//        adapter.update(newList, new ItemsDiffUtil(items, newList));
+//    }
 
     @Override
     protected int getLayoutResId() {
@@ -82,16 +156,54 @@ public class PerfumeListActivity extends ActivityView
         setPresenter(presenter);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this,
+                drawer,
+                toolbar,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView.setNavigationItemSelectedListener(this);
+        mrvPerfumesList.setLayoutManager(new LinearLayoutManager(this));
+        mrvPerfumesList.setEmptyView(emptyView);
+
+        adapter = new PerfumeAdapter(this, this, this, this);
+        mrvPerfumesList.setAdapter(adapter);
+        mrvPerfumesList.addOnScrollListener(new OnScrollToBottomListener() {
+            @Override
+            public void onScrollToBottom(RecyclerView recyclerView, int dx, int dy) {
+                presenter.loadPerfumes(false, false);
+            }
+        });
+
+        if (intent != null) {
+            int listType = intent.getIntExtra(EXTRA_LIST_TYPE, ALL_PERFUMES_LIST);
+
+            setMenu(listType);
+            setTitleHelper(listType);
+            presenter.setPerfumeListType(listType);
+        }
+
+        srlPerfumesList.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.i(TAG, "onRefresh called from SwipeRefreshLayout");
+                presenter.loadPerfumes(true, true);
+            }
+        });
+
+        presenter.loadPerfumes(false, false);
     }
 
     @Override
     protected void injectDependencies(@NonNull AppComponent appComponent) {
-        appComponent.plus(new PerfumeListModule(this, getApplicationContext())).inject(this);
+        appComponent.plus(new PerfumeListModule(this)).inject(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        adapter.cancel();
     }
 
     @Override
@@ -109,22 +221,60 @@ public class PerfumeListActivity extends ActivityView
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_login) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-            Intent intent = PerfumeListActivity.createIntent(this, PerfumeListPresenter.LIKED_PERFUMES_LIST);
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_all_perfumes) {
+            startActivity(createIntent(this, ALL_PERFUMES_LIST));
+        } else if (id == R.id.nav_favorites) {
+            startActivity(createIntent(this, FAVORITED_PERFUMES_LIST));
+        } else if (id == R.id.nav_wishlist) {
+            startActivity(createIntent(this, WISHLISTED_PERFUMES_LIST));
+        } else if (id == R.id.nav_owned) {
+            startActivity(createIntent(this, OWNED_PERFUMES_LIST));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void setMenu(int listType) {
+        navigationView.setNavigationItemSelectedListener(this);
+        switch (listType) {
+            case ALL_PERFUMES_LIST:
+                navigationView.inflateMenu(R.menu.all_perfumes_drawer);
+                break;
+            case FAVORITED_PERFUMES_LIST:
+                navigationView.inflateMenu(R.menu.favorites_drawer);
+                break;
+            case WISHLISTED_PERFUMES_LIST:
+                navigationView.inflateMenu(R.menu.wishlist_drawer);
+                break;
+            case OWNED_PERFUMES_LIST:
+                navigationView.inflateMenu(R.menu.owned_perfumes_drawer);
+                break;
+            default:
+                navigationView.inflateMenu(R.menu.activity_perfume_list_drawer);
+        }
+    }
+
+    private void setTitleHelper(int listType) {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            switch (listType) {
+                case ALL_PERFUMES_LIST:
+                    setTitle(R.string.all_perfumes_title);
+                    break;
+                case FAVORITED_PERFUMES_LIST:
+                    getSupportActionBar().setTitle(R.string.favorite_perfumes_title);
+                    break;
+                case WISHLISTED_PERFUMES_LIST:
+                    getSupportActionBar().setTitle(R.string.wishlist_perfumes_title);
+                    break;
+                case OWNED_PERFUMES_LIST:
+                    getSupportActionBar().setTitle(R.string.owned_perfumes_title);
+                    break;
+            }
+        }
     }
 }

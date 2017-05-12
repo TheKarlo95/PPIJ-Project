@@ -14,6 +14,7 @@ import hr.lordsofsmell.parfume.feature.core.ICore;
 public interface IRegister extends ICore {
     interface View extends ICore.View {
         void registrationSuccessful(User user);
+
         void passwordError();
     }
 
@@ -26,6 +27,7 @@ public interface IRegister extends ICore {
                       @NonNull String surname,
                       @NonNull Gender gender);
     }
+
     interface RegisterUseCase extends ICore.Interactor<RegisterRequest, User> {
     }
 }

@@ -12,6 +12,7 @@ import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.domain.model.response.User;
 import io.reactivex.Observable;
+import retrofit2.http.Path;
 
 public interface IRepository {
 
@@ -19,13 +20,13 @@ public interface IRepository {
 
     Observable<User> register(@NonNull RegisterRequest request);
 
-    Observable<List<PerfumeItem>> getAllParfumes();
+    Observable<List<PerfumeItem>> getAllParfumes(int from, int numOfItems);
 
-    Observable<List<PerfumeItem>> getLikedParfumes(@NonNull Long userId);
+    Observable<List<PerfumeItem>> getLikedParfumes(@NonNull Long userId, int from, int numOfItems);
 
-    Observable<List<PerfumeItem>> getWishlistedParfumes(@NonNull Long userId);
+    Observable<List<PerfumeItem>> getWishlistedParfumes(@NonNull Long userId, int from, int numOfItems);
 
-    Observable<List<PerfumeItem>> getOwnedParfumes(@NonNull Long userId);
+    Observable<List<PerfumeItem>> getOwnedParfumes(@NonNull Long userId, int from, int numOfItems);
 
     Observable<Void> changeLiked(@NonNull Long userId, @NonNull LikedRequest request);
 

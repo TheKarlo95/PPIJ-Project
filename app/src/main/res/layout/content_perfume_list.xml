@@ -9,4 +9,20 @@
     tools:context="hr.lordsofsmell.parfume.feature.perfumelist.view.PerfumeListActivity"
     tools:showIn="@layout/app_bar_perfume_list">
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/srl_perfumes_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/activity_vertical_margin">
+
+        <co.infinum.mjolnirrecyclerview.MjolnirRecyclerView
+            android:id="@+id/mrv_perfumes_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <include
+        layout="@layout/empty_view_perfume_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </android.support.constraint.ConstraintLayout>

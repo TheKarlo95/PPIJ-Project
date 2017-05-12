@@ -9,7 +9,7 @@ public abstract class Observer<T> extends LoggingObserver<T> {
 
     @StringRes private int errorId;
 
-    public Observer(@NonNull ICore.View view, @NonNull String tag, @StringRes int errorId) {
+    protected Observer(@NonNull ICore.View view, @NonNull String tag, @StringRes int errorId) {
         super(view, tag);
         this.errorId = errorId;
     }
