@@ -18,7 +18,6 @@ public class LoggingObserver<T> extends DisposableObserver<T> {
 
     @Override
     public void onNext(T value) {
-        view.hideLoading();
         Log.d(tag, "onNext: " + String.valueOf(value));
     }
 
