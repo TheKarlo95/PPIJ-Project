@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+
 import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import hr.lordsofsmell.parfume.R;
@@ -15,6 +17,8 @@ import hr.lordsofsmell.parfume.feature.register.IRegister;
 
 public class RegisterActivity extends ActivityView
         implements IRegister.View {
+
+    private static final String TAG = "PerfumeList";
 
     @Inject
     IRegister.Presenter presenter;
@@ -32,6 +36,12 @@ public class RegisterActivity extends ActivityView
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_register;
+    }
+
+    @Override
+    @NonNull
+    protected String getLogTag() {
+        return TAG;
     }
 
     @Override

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import hr.lordsofsmell.parfume.domain.model.Gender;
-import hr.lordsofsmell.parfume.domain.model.request.LikedRequest;
+import hr.lordsofsmell.parfume.domain.model.request.FavoriteRequest;
 import hr.lordsofsmell.parfume.domain.model.request.LoginRequest;
 import hr.lordsofsmell.parfume.domain.model.request.OwnedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.RegisterRequest;
@@ -17,10 +17,11 @@ import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.domain.model.response.User;
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 
 public class MockRepository implements IRepository {
 
-    private final List<PerfumeItem> perfumes = Arrays.asList(
+    private final List<PerfumeItem> perfumes = new ArrayList<>(Arrays.asList(
             PerfumeItem.create(1L,
                     "http://www.chanel.com/en_US/fragrance-beauty/cms2export/Site1Files/P125420/S125530_XLARGE.jpg",
                     "Chanel",
@@ -100,22 +101,28 @@ public class MockRepository implements IRepository {
                     "1953",
                     false,
                     false,
-                    false));
+                    false)));
 
     @Override
     public Observable<User> login(@NonNull LoginRequest request) {
         return Observable.fromArray(User.create(1L,
-                "dsasdsadasas",
+                "1b234c567df890ff23453e67ac",
                 request.username(),
                 "example@example.com",
-                "ivan",
-                "ivic",
+                "John",
+                "Doe",
                 Gender.MALE));
     }
 
     @Override
     public Observable<User> register(@NonNull RegisterRequest request) {
-        return null;
+        return Observable.fromArray(User.create(1L,
+                "1b234c567df890ff23453e67ac",
+                request.username(),
+                request.email(),
+                request.name(),
+                request.surname(),
+                Gender.MALE));
     }
 
     @Override
@@ -144,7 +151,7 @@ public class MockRepository implements IRepository {
                 } else {
                     List<PerfumeItem> liked = new ArrayList<>(perfumes.size() / 2);
                     for (PerfumeItem perfume : perfumes) {
-                        if (perfume.liked()) {
+                        if (perfume.favorited()) {
                             liked.add(perfume);
                         }
                     }
@@ -199,60 +206,76 @@ public class MockRepository implements IRepository {
     }
 
     @Override
-    public Observable<Void> changeLiked(@NonNull Long userId, @NonNull final LikedRequest request) {
-        return Observable.fromCallable(new Callable<Void>() {
+    public Observable<Void> changeLiked(@NonNull Long userId,
+                                        @NonNull final FavoriteRequest request) {
+        return new Observable<Void>() {
             @Override
-            public Void call() throws Exception {
-                for (int i = 0, max = perfumes.size(); i < max; i++) {
-                    PerfumeItem perfume = perfumes.get(i);
+            protected void subscribeActual(Observer<? super Void> observer) {
+                try {
+                    for (int i = 0, max = perfumes.size(); i < max; i++) {
+                        PerfumeItem perfume = perfumes.get(i);
 
-                    if (perfume.id().equals(request.parfumeId())) {
-                        PerfumeItem changedPerfume = perfume.withLiked(request.liked());
-                        perfumes.remove(i);
-                        perfumes.add(i, changedPerfume);
+                        if (perfume.id().equals(request.parfumeId())) {
+                            PerfumeItem changedPerfume = perfume.withFavorited(request.liked());
+                            perfumes.remove(i);
+                            perfumes.add(i, changedPerfume);
+                            break;
+                        }
                     }
+                    observer.onComplete();
+                } catch (Exception e) {
+                    observer.onError(e);
                 }
-                return null;
             }
-        });
+        };
     }
 
     @Override
     public Observable<Void> changeWishlisted(@NonNull Long userId,
                                              @NonNull final WishlistRequest request) {
-        return Observable.fromCallable(new Callable<Void>() {
+        return new Observable<Void>() {
             @Override
-            public Void call() throws Exception {
-                for (int i = 0, max = perfumes.size(); i < max; i++) {
-                    PerfumeItem perfume = perfumes.get(i);
+            protected void subscribeActual(Observer<? super Void> observer) {
+                try {
+                    for (int i = 0, max = perfumes.size(); i < max; i++) {
+                        PerfumeItem perfume = perfumes.get(i);
 
-                    if (perfume.id().equals(request.parfumeId())) {
-                        PerfumeItem changedPerfume = perfume.withWishlisted(request.wishlisted());
-                        perfumes.remove(i);
-                        perfumes.add(i, changedPerfume);
+                        if (perfume.id().equals(request.parfumeId())) {
+                            PerfumeItem changedPerfume = perfume.withWishlisted(request.wishlisted());
+                            perfumes.remove(i);
+                            perfumes.add(i, changedPerfume);
+                            break;
+                        }
                     }
+                    observer.onComplete();
+                } catch (Exception e) {
+                    observer.onError(e);
                 }
-                return null;
             }
-        });
+        };
     }
 
     @Override
     public Observable<Void> changeOwned(@NonNull Long userId, @NonNull final OwnedRequest request) {
-        return Observable.fromCallable(new Callable<Void>() {
+        return new Observable<Void>() {
             @Override
-            public Void call() throws Exception {
-                for (int i = 0, max = perfumes.size(); i < max; i++) {
-                    PerfumeItem perfume = perfumes.get(i);
+            protected void subscribeActual(Observer<? super Void> observer) {
+                try {
+                    for (int i = 0, max = perfumes.size(); i < max; i++) {
+                        PerfumeItem perfume = perfumes.get(i);
 
-                    if (perfume.id().equals(request.parfumeId())) {
-                        PerfumeItem changedPerfume = perfume.withOwned(request.owned());
-                        perfumes.remove(i);
-                        perfumes.add(i, changedPerfume);
+                        if (perfume.id().equals(request.parfumeId())) {
+                            PerfumeItem changedPerfume = perfume.withOwned(request.owned());
+                            perfumes.remove(i);
+                            perfumes.add(i, changedPerfume);
+                            break;
+                        }
                     }
+                    observer.onComplete();
+                } catch (Exception e) {
+                    observer.onError(e);
                 }
-                return null;
             }
-        });
+        };
     }
 }

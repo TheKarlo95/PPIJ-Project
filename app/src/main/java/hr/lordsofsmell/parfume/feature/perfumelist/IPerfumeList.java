@@ -10,7 +10,7 @@ import hr.lordsofsmell.parfume.domain.model.params.GetWishlistedPerfumesParams;
 import hr.lordsofsmell.parfume.domain.model.params.LikedRequestParams;
 import hr.lordsofsmell.parfume.domain.model.params.OwnedRequestParams;
 import hr.lordsofsmell.parfume.domain.model.params.WishlistedRequestParams;
-import hr.lordsofsmell.parfume.domain.model.request.LikedRequest;
+import hr.lordsofsmell.parfume.domain.model.request.FavoriteRequest;
 import hr.lordsofsmell.parfume.domain.model.request.OwnedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
@@ -25,21 +25,21 @@ public interface IPerfumeList {
 
         boolean isRefreshing();
 
-        void likeChanged(Long parfumeId);
+        void favoriteChanged(long perfumeId, boolean isChecked);
 
-        void wishlistedChanged(Long parfumeId);
+        void wishlistedChanged(long perfumeId, boolean isChecked);
 
-        void ownedChanged(Long parfumeId);
+        void ownedChanged(long perfumeId, boolean isChecked);
     }
 
     interface Presenter extends ICore.Presenter {
-        int getPerfumeListType();
+        int getListType();
 
-        void setPerfumeListType(int perfumeListType);
+        void setListType(int perfumeListType);
 
         void loadPerfumes(boolean clearAdapter, boolean userSwipe);
 
-        void changeLiked(LikedRequest request);
+        void changeFavorite(FavoriteRequest request);
 
         void changeWishlisted(WishlistRequest request);
 

@@ -2,7 +2,7 @@ package hr.lordsofsmell.parfume.domain.repository.network;
 
 import java.util.List;
 
-import hr.lordsofsmell.parfume.domain.model.request.LikedRequest;
+import hr.lordsofsmell.parfume.domain.model.request.FavoriteRequest;
 import hr.lordsofsmell.parfume.domain.model.request.LoginRequest;
 import hr.lordsofsmell.parfume.domain.model.request.OwnedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.RegisterRequest;
@@ -29,7 +29,7 @@ public interface ApiService {
     @GET("parfumes/{from}/{to}")
     Observable<List<PerfumeItem>> getAllParfumes(@Path("from") int from, @Path("to") int to);
 
-    @GET("users/{id}/liked/{from}/{to}")
+    @GET("users/{id}/favorited/{from}/{to}")
     Observable<List<PerfumeItem>> getLikedParfumes(@Header("X-Authorization") String token,
                                                    @Path("id") long userId,
                                                    @Path("from") int from,
@@ -47,10 +47,10 @@ public interface ApiService {
                                                    @Path("from") int from,
                                                    @Path("to") int to);
 
-    @POST("users/{id}/liked")
+    @POST("users/{id}/favorited")
     Observable<Void> changeLiked(@Header("X-Authorization") String token,
                                  @Path("id") Long id,
-                                 @Body LikedRequest request);
+                                 @Body FavoriteRequest request);
 
     @POST("users/{id}/wishlist")
     Observable<Void> changeWishlisted(@Header("X-Authorization") String token,

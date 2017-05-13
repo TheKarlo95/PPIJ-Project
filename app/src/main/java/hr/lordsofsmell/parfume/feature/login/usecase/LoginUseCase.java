@@ -11,6 +11,7 @@ import hr.lordsofsmell.parfume.domain.repository.IRepository;
 import hr.lordsofsmell.parfume.feature.login.ILogin;
 import hr.lordsofsmell.parfume.threads.PostExecutionThread;
 import hr.lordsofsmell.parfume.threads.ThreadExecutor;
+import hr.lordsofsmell.parfume.utils.UserUtils;
 import io.reactivex.Observable;
 
 /**
@@ -30,8 +31,12 @@ public class LoginUseCase extends UseCase<LoginRequest, User>
     }
 
     @Override
-    protected Observable<User> createObservable(LoginRequest loginRequest) {
-        return null;
+    protected Observable<User> createObservable(LoginRequest params) {
+        if (params == null) {
+            return Observable.error(new NullPointerException("Parameter params can't be null"));
+        } else {
+            return repository.login(params);
+        }
     }
 
 

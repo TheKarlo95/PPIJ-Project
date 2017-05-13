@@ -15,6 +15,7 @@
         android:layout_marginEnd="30dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="30dp"
+        android:layout_centerInParent="true"
         app:cardElevation="2dp">
 
         <LinearLayout
@@ -33,7 +34,7 @@
                     style="@style/EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Username"
+                    android:hint="@string/login_username"
                     android:imeOptions="actionNext"
                     android:inputType="textVisiblePassword|textNoSuggestions"
                     android:nextFocusDown="@+id/et_password"/>
@@ -49,7 +50,7 @@
                     style="@style/EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Password"
+                    android:hint="@string/login_password"
                     android:imeOptions="actionGo"
                     android:inputType="textPassword"
                     android:nextFocusDown="@+id/btn_login"
@@ -69,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:nextFocusRight="@+id/btn_login"
                     android:nextFocusUp="@+id/et_password"
-                    android:text="Register"
+                    android:text="@string/login_register_button"
                     android:theme="@style/Button.Flat"/>
 
                 <Button
@@ -78,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:nextFocusLeft="@+id/btn_register"
                     android:nextFocusUp="@+id/et_password"
-                    android:text="Login"
+                    android:text="@string/login_login_button"
                     android:theme="@style/Button.Colored"/>
             </LinearLayout>
         </LinearLayout>

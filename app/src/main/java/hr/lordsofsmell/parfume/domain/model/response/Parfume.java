@@ -49,7 +49,7 @@ public abstract class Parfume implements Parcelable {
     @SerializedName("year")
     public abstract String year();
 
-    @SerializedName("liked")
+    @SerializedName("favorited")
     public abstract Boolean liked();
 
     @SerializedName("owned")

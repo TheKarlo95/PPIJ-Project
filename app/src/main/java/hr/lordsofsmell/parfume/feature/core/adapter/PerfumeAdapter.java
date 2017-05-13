@@ -8,7 +8,9 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -22,12 +24,12 @@ import hr.lordsofsmell.parfume.utils.PreferencesUtil;
 
 public class PerfumeAdapter extends MjolnirRecyclerAdapter<PerfumeItem> {
 
-    private OnPerfumeLikeClickListener likeListener;
+    private OnPerfumeFavoriteClickListener likeListener;
     private OnPerfumeWishlistClickListener wishlistListener;
     private OnPerfumeOwnedClickListener ownedListener;
 
     public PerfumeAdapter(Context context,
-                          OnPerfumeLikeClickListener likeListener,
+                          OnPerfumeFavoriteClickListener likeListener,
                           OnPerfumeWishlistClickListener wishlistListener,
                           OnPerfumeOwnedClickListener ownedListener) {
         super(context, Collections.<PerfumeItem>emptyList());
@@ -35,6 +37,37 @@ public class PerfumeAdapter extends MjolnirRecyclerAdapter<PerfumeItem> {
         this.wishlistListener = wishlistListener;
         this.ownedListener = ownedListener;
 
+    }
+
+    public void update(PerfumeItem newPerfume) {
+        int index = getIndexById(newPerfume.id());
+
+        List<PerfumeItem> oldItems = (List<PerfumeItem>) getAll();
+        List<PerfumeItem> newItems = new ArrayList<>(oldItems);
+        newItems.remove(index);
+        newItems.add(index, newPerfume);
+
+        update(newItems, new PerfumeItemsDiffUtil(oldItems, newItems));
+    }
+
+    public int getIndexById(long id) {
+        int index = -1;
+        int i = 0;
+
+        for (PerfumeItem tmp : getAll()) {
+            if (tmp.id() == id) {
+                index = i;
+                break;
+            } else {
+                i++;
+            }
+        }
+
+        return index;
+    }
+
+    public PerfumeItem getById(long id) {
+        return get(getIndexById(id));
     }
 
     @Override
@@ -93,12 +126,11 @@ public class PerfumeAdapter extends MjolnirRecyclerAdapter<PerfumeItem> {
             tvYear.setText(perfume.year());
 
             boolean isLoggedIn = PreferencesUtil.isLoggedIn();
-//            isLoggedIn = true; // use to bypass login
 
             setEnabled(isLoggedIn);
 
             if (isLoggedIn) {
-                cbFavorite.setChecked(perfume.liked());
+                cbFavorite.setChecked(perfume.favorited());
                 cbWishlist.setChecked(perfume.wishlisted());
                 cbOwned.setChecked(perfume.owned());
             }
@@ -130,7 +162,7 @@ public class PerfumeAdapter extends MjolnirRecyclerAdapter<PerfumeItem> {
                 cbFavorite.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        likeListener.onLikeClick(itemView,
+                        likeListener.onFavoriteClick(itemView,
                                 perfume,
                                 position,
                                 (Boolean) cbFavorite.getTag());
@@ -162,8 +194,8 @@ public class PerfumeAdapter extends MjolnirRecyclerAdapter<PerfumeItem> {
         }
     }
 
-    public interface OnPerfumeLikeClickListener {
-        void onLikeClick(View view, PerfumeItem perfume, int position, boolean enabled);
+    public interface OnPerfumeFavoriteClickListener {
+        void onFavoriteClick(View view, PerfumeItem perfume, int position, boolean enabled);
     }
 
     public interface OnPerfumeWishlistClickListener {

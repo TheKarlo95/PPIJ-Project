@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
-import hr.lordsofsmell.parfume.domain.model.request.LikedRequest;
+import hr.lordsofsmell.parfume.domain.model.request.FavoriteRequest;
 import hr.lordsofsmell.parfume.domain.model.request.LoginRequest;
 import hr.lordsofsmell.parfume.domain.model.request.OwnedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.RegisterRequest;
@@ -61,7 +61,7 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public Observable<Void> changeLiked(@NonNull Long userId, @NonNull LikedRequest request) {
+    public Observable<Void> changeLiked(@NonNull Long userId, @NonNull FavoriteRequest request) {
         return ObservableUtils.getFirstNonNull(network.changeLiked(userId, request));
     }
 

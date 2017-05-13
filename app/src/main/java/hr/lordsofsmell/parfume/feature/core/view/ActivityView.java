@@ -7,10 +7,9 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.TextView;
+import android.util.Log;
 import android.widget.Toast;
 
-import butterknife.BindView;
 import butterknife.Unbinder;
 import hr.lordsofsmell.parfume.AndroidApplication;
 import hr.lordsofsmell.parfume.R;
@@ -22,9 +21,13 @@ public abstract class ActivityView extends AppCompatActivity implements ICore.Vi
     private ICore.Presenter presenter;
     private ProgressDialog dialog;
     private Unbinder unbinder;
+    private String tag;
 
     @LayoutRes
     protected abstract int getLayoutResId();
+
+    @NonNull
+    protected abstract String getLogTag();
 
     protected abstract Unbinder bind();
 
@@ -38,6 +41,8 @@ public abstract class ActivityView extends AppCompatActivity implements ICore.Vi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        tag = getLogTag();
+        Log.i(tag, "onCreate started");
         super.onCreate(savedInstanceState);
         injectDependencies(((AndroidApplication) getApplication()).getApplicationComponent());
         setContentView(getLayoutResId());
@@ -53,34 +58,42 @@ public abstract class ActivityView extends AppCompatActivity implements ICore.Vi
         } else {
             executeOnFirstRun(intent);
         }
+        Log.i(tag, "onCreate finished");
     }
 
     @Override
     protected void onResume() {
+        Log.i(tag, "onResume started");
         super.onResume();
         if (presenter != null) {
             presenter.onResume();
         }
+        Log.i(tag, "onResume finished");
     }
 
     @Override
     protected void onPause() {
+        Log.i(tag, "onPause started");
         super.onPause();
         if (presenter != null) {
             presenter.onPause();
         }
+        Log.i(tag, "onPause finished");
     }
 
     @Override
     protected void onStop() {
+        Log.i(tag, "onStop started");
         super.onStop();
         if (presenter != null) {
             presenter.onStop();
         }
+        Log.i(tag, "onStop finished");
     }
 
     @Override
     protected void onDestroy() {
+        Log.i(tag, "onDestroy started");
         super.onDestroy();
 
         hideLoading();
@@ -90,12 +103,14 @@ public abstract class ActivityView extends AppCompatActivity implements ICore.Vi
         if (presenter != null) {
             presenter.onDestroy();
         }
+        Log.i(tag, "onDestroy finished");
     }
 
     @Override
     public void showLoading() {
         if (dialog != null) {
             dialog.show();
+            Log.i(tag, "Dialog shown");
         }
     }
 
@@ -103,6 +118,7 @@ public abstract class ActivityView extends AppCompatActivity implements ICore.Vi
     public void hideLoading() {
         if (dialog != null) {
             dialog.hide();
+            Log.i(tag, "Dialog hidden");
         }
     }
 

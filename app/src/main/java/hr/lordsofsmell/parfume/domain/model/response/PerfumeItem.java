@@ -13,10 +13,17 @@ public abstract class PerfumeItem {
                                      String company,
                                      String model,
                                      String year,
-                                     boolean liked,
+                                     boolean favorited,
                                      boolean owned,
                                      boolean wishlisted) {
-        return new AutoValue_PerfumeItem(id, image, company, model, year, liked, owned, wishlisted);
+        return new AutoValue_PerfumeItem(id,
+                image,
+                company,
+                model,
+                year,
+                favorited,
+                owned,
+                wishlisted);
     }
 
     @SerializedName("id")
@@ -34,20 +41,20 @@ public abstract class PerfumeItem {
     @SerializedName("year")
     public abstract String year();
 
-    @SerializedName("liked")
-    public abstract Boolean liked();
-
-    @SerializedName("owned")
-    public abstract Boolean owned();
+    @SerializedName("favorited")
+    public abstract Boolean favorited();
 
     @SerializedName("wishlisted")
     public abstract Boolean wishlisted();
 
-    public abstract PerfumeItem withLiked(Boolean liked);
+    @SerializedName("owned")
+    public abstract Boolean owned();
 
-    public abstract PerfumeItem withOwned(Boolean wishlisted);
+    public abstract PerfumeItem withFavorited(Boolean favorited);
 
-    public abstract PerfumeItem withWishlisted(Boolean liked);
+    public abstract PerfumeItem withWishlisted(Boolean wishlisted);
+
+    public abstract PerfumeItem withOwned(Boolean owned);
 
     public static TypeAdapter<PerfumeItem> typeAdapter(Gson gson) {
         return new AutoValue_PerfumeItem.GsonTypeAdapter(gson);

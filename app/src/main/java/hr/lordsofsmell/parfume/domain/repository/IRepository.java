@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
-import hr.lordsofsmell.parfume.domain.model.request.LikedRequest;
+import hr.lordsofsmell.parfume.domain.model.request.FavoriteRequest;
 import hr.lordsofsmell.parfume.domain.model.request.LoginRequest;
 import hr.lordsofsmell.parfume.domain.model.request.OwnedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.RegisterRequest;
@@ -12,7 +12,6 @@ import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.domain.model.response.User;
 import io.reactivex.Observable;
-import retrofit2.http.Path;
 
 public interface IRepository {
 
@@ -28,7 +27,7 @@ public interface IRepository {
 
     Observable<List<PerfumeItem>> getOwnedParfumes(@NonNull Long userId, int from, int numOfItems);
 
-    Observable<Void> changeLiked(@NonNull Long userId, @NonNull LikedRequest request);
+    Observable<Void> changeLiked(@NonNull Long userId, @NonNull FavoriteRequest request);
 
     Observable<Void> changeWishlisted(@NonNull Long userId, @NonNull WishlistRequest request);
 

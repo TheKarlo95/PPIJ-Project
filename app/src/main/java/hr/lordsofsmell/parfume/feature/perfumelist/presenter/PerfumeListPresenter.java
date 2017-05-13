@@ -14,7 +14,7 @@ import hr.lordsofsmell.parfume.domain.model.params.GetWishlistedPerfumesParams;
 import hr.lordsofsmell.parfume.domain.model.params.LikedRequestParams;
 import hr.lordsofsmell.parfume.domain.model.params.OwnedRequestParams;
 import hr.lordsofsmell.parfume.domain.model.params.WishlistedRequestParams;
-import hr.lordsofsmell.parfume.domain.model.request.LikedRequest;
+import hr.lordsofsmell.parfume.domain.model.request.FavoriteRequest;
 import hr.lordsofsmell.parfume.domain.model.request.OwnedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
@@ -39,7 +39,7 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
     private IPerfumeList.ChangeWishlistedUseCase changeWishlistedUseCase;
     private IPerfumeList.ChangeOwnedUseCase changeOwnedUseCase;
 
-    private int perfumeListType;
+    private int listType;
     private int lastPerfumeIndex;
     private boolean reachedLastPerfume;
 
@@ -61,19 +61,19 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
         this.changeWishlistedUseCase = changeWishlistedUseCase;
         this.changeOwnedUseCase = changeOwnedUseCase;
 
-        perfumeListType = 0;
+        listType = 0;
         lastPerfumeIndex = 1;
         reachedLastPerfume = false;
     }
 
     @Override
-    public int getPerfumeListType() {
-        return perfumeListType;
+    public int getListType() {
+        return listType;
     }
 
     @Override
-    public void setPerfumeListType(int perfumeListType) {
-        this.perfumeListType = perfumeListType;
+    public void setListType(int listType) {
+        this.listType = listType;
     }
 
     @Override
@@ -87,23 +87,23 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
                 reachedLastPerfume = false;
             }
 
-            int userId = PreferencesUtil.getUserId();
+            long userId = PreferencesUtil.getUserId();
 
-            switch (perfumeListType) {
-                case PerfumeListActivity.ALL_PERFUMES_LIST:
+            switch (listType) {
+                case PerfumeListActivity.LIST_TYPE_ALL_PERFUMES:
                     GetAllPerfumesParams allParams = GetAllPerfumesParams.create(lastPerfumeIndex,
                             LOAD_ITEMS);
                     getAllPerfumesUseCase.execute(allParams,
                             getListObserver(userSwipe, R.string.get_all_perfumes_error));
                     break;
-                case PerfumeListActivity.FAVORITED_PERFUMES_LIST:
+                case PerfumeListActivity.LIST_TYPE_FAVORITED:
                     GetLikedPerfumesParams likedParams = GetLikedPerfumesParams.create(userId,
                             lastPerfumeIndex,
                             LOAD_ITEMS);
                     getLikedPerfumesUseCase.execute(likedParams,
                             getListObserver(userSwipe, R.string.get_liked_perfumes_error));
                     break;
-                case PerfumeListActivity.WISHLISTED_PERFUMES_LIST:
+                case PerfumeListActivity.LIST_TYPE_WISHLISTED:
                     GetWishlistedPerfumesParams wishlistedParams = GetWishlistedPerfumesParams.create(
                             userId,
                             lastPerfumeIndex,
@@ -111,7 +111,7 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
                     getWishlistedPerfumesUseCase.execute(wishlistedParams,
                             getListObserver(userSwipe, R.string.get_wishlisted_perfumes_error));
                     break;
-                case PerfumeListActivity.OWNED_PERFUMES_LIST:
+                case PerfumeListActivity.LIST_TYPE_OWNED:
                     GetOwnedPerfumesParams ownedParams = GetOwnedPerfumesParams.create(userId,
                             lastPerfumeIndex,
                             LOAD_ITEMS);
@@ -123,7 +123,7 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
     }
 
     @Override
-    public void changeLiked(final LikedRequest request) {
+    public void changeFavorite(final FavoriteRequest request) {
         final IPerfumeList.View view = (IPerfumeList.View) getView();
         view.showLoading();
 
@@ -138,7 +138,12 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
                     @Override
                     public void onNext(Void value) {
                         super.onNext(value);
-                        view.likeChanged(request.parfumeId());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        super.onComplete();
+                        view.favoriteChanged(request.parfumeId(), request.liked());
                     }
                 });
     }
@@ -159,7 +164,13 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
                     @Override
                     public void onNext(Void value) {
                         super.onNext(value);
-                        view.wishlistedChanged(request.parfumeId());
+                        view.wishlistedChanged(request.parfumeId(), request.wishlisted());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        super.onComplete();
+                        view.wishlistedChanged(request.parfumeId(), request.wishlisted());
                     }
                 });
     }
@@ -180,7 +191,12 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
                     @Override
                     public void onNext(Void value) {
                         super.onNext(value);
-                        view.ownedChanged(request.parfumeId());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        super.onComplete();
+                        view.ownedChanged(request.parfumeId(), request.owned());
                     }
                 });
     }

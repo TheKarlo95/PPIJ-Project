@@ -13,7 +13,7 @@ import hr.lordsofsmell.parfume.feature.login.ILogin;
 
 public class LoginPresenter extends Presenter implements ILogin.Presenter {
 
-    private static final String TAG = "LoginPresenter";
+    private static final String TAG = "Login";
 
     private ILogin.LoginUseCase loginUseCase;
 

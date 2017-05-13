@@ -39,6 +39,20 @@ public class PreferencesUtil {
                 .apply();
     }
 
+    public static void removeUser() {
+        AndroidApplication.getContext()
+                .getSharedPreferences(USER_PREFERENCES_KEY, Context.MODE_PRIVATE)
+                .edit()
+                .remove(USER_ID)
+                .remove(USER_TOKEN)
+                .remove(USER_USERNAME)
+                .remove(USER_EMAIL)
+                .remove(USER_NAME)
+                .remove(USER_SURNAME)
+                .remove(USER_GENDER)
+                .apply();
+    }
+
     public static User getUser() {
         SharedPreferences prefs = AndroidApplication.getContext()
                 .getSharedPreferences(USER_PREFERENCES_KEY, Context.MODE_PRIVATE);
@@ -47,10 +61,10 @@ public class PreferencesUtil {
         Long id = prefs.getLong(USER_ID, -1);
         if (id != -1) {
             String token = prefs.getString(USER_TOKEN, null);
-            String username = prefs.getString(USER_TOKEN, null);
-            String email = prefs.getString(USER_TOKEN, null);
-            String name = prefs.getString(USER_TOKEN, null);
-            String surname = prefs.getString(USER_TOKEN, null);
+            String username = prefs.getString(USER_USERNAME, null);
+            String email = prefs.getString(USER_EMAIL, null);
+            String name = prefs.getString(USER_NAME, null);
+            String surname = prefs.getString(USER_SURNAME, null);
             Gender gender = Gender.fromString(prefs.getString(USER_GENDER, null));
 
             user = User.create(id, token, username, email, name, surname, gender);
@@ -65,10 +79,10 @@ public class PreferencesUtil {
                 .getString(USER_TOKEN, null);
     }
 
-    public static int getUserId() {
+    public static long getUserId() {
         return AndroidApplication.getContext()
                 .getSharedPreferences(USER_PREFERENCES_KEY, Context.MODE_PRIVATE)
-                .getInt(USER_ID, -1);
+                .getLong(USER_ID, -1);
     }
 
     public static boolean isLoggedIn() {
