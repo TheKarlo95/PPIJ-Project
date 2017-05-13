@@ -42,6 +42,7 @@ import hr.lordsofsmell.parfume.feature.core.adapter.PerfumeAdapter;
 import hr.lordsofsmell.parfume.feature.core.view.ActivityView;
 import hr.lordsofsmell.parfume.feature.login.view.LoginActivity;
 import hr.lordsofsmell.parfume.feature.perfumelist.IPerfumeList;
+import hr.lordsofsmell.parfume.feature.register.view.RegisterActivity;
 import hr.lordsofsmell.parfume.utils.PreferencesUtil;
 
 public class PerfumeListActivity extends ActivityView
@@ -56,8 +57,8 @@ public class PerfumeListActivity extends ActivityView
     public static final String EXTRA_LIST_TYPE = "list_type";
     public static final int LIST_TYPE_ERROR = -1;
     public static final int LIST_TYPE_ALL_PERFUMES = 0;
-    public static final int LIST_TYPE_FAVORITED = 1;
-    public static final int LIST_TYPE_WISHLISTED = 2;
+    public static final int LIST_TYPE_FAVORITES = 1;
+    public static final int LIST_TYPE_WISHLIST = 2;
     public static final int LIST_TYPE_OWNED = 3;
 
     public static final String EXTRA_ACTION = "action_extra";
@@ -91,6 +92,7 @@ public class PerfumeListActivity extends ActivityView
 
     public static Intent createIntent(Context context, int listType) {
         Intent intent = new Intent(context, PerfumeListActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         if (listType != LIST_TYPE_ERROR) {
             intent.putExtra(EXTRA_LIST_TYPE, listType);
         }
@@ -128,26 +130,44 @@ public class PerfumeListActivity extends ActivityView
 
     @Override
     public void favoriteChanged(long perfumeId, boolean isChecked) {
-        PerfumeItem perfume = adapter.getById(perfumeId).withFavorited(isChecked);
-        adapter.update(perfume);
+        int index = adapter.getIndexById(perfumeId);
+
+        if(!isChecked && getListType(getIntent()) == LIST_TYPE_FAVORITES){
+            adapter.remove(index);
+        } else {
+            PerfumeItem perfume = adapter.get(index).withFavorited(isChecked);
+            adapter.update(perfume);
+        }
     }
 
     @Override
     public void wishlistedChanged(long perfumeId, boolean isChecked) {
-        PerfumeItem perfume = adapter.getById(perfumeId).withWishlisted(isChecked);
-        adapter.update(perfume);
+        int index = adapter.getIndexById(perfumeId);
+
+        if(!isChecked && getListType(getIntent()) == LIST_TYPE_WISHLIST){
+            adapter.remove(index);
+        } else {
+            PerfumeItem perfume = adapter.get(index).withWishlisted(isChecked);
+            adapter.update(perfume);
+        }
     }
 
     @Override
     public void ownedChanged(long perfumeId, boolean isChecked) {
-        PerfumeItem perfume = adapter.getById(perfumeId).withOwned(isChecked);
-        adapter.update(perfume);
+        int index = adapter.getIndexById(perfumeId);
+
+        if(!isChecked && getListType(getIntent()) == LIST_TYPE_OWNED){
+            adapter.remove(index);
+        } else {
+            PerfumeItem perfume = adapter.get(index).withOwned(isChecked);
+            adapter.update(perfume);
+        }
     }
 
     @Override
     public void onFavoriteClick(View view, PerfumeItem perfume, int position, boolean enabled) {
         if (enabled) {
-            presenter.changeFavorite(FavoriteRequest.create(perfume.favorited(), perfume.id()));
+            presenter.changeFavorite(FavoriteRequest.create(!perfume.favorited(), perfume.id()));
         } else {
             startActivity(LoginActivity.createIntent(this,
                     presenter.getListType(),
@@ -159,7 +179,7 @@ public class PerfumeListActivity extends ActivityView
     @Override
     public void onWishlistClick(View view, PerfumeItem perfume, int position, boolean enabled) {
         if (enabled) {
-            presenter.changeWishlisted(WishlistRequest.create(perfume.wishlisted(), perfume.id()));
+            presenter.changeWishlisted(WishlistRequest.create(!perfume.wishlisted(), perfume.id()));
         } else {
             startActivity(LoginActivity.createIntent(this,
                     presenter.getListType(),
@@ -171,7 +191,7 @@ public class PerfumeListActivity extends ActivityView
     @Override
     public void onOwnedClick(View view, PerfumeItem perfume, int position, boolean enabled) {
         if (enabled) {
-            presenter.changeOwned(OwnedRequest.create(perfume.owned(), perfume.id()));
+            presenter.changeOwned(OwnedRequest.create(!perfume.owned(), perfume.id()));
         } else {
             startActivity(LoginActivity.createIntent(this,
                     presenter.getListType(),
@@ -222,11 +242,6 @@ public class PerfumeListActivity extends ActivityView
             }
         });
 
-        if (intent != null) {
-            int listType = intent.getIntExtra(EXTRA_LIST_TYPE, LIST_TYPE_ALL_PERFUMES);
-            presenter.setListType(listType);
-        }
-
         srlPerfumesList.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -237,7 +252,7 @@ public class PerfumeListActivity extends ActivityView
 
         int listType = getListType(intent);
 
-        presenter.setListType(listType);
+        presenter.init(listType);
         setMenu(listType);
         setActivityTitle(listType);
 
@@ -287,30 +302,50 @@ public class PerfumeListActivity extends ActivityView
             } else {
                 startActivity(LoginActivity.createIntent(this, presenter.getListType()));
             }
+        } else if (id == R.id.nav_register) {
+            if (PreferencesUtil.isLoggedIn()) {
+                showLogoutDialog(R.string.register_dialog_message,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                PreferencesUtil.removeUser();
+                                startActivity(RegisterActivity.createIntent(PerfumeListActivity.this,
+                                        presenter.getListType()));
+                            }
+                        },
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+            } else {
+                startActivity(RegisterActivity.createIntent(this, presenter.getListType()));
+            }
         } else if (id == R.id.nav_all_perfumes) {
-            startActivity(createIntent(this, LIST_TYPE_ALL_PERFUMES));
+            startActivity(PerfumeListActivity.createIntent(this, LIST_TYPE_ALL_PERFUMES));
         } else if (id == R.id.nav_favorites) {
-            startActivity(createIntent(this, LIST_TYPE_FAVORITED));
+            if (PreferencesUtil.isLoggedIn()) {
+                startActivity(PerfumeListActivity.createIntent(this, LIST_TYPE_FAVORITES));
+            } else {
+                startActivity(LoginActivity.createIntent(this, LIST_TYPE_FAVORITES));
+            }
         } else if (id == R.id.nav_wishlist) {
-            startActivity(createIntent(this, LIST_TYPE_WISHLISTED));
+            if (PreferencesUtil.isLoggedIn()) {
+                startActivity(PerfumeListActivity.createIntent(this, LIST_TYPE_WISHLIST));
+            } else {
+                startActivity(LoginActivity.createIntent(this, LIST_TYPE_WISHLIST));
+            }
         } else if (id == R.id.nav_owned) {
-            startActivity(createIntent(this, LIST_TYPE_OWNED));
+            if (PreferencesUtil.isLoggedIn()) {
+                startActivity(PerfumeListActivity.createIntent(this, LIST_TYPE_OWNED));
+            } else {
+                startActivity(LoginActivity.createIntent(this, LIST_TYPE_OWNED));
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    private void showLogoutDialog(@StringRes int message,
-                                  @NonNull DialogInterface.OnClickListener positiveListener,
-                                  @NonNull DialogInterface.OnClickListener negativeListener) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.logout_dialog_title);
-        builder.setMessage(message);
-        builder.setPositiveButton(R.string.logout_ok_button, positiveListener);
-        builder.setNegativeButton(R.string.logout_cancel_button, negativeListener);
-        builder.show();
     }
 
     @Override
@@ -363,23 +398,34 @@ public class PerfumeListActivity extends ActivityView
         return listType;
     }
 
+    private void showLogoutDialog(@StringRes int message,
+                                  @NonNull DialogInterface.OnClickListener positiveListener,
+                                  @NonNull DialogInterface.OnClickListener negativeListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.logout_dialog_title);
+        builder.setMessage(message);
+        builder.setPositiveButton(R.string.logout_ok_button, positiveListener);
+        builder.setNegativeButton(R.string.logout_cancel_button, negativeListener);
+        builder.show();
+    }
+
     private void setMenu(int listType) {
         navigationView.setNavigationItemSelectedListener(this);
         switch (listType) {
             case LIST_TYPE_ALL_PERFUMES:
                 navigationView.inflateMenu(R.menu.all_perfumes_drawer);
                 break;
-            case LIST_TYPE_FAVORITED:
+            case LIST_TYPE_FAVORITES:
                 navigationView.inflateMenu(R.menu.favorites_drawer);
                 break;
-            case LIST_TYPE_WISHLISTED:
+            case LIST_TYPE_WISHLIST:
                 navigationView.inflateMenu(R.menu.wishlist_drawer);
                 break;
             case LIST_TYPE_OWNED:
                 navigationView.inflateMenu(R.menu.owned_perfumes_drawer);
                 break;
             default:
-                navigationView.inflateMenu(R.menu.activity_perfume_list_drawer);
+                navigationView.inflateMenu(R.menu.all_perfumes_drawer);
         }
     }
 
@@ -390,10 +436,10 @@ public class PerfumeListActivity extends ActivityView
                 case LIST_TYPE_ALL_PERFUMES:
                     actionBar.setTitle(R.string.all_perfumes_title);
                     break;
-                case LIST_TYPE_FAVORITED:
+                case LIST_TYPE_FAVORITES:
                     actionBar.setTitle(R.string.favorite_perfumes_title);
                     break;
-                case LIST_TYPE_WISHLISTED:
+                case LIST_TYPE_WISHLIST:
                     actionBar.setTitle(R.string.wishlist_perfumes_title);
                     break;
                 case LIST_TYPE_OWNED:

@@ -61,8 +61,8 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public Observable<Void> changeLiked(@NonNull Long userId, @NonNull FavoriteRequest request) {
-        return ObservableUtils.getFirstNonNull(network.changeLiked(userId, request));
+    public Observable<Void> changeFavorite(@NonNull Long userId, @NonNull FavoriteRequest request) {
+        return ObservableUtils.getFirstNonNull(network.changeFavorite(userId, request));
     }
 
     @Override

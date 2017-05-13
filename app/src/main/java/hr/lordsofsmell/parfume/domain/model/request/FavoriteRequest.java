@@ -8,12 +8,12 @@ import com.google.gson.annotations.SerializedName;
 @AutoValue
 public abstract class FavoriteRequest {
 
-    public static FavoriteRequest create(Boolean liked, Long perfumeId) {
-        return new AutoValue_FavoriteRequest(liked, perfumeId);
+    public static FavoriteRequest create(Boolean favorited, Long perfumeId) {
+        return new AutoValue_FavoriteRequest(favorited, perfumeId);
     }
 
     @SerializedName("favorited")
-    public abstract Boolean liked();
+    public abstract Boolean favorited();
 
     @SerializedName("parfumeId")
     public abstract Long parfumeId();

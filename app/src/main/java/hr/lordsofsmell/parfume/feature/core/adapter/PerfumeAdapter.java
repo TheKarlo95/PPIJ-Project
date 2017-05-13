@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -24,16 +23,16 @@ import hr.lordsofsmell.parfume.utils.PreferencesUtil;
 
 public class PerfumeAdapter extends MjolnirRecyclerAdapter<PerfumeItem> {
 
-    private OnPerfumeFavoriteClickListener likeListener;
+    private OnPerfumeFavoriteClickListener favoriteListener;
     private OnPerfumeWishlistClickListener wishlistListener;
     private OnPerfumeOwnedClickListener ownedListener;
 
     public PerfumeAdapter(Context context,
-                          OnPerfumeFavoriteClickListener likeListener,
+                          OnPerfumeFavoriteClickListener favoriteListener,
                           OnPerfumeWishlistClickListener wishlistListener,
                           OnPerfumeOwnedClickListener ownedListener) {
         super(context, Collections.<PerfumeItem>emptyList());
-        this.likeListener = likeListener;
+        this.favoriteListener = favoriteListener;
         this.wishlistListener = wishlistListener;
         this.ownedListener = ownedListener;
 
@@ -93,7 +92,6 @@ public class PerfumeAdapter extends MjolnirRecyclerAdapter<PerfumeItem> {
 
         ViewHolder(View itemView) {
             super(itemView);
-
             ButterKnife.bind(this, itemView);
         }
 
@@ -158,11 +156,11 @@ public class PerfumeAdapter extends MjolnirRecyclerAdapter<PerfumeItem> {
         }
 
         private void setListeners(final PerfumeItem perfume, final int position) {
-            if (likeListener != null) {
+            if (favoriteListener != null) {
                 cbFavorite.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        likeListener.onFavoriteClick(itemView,
+                        favoriteListener.onFavoriteClick(itemView,
                                 perfume,
                                 position,
                                 (Boolean) cbFavorite.getTag());

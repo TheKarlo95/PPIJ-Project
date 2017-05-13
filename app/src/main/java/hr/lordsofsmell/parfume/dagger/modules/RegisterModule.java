@@ -4,12 +4,6 @@ import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
-import hr.lordsofsmell.parfume.feature.perfumelist.IPerfumeList;
-import hr.lordsofsmell.parfume.feature.perfumelist.presenter.PerfumeListPresenter;
-import hr.lordsofsmell.parfume.feature.perfumelist.usecase.GetAllPerfumesUseCase;
-import hr.lordsofsmell.parfume.feature.perfumelist.usecase.GetLikedPerfumesUseCase;
-import hr.lordsofsmell.parfume.feature.perfumelist.usecase.GetOwnedPerfumesUseCase;
-import hr.lordsofsmell.parfume.feature.perfumelist.usecase.GetWishlistedPerfumesUseCase;
 import hr.lordsofsmell.parfume.feature.register.IRegister;
 import hr.lordsofsmell.parfume.feature.register.presenter.RegisterPresenter;
 import hr.lordsofsmell.parfume.feature.register.usecase.RegisterUseCase;

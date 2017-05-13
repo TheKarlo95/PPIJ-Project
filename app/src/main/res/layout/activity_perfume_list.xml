@@ -20,6 +20,5 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_perfume_list"
-        app:menu="@menu/activity_perfume_list_drawer"/>
+        app:headerLayout="@layout/nav_header_perfume_list"/>
 </android.support.v4.widget.DrawerLayout>

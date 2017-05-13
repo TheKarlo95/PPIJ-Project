@@ -69,7 +69,7 @@ public class NetworkDataSource implements IRepository {
     }
 
     @Override
-    public Observable<Void> changeLiked(@NonNull Long userId, @NonNull FavoriteRequest request) {
+    public Observable<Void> changeFavorite(@NonNull Long userId, @NonNull FavoriteRequest request) {
         return service.changeLiked(PreferencesUtil.getToken(), userId, request);
     }
 

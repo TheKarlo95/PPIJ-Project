@@ -16,15 +16,15 @@ import hr.lordsofsmell.parfume.threads.PostExecutionThread;
 import hr.lordsofsmell.parfume.threads.ThreadExecutor;
 import io.reactivex.Observable;
 
-public class GetLikedPerfumesUseCase extends UseCase<GetLikedPerfumesParams, List<PerfumeItem>>
+public class GetFavoritePerfumesUseCase extends UseCase<GetLikedPerfumesParams, List<PerfumeItem>>
         implements IPerfumeList.GetLikedPerfumesUseCase {
 
     private IRepository repository;
 
     @Inject
-    GetLikedPerfumesUseCase(@NonNull ThreadExecutor threadExecutor,
-                            @NonNull PostExecutionThread postExecutionThread,
-                            @NonNull IRepository repository) {
+    GetFavoritePerfumesUseCase(@NonNull ThreadExecutor threadExecutor,
+                               @NonNull PostExecutionThread postExecutionThread,
+                               @NonNull IRepository repository) {
         super(threadExecutor, postExecutionThread);
         this.repository = repository;
     }

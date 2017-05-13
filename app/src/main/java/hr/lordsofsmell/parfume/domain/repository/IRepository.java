@@ -27,7 +27,7 @@ public interface IRepository {
 
     Observable<List<PerfumeItem>> getOwnedParfumes(@NonNull Long userId, int from, int numOfItems);
 
-    Observable<Void> changeLiked(@NonNull Long userId, @NonNull FavoriteRequest request);
+    Observable<Void> changeFavorite(@NonNull Long userId, @NonNull FavoriteRequest request);
 
     Observable<Void> changeWishlisted(@NonNull Long userId, @NonNull WishlistRequest request);
 

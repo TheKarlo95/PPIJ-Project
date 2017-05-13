@@ -12,15 +12,15 @@ import hr.lordsofsmell.parfume.threads.PostExecutionThread;
 import hr.lordsofsmell.parfume.threads.ThreadExecutor;
 import io.reactivex.Observable;
 
-public class ChangeLikedUseCase extends UseCase<LikedRequestParams, Void>
+public class ChangeFavoriteUseCase extends UseCase<LikedRequestParams, Void>
         implements IPerfumeList.ChangeLikedUseCase {
 
     private IRepository repository;
 
     @Inject
-    ChangeLikedUseCase(@NonNull ThreadExecutor threadExecutor,
-                       @NonNull PostExecutionThread postExecutionThread,
-                       @NonNull IRepository repository) {
+    ChangeFavoriteUseCase(@NonNull ThreadExecutor threadExecutor,
+                          @NonNull PostExecutionThread postExecutionThread,
+                          @NonNull IRepository repository) {
         super(threadExecutor, postExecutionThread);
         this.repository = repository;
     }
@@ -32,7 +32,7 @@ public class ChangeLikedUseCase extends UseCase<LikedRequestParams, Void>
         } else if (params.request().parfumeId() <= 0) {
             return Observable.error(new IllegalArgumentException("Parameter parfumeId can't be less than or equals to 0"));
         } else {
-            return repository.changeLiked(params.userId(), params.request());
+            return repository.changeFavorite(params.userId(), params.request());
         }
     }
 }

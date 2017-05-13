@@ -155,7 +155,11 @@ public class MockRepository implements IRepository {
                             liked.add(perfume);
                         }
                     }
-                    return liked.subList(from - 1, from + numOfItems - 1);
+
+                    int fromIndex = liked.size() < from - 1 ? liked.size() : from - 1;
+                    int to = from + numOfItems - 1;
+                    int toIndex = liked.size() < to ? liked.size() : to;
+                    return liked.subList(fromIndex, toIndex);
                 }
             }
         });
@@ -177,7 +181,11 @@ public class MockRepository implements IRepository {
                             wishlisted.add(perfume);
                         }
                     }
-                    return wishlisted.subList(from - 1, from + numOfItems - 1);
+
+                    int fromIndex = wishlisted.size() < from - 1 ? wishlisted.size() : from - 1;
+                    int to = from + numOfItems - 1;
+                    int toIndex = wishlisted.size() < to ? wishlisted.size() : to;
+                    return wishlisted.subList(fromIndex, toIndex);
                 }
             }
         });
@@ -199,15 +207,19 @@ public class MockRepository implements IRepository {
                             owned.add(perfume);
                         }
                     }
-                    return owned.subList(from - 1, from + numOfItems - 1);
+
+                    int fromIndex = owned.size() < from - 1 ? owned.size() : from - 1;
+                    int to = from + numOfItems - 1;
+                    int toIndex = owned.size() < to ? owned.size() : to;
+                    return owned.subList(fromIndex, toIndex);
                 }
             }
         });
     }
 
     @Override
-    public Observable<Void> changeLiked(@NonNull Long userId,
-                                        @NonNull final FavoriteRequest request) {
+    public Observable<Void> changeFavorite(@NonNull Long userId,
+                                           @NonNull final FavoriteRequest request) {
         return new Observable<Void>() {
             @Override
             protected void subscribeActual(Observer<? super Void> observer) {
@@ -216,7 +228,7 @@ public class MockRepository implements IRepository {
                         PerfumeItem perfume = perfumes.get(i);
 
                         if (perfume.id().equals(request.parfumeId())) {
-                            PerfumeItem changedPerfume = perfume.withFavorited(request.liked());
+                            PerfumeItem changedPerfume = perfume.withFavorited(request.favorited());
                             perfumes.remove(i);
                             perfumes.add(i, changedPerfume);
                             break;

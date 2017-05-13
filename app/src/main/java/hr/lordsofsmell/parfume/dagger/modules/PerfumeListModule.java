@@ -4,11 +4,11 @@ import dagger.Module;
 import dagger.Provides;
 import hr.lordsofsmell.parfume.feature.perfumelist.IPerfumeList;
 import hr.lordsofsmell.parfume.feature.perfumelist.presenter.PerfumeListPresenter;
-import hr.lordsofsmell.parfume.feature.perfumelist.usecase.ChangeLikedUseCase;
+import hr.lordsofsmell.parfume.feature.perfumelist.usecase.ChangeFavoriteUseCase;
 import hr.lordsofsmell.parfume.feature.perfumelist.usecase.ChangeOwnedUseCase;
 import hr.lordsofsmell.parfume.feature.perfumelist.usecase.ChangeWishlistedUseCase;
 import hr.lordsofsmell.parfume.feature.perfumelist.usecase.GetAllPerfumesUseCase;
-import hr.lordsofsmell.parfume.feature.perfumelist.usecase.GetLikedPerfumesUseCase;
+import hr.lordsofsmell.parfume.feature.perfumelist.usecase.GetFavoritePerfumesUseCase;
 import hr.lordsofsmell.parfume.feature.perfumelist.usecase.GetOwnedPerfumesUseCase;
 import hr.lordsofsmell.parfume.feature.perfumelist.usecase.GetWishlistedPerfumesUseCase;
 
@@ -37,7 +37,7 @@ public class PerfumeListModule {
     }
 
     @Provides
-    public IPerfumeList.GetLikedPerfumesUseCase provideGetLikedPerfumesUseCase(GetLikedPerfumesUseCase useCase) {
+    public IPerfumeList.GetLikedPerfumesUseCase provideGetLikedPerfumesUseCase(GetFavoritePerfumesUseCase useCase) {
         return useCase;
     }
 
@@ -52,7 +52,7 @@ public class PerfumeListModule {
     }
 
     @Provides
-    public IPerfumeList.ChangeLikedUseCase provideChangeLikedUseCase(ChangeLikedUseCase useCase) {
+    public IPerfumeList.ChangeLikedUseCase provideChangeLikedUseCase(ChangeFavoriteUseCase useCase) {
         return useCase;
     }
 

@@ -4,7 +4,7 @@
     <string name="loading_message">Loading…</string>
 
     <string name="get_all_perfumes_error">Error happened while getting list of all perfumes</string>
-    <string name="get_liked_perfumes_error">Error happened while getting list of all liked perfumes</string>
+    <string name="get_liked_perfumes_error">Error happened while getting list of all favorite perfumes</string>
     <string name="get_wishlisted_perfumes_error">Error happened while getting list of all perfumes from wishlist</string>
     <string name="get_owned_perfumes_error">Error happened while getting list of all owned perfumes</string>
     <string name="change_liked_error">Error happened while changing like state of perfume</string>
@@ -25,6 +25,13 @@
     <string name="perfume_image">Perfume image</string>
     <string name="empty_perfumes_list">No perfumes</string>
 
+    <string name="toolbar_logout">Logout</string>
+    <string name="logout_dialog_title">Logout</string>
+    <string name="logout_dialog_message_login">You first need to logout before login.</string>
+    <string name="logout_dialog_message">Are you sure you want to logout?</string>
+    <string name="logout_ok_button">OK</string>
+    <string name="logout_cancel_button">Cancel</string>
+
     <string name="title_activity_login">Login</string>
     <string name="login_username">Username</string>
     <string name="login_password">Password</string>
@@ -32,10 +39,13 @@
     <string name="login_login_button">Login</string>
 
     <string name="title_activity_register">Register</string>
-    <string name="toolbar_logout">Logout</string>
-    <string name="logout_dialog_title">Logout</string>
-    <string name="logout_dialog_message_login">You first need to logout before login.</string>
-    <string name="logout_dialog_message">Are you sure you want to logout?</string>
-    <string name="logout_ok_button">OK</string>
-    <string name="logout_cancel_button">Cancel</string>
+    <string name="register_username">Username</string>
+    <string name="register_password">Password</string>
+    <string name="register_password_confirmation">Password confirmation</string>
+    <string name="register_email">Email</string>
+    <string name="register_name">Name</string>
+    <string name="register_surname">Surname</string>
+    <string name="register_gender">Gender</string>
+    <string name="register_register_button">Register</string>
+    <string name="register_dialog_message">You first need to logout before registering another account.</string>
 </resources>
