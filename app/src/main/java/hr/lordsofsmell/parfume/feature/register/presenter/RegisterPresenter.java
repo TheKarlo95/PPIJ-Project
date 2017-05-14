@@ -41,7 +41,7 @@ public class RegisterPresenter extends Presenter implements IRegister.Presenter 
                     name,
                     surname,
                     gender);
-            useCase.execute(request, new Observer<User>(view,TAG, R.string.login_error){
+            useCase.execute(request, new Observer<User>(view,TAG, R.string.register_error){
                 @Override
                 public void onNext(User value){
                     super.onNext(value);
