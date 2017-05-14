@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_login"
+    android:id="@+id/activity_register"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".feature.login.view.LoginActivity">
+    tools:context=".feature.login.view.RegisterActivity">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/cd_login_form"
+        android:id="@+id/cd_register_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
@@ -36,7 +36,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/register_username"
                     android:imeOptions="actionNext"
-                    android:inputType="textVisiblePassword|textNoSuggestions"
+                    android:inputType="textNoSuggestions"
                     android:nextFocusDown="@+id/et_password"/>
             </android.support.design.widget.TextInputLayout>
 
@@ -51,7 +51,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/register_password"
-                    android:imeOptions="actionGo"
+                    android:imeOptions="actionNext"
                     android:inputType="textPassword"
                     android:nextFocusDown="@+id/et_password_confirmation"
                     android:nextFocusUp="@+id/et_username"/>
@@ -68,9 +68,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/register_password_confirmation"
-                    android:imeOptions="actionGo"
+                    android:imeOptions="actionNext"
                     android:inputType="textPassword"
-                    android:nextFocusDown="@+id/btn_login"
+                    android:nextFocusDown="@+id/et_email"
                     android:nextFocusUp="@+id/et_password"/>
             </android.support.design.widget.TextInputLayout>
 
@@ -85,7 +85,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/register_email"
-                    android:imeOptions="actionGo"
+                    android:imeOptions="actionNext"
                     android:inputType="textEmailAddress"
                     android:nextFocusDown="@+id/et_name"
                     android:nextFocusUp="@+id/et_password_confirmation"/>
@@ -102,10 +102,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/register_name"
-                    android:imeOptions="actionGo"
+                    android:imeOptions="actionNext"
                     android:inputType="textPersonName|textCapWords"
                     android:nextFocusDown="@+id/et_surname"
-                    android:nextFocusUp="@+id/et_name"/>
+                    android:nextFocusUp="@+id/et_email"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -119,7 +119,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/register_surname"
-                    android:imeOptions="actionGo"
+                    android:imeOptions="actionNext"
                     android:inputType="textPersonName|textCapWords"
                     android:nextFocusDown="@+id/et_gender"
                     android:nextFocusUp="@+id/et_name"/>
@@ -137,7 +137,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/register_gender"
                     android:imeOptions="actionGo"
-                    android:inputType="textPersonName|textCapWords"
+                    android:inputType="textNoSuggestions"
                     android:nextFocusDown="@+id/btn_register"
                     android:nextFocusUp="@+id/et_surname"/>
             </android.support.design.widget.TextInputLayout>
