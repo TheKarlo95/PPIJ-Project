@@ -78,7 +78,7 @@ public class LoginActivity extends ActivityView implements ILogin.View {
         String username = InputUtil.getUsernameText(tilUsername);
         String password = InputUtil.getPasswordText(tilPassword);
 
-        if (username != null && password != null) {
+        if (username.equals(InputUtil.EMPTY) && password.equals(InputUtil.EMPTY)) {
             presenter.login(username, password);
         }
     }

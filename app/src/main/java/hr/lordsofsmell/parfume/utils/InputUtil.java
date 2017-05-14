@@ -1,27 +1,30 @@
 package hr.lordsofsmell.parfume.utils;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 
 import org.apache.commons.validator.routines.EmailValidator;
 
+import hr.lordsofsmell.parfume.R;
 import hr.lordsofsmell.parfume.domain.model.Gender;
 
 public class InputUtil {
 
-    @Nullable
+    public static final String EMPTY = "";
+
+    @NonNull
     public static String getUsernameText(@NonNull TextInputLayout tilUsername) {
         String username = InputUtil.get(tilUsername);
 
-        if (username == null) {
+        if (username.isEmpty()) {
             tilUsername.setErrorEnabled(true);
             tilUsername.setError("Username field cannot be empty");
         } else if (!UserUtils.isValidUsername(username)) {
             tilUsername.setErrorEnabled(true);
             tilUsername.setError("Invalid username");
-            username = null;
+            username = EMPTY;
         } else {
             tilUsername.setError(null);
             tilUsername.setErrorEnabled(false);
@@ -30,17 +33,17 @@ public class InputUtil {
         return username;
     }
 
-    @Nullable
+    @NonNull
     public static String getPasswordText(@NonNull TextInputLayout tilPassword) {
         String password = InputUtil.get(tilPassword);
 
-        if (password == null) {
+        if (password.isEmpty()) {
             tilPassword.setErrorEnabled(true);
             tilPassword.setError("Password field cannot be empty");
         } else if (!UserUtils.isValidPassword(password)) {
             tilPassword.setErrorEnabled(true);
             tilPassword.setError("Invalid password");
-            password = null;
+            password = EMPTY;
         } else {
             tilPassword.setError(null);
             tilPassword.setErrorEnabled(false);
@@ -49,17 +52,17 @@ public class InputUtil {
         return password;
     }
 
-    @Nullable
+    @NonNull
     public static String getPasswordConfiramtionText(@NonNull TextInputLayout tilPassword) {
         String password = InputUtil.get(tilPassword);
 
-        if (password == null) {
+        if (password.isEmpty()) {
             tilPassword.setErrorEnabled(true);
             tilPassword.setError("Password confirmation field cannot be empty");
         } else if (!UserUtils.isValidPassword(password)) {
             tilPassword.setErrorEnabled(true);
             tilPassword.setError("Invalid password confirmation");
-            password = null;
+            password = EMPTY;
         } else {
             tilPassword.setError(null);
             tilPassword.setErrorEnabled(false);
@@ -68,17 +71,17 @@ public class InputUtil {
         return password;
     }
 
-    @Nullable
+    @NonNull
     public static String getEmailText(@NonNull TextInputLayout tilEmail) {
         String email = InputUtil.get(tilEmail);
 
-        if (email == null) {
+        if (email.isEmpty()) {
             tilEmail.setErrorEnabled(true);
             tilEmail.setError("Email field cannot be empty");
         } else if (!EmailValidator.getInstance().isValid(email)) {
             tilEmail.setErrorEnabled(true);
             tilEmail.setError("Invalid email");
-            email = null;
+            email = EMPTY;
         } else {
             tilEmail.setError(null);
             tilEmail.setErrorEnabled(false);
@@ -87,11 +90,11 @@ public class InputUtil {
         return email;
     }
 
-    @Nullable
+    @NonNull
     public static String getNameText(@NonNull TextInputLayout tilName) {
         String name = InputUtil.get(tilName);
 
-        if (name == null) {
+        if (name.isEmpty()) {
             tilName.setErrorEnabled(true);
             tilName.setError("Name field cannot be empty");
         } else {
@@ -102,11 +105,11 @@ public class InputUtil {
         return name;
     }
 
-    @Nullable
+    @NonNull
     public static String getSurnameText(@NonNull TextInputLayout tilSurname) {
         String surname = InputUtil.get(tilSurname);
 
-        if (surname == null) {
+        if (surname.isEmpty()) {
             tilSurname.setErrorEnabled(true);
             tilSurname.setError("Surname field cannot be empty");
         } else {
@@ -117,32 +120,34 @@ public class InputUtil {
         return surname;
     }
 
-    @Nullable
-    public static Gender getGender(@NonNull TextInputLayout tilGender) {
-        Gender gender = Gender.fromString(InputUtil.get(tilGender));
+    @NonNull
+    public static Gender getGender(@NonNull RadioGroup rgGender) {
+        Gender gender;
 
-        if (gender == null) {
-            tilGender.setErrorEnabled(true);
-            tilGender.setError("Gender field cannot be empty");
-        } else {
-            tilGender.setError(null);
-            tilGender.setErrorEnabled(false);
+        switch (rgGender.getCheckedRadioButtonId()) {
+            case R.id.rb_gender_male:
+                gender = Gender.MALE;
+                break;
+            case R.id.rb_gender_female:
+                gender = Gender.FEMALE;
+                break;
+            default:
+                gender = Gender.MALE;
+                break;
         }
 
         return gender;
     }
 
-    @Nullable
+    @NonNull
     private static String get(@NonNull TextInputLayout textInputLayout) {
         EditText editText = textInputLayout.getEditText();
-        String text = null;
+        String text;
 
         if (editText != null) {
             text = editText.getText().toString().trim();
-
-            if (text.isEmpty()) {
-                text = null;
-            }
+        } else {
+            text = EMPTY;
         }
 
         return text;

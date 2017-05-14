@@ -15,6 +15,9 @@
     <color name="iconWishlist">#0097a7</color>
     <color name="iconOwned">#4caf50</color>
 
+    <color name="genderIconMale">#0097a7</color>
+    <color name="genderIconFemale">#e95950</color>
+
     <color name="white">#FFFFFF</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>

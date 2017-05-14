@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.widget.RadioGroup;
 
 import javax.inject.Inject;
 
@@ -42,8 +43,8 @@ public class RegisterActivity extends ActivityView
     TextInputLayout tilName;
     @BindView(R.id.til_surname)
     TextInputLayout tilSurname;
-    @BindView(R.id.til_gender)
-    TextInputLayout tilGender;
+    @BindView(R.id.rg_gender)
+    RadioGroup rgGender;
 
     @Inject
     IRegister.Presenter presenter;
@@ -52,13 +53,6 @@ public class RegisterActivity extends ActivityView
         Intent intent = new Intent(context, RegisterActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         intent.putExtra(PerfumeListActivity.EXTRA_LIST_TYPE, listType);
-        return intent;
-    }
-
-    public static Intent createIntent(Context context, int listType, int action, int position) {
-        Intent intent = createIntent(context, listType);
-        intent.putExtra(PerfumeListActivity.EXTRA_ACTION, action);
-        intent.putExtra(PerfumeListActivity.EXTRA_POSITION, position);
         return intent;
     }
 
@@ -74,12 +68,8 @@ public class RegisterActivity extends ActivityView
         } else {
             int listType = intent.getIntExtra(PerfumeListActivity.EXTRA_LIST_TYPE,
                     PerfumeListActivity.LIST_TYPE_ERROR);
-            int action = intent.getIntExtra(PerfumeListActivity.EXTRA_ACTION,
-                    PerfumeListActivity.ACTION_ERROR);
-            int position = intent.getIntExtra(PerfumeListActivity.EXTRA_POSITION,
-                    PerfumeListActivity.POSITION_ERROR);
 
-            startActivity(PerfumeListActivity.createIntent(this, listType, action, position));
+            startActivity(PerfumeListActivity.createIntent(this, listType));
         }
     }
 
@@ -87,15 +77,21 @@ public class RegisterActivity extends ActivityView
     public void registerClicked() {
         String username = InputUtil.getUsernameText(tilUsername);
         String password = InputUtil.getPasswordText(tilPassword);
-        String password_confirmation = InputUtil.getPasswordConfiramtionText(tilPasswordConfirmation);
+        String passwordConfirmation = InputUtil.getPasswordConfiramtionText(tilPasswordConfirmation);
         String email = InputUtil.getEmailText(tilEmail);
         String name = InputUtil.getNameText(tilName);
         String surname = InputUtil.getSurnameText(tilSurname);
-        Gender gender = InputUtil.getGender(tilGender);
-        if (username != null && password != null && password_confirmation != null && email != null && name != null && surname != null && gender != null) {
+        Gender gender = InputUtil.getGender(rgGender);
+
+        if (!username.equals(InputUtil.EMPTY)
+                && !password.equals(InputUtil.EMPTY)
+                && !passwordConfirmation.equals(InputUtil.EMPTY)
+                && !email.equals(InputUtil.EMPTY)
+                && !name.equals(InputUtil.EMPTY)
+                && !surname.equals(InputUtil.EMPTY)) {
             presenter.register(username,
                     password,
-                    password_confirmation,
+                    passwordConfirmation,
                     email,
                     name,
                     surname,
