@@ -32,7 +32,7 @@ public class RegisterUseCase extends UseCase<RegisterRequest, User>
 
     @Override
     protected Observable<User> createObservable(RegisterRequest r) {
-        if (r.email()== null || r.gender()==null || r.name()==null || r.password()==null || r.surname()==null || r.username()==null)  return Observable.error(new NullPointerException("None of the parameters can be null!"));
+        if (r==null)  return Observable.error(new NullPointerException("None of the parameters can be null!"));
         else return repository.register(r);
     }
 

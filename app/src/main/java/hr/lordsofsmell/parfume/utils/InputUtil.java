@@ -7,6 +7,8 @@ import android.widget.EditText;
 
 import org.apache.commons.validator.routines.EmailValidator;
 
+import hr.lordsofsmell.parfume.domain.model.Gender;
+
 public class InputUtil {
 
     @Nullable
@@ -113,6 +115,21 @@ public class InputUtil {
         }
 
         return surname;
+    }
+
+    @Nullable
+    public static Gender getGender(@NonNull TextInputLayout tilGender) {
+        Gender gender = Gender.fromString(InputUtil.get(tilGender));
+
+        if (gender == null) {
+            tilGender.setErrorEnabled(true);
+            tilGender.setError("Gender field cannot be empty");
+        } else {
+            tilGender.setError(null);
+            tilGender.setErrorEnabled(false);
+        }
+
+        return gender;
     }
 
     @Nullable

@@ -4,27 +4,46 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import hr.lordsofsmell.parfume.R;
 import hr.lordsofsmell.parfume.dagger.components.AppComponent;
 import hr.lordsofsmell.parfume.dagger.modules.RegisterModule;
+import hr.lordsofsmell.parfume.domain.model.Gender;
 import hr.lordsofsmell.parfume.domain.model.response.User;
 import hr.lordsofsmell.parfume.feature.core.view.ActivityView;
-import hr.lordsofsmell.parfume.feature.login.view.LoginActivity;
 import hr.lordsofsmell.parfume.feature.perfumelist.view.PerfumeListActivity;
 import hr.lordsofsmell.parfume.feature.register.IRegister;
+import hr.lordsofsmell.parfume.utils.InputUtil;
 import hr.lordsofsmell.parfume.utils.PreferencesUtil;
 
 public class RegisterActivity extends ActivityView
         implements IRegister.View {
 
-    private static final String TAG = "PerfumeList";
+    private static final String TAG = "Register";
+
+    @BindView(R.id.til_username)
+    TextInputLayout tilUsername;
+    @BindView(R.id.til_password)
+    TextInputLayout tilPassword;
+    @BindView(R.id.til_password_confirmation)
+    TextInputLayout tilPasswordConfirmation;
+    @BindView(R.id.til_email)
+    TextInputLayout tilEmail;
+    @BindView(R.id.til_name)
+    TextInputLayout tilName;
+    @BindView(R.id.til_surname)
+    TextInputLayout tilSurname;
+    @BindView(R.id.til_gender)
+    TextInputLayout tilGender;
 
     @Inject
     IRegister.Presenter presenter;
@@ -61,6 +80,26 @@ public class RegisterActivity extends ActivityView
                     PerfumeListActivity.POSITION_ERROR);
 
             startActivity(PerfumeListActivity.createIntent(this, listType, action, position));
+        }
+    }
+
+    @OnClick(R.id.btn_register)
+    public void registerClicked() {
+        String username = InputUtil.getUsernameText(tilUsername);
+        String password = InputUtil.getPasswordText(tilPassword);
+        String password_confirmation = InputUtil.getPasswordConfiramtionText(tilPasswordConfirmation);
+        String email = InputUtil.getEmailText(tilEmail);
+        String name = InputUtil.getNameText(tilName);
+        String surname = InputUtil.getSurnameText(tilSurname);
+        Gender gender = InputUtil.getGender(tilGender);
+        if (username != null && password != null && password_confirmation != null && email != null && name != null && surname != null && gender != null) {
+            presenter.register(username,
+                    password,
+                    password_confirmation,
+                    email,
+                    name,
+                    surname,
+                    gender);
         }
     }
 
