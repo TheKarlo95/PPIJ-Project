@@ -1,15 +1,18 @@
 package hr.lordsofsmell.parfume.domain.model.params;
 
+import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 
 @AutoValue
 public abstract class GetAllPerfumesParams {
 
-    public static GetAllPerfumesParams create(int from, int numOfItems) {
-        return new AutoValue_GetAllPerfumesParams(from, numOfItems);
+    public static GetAllPerfumesParams create(String token, int page) {
+        return new AutoValue_GetAllPerfumesParams(token, page);
     }
 
-    public abstract int from();
+    @Nullable
+    public abstract String token();
 
-    public abstract int numOfItems();
+    public abstract int page();
 }

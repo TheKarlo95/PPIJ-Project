@@ -36,7 +36,7 @@ public class GetOwnedPerfumesUseCase extends UseCase<GetOwnedPerfumesParams, Lis
             return Observable.error(new IllegalArgumentException(
                     "Parameter userId can't be less than or equals to 0"));
         } else {
-            return repository.getOwnedParfumes(params.userId(), params.from(), params.numOfItems());
+            return repository.getOwnedParfumes(params.token(), params.userId(), params.page());
         }
     }
 }

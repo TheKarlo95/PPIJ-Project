@@ -1,6 +1,7 @@
 package hr.lordsofsmell.parfume.domain.repository.network;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.List;
 
@@ -12,7 +13,6 @@ import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.domain.model.response.User;
 import hr.lordsofsmell.parfume.domain.repository.IRepository;
-import hr.lordsofsmell.parfume.utils.PreferencesUtil;
 import io.reactivex.Observable;
 
 public class NetworkDataSource implements IRepository {
@@ -34,53 +34,49 @@ public class NetworkDataSource implements IRepository {
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getAllParfumes(int from, int numOfItems) {
-        return service.getAllParfumes(from, from + numOfItems - 1);
+    public Observable<List<PerfumeItem>> getAllParfumes(@Nullable String token, int page) {
+        return service.getAllParfumes(token, page);
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getLikedParfumes(@NonNull Long userId,
-                                                          int from,
-                                                          int numOfItems) {
-        return service.getLikedParfumes(PreferencesUtil.getToken(),
-                userId,
-                from,
-                from + numOfItems - 1);
+    public Observable<List<PerfumeItem>> getLikedParfumes(@NonNull String token,
+                                                          @NonNull Long userId,
+                                                          int page) {
+        return service.getLikedParfumes(token, userId, page);
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getWishlistedParfumes(@NonNull Long userId,
-                                                               int from,
-                                                               int numOfItems) {
-        return service.getWishlistedParfumes(PreferencesUtil.getToken(),
-                userId,
-                from,
-                from + numOfItems - 1);
+    public Observable<List<PerfumeItem>> getWishlistedParfumes(@NonNull String token,
+                                                               @NonNull Long userId,
+                                                               int page) {
+        return service.getWishlistedParfumes(token, userId, page);
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getOwnedParfumes(@NonNull Long userId,
-                                                          int from,
-                                                          int numOfItems) {
-        return service.getOwnedParfumes(PreferencesUtil.getToken(),
-                userId,
-                from,
-                from + numOfItems - 1);
+    public Observable<List<PerfumeItem>> getOwnedParfumes(@NonNull String token,
+                                                          @NonNull Long userId,
+                                                          int page) {
+        return service.getOwnedParfumes(token, userId, page);
     }
 
     @Override
-    public Observable<Void> changeFavorite(@NonNull Long userId, @NonNull FavoriteRequest request) {
-        return service.changeLiked(PreferencesUtil.getToken(), userId, request);
+    public Observable<Void> changeFavorite(@NonNull String token,
+                                           @NonNull Long userId,
+                                           @NonNull FavoriteRequest request) {
+        return service.changeLiked(token, userId, request);
     }
 
     @Override
-    public Observable<Void> changeWishlisted(@NonNull Long userId,
+    public Observable<Void> changeWishlisted(@NonNull String token,
+                                             @NonNull Long userId,
                                              @NonNull WishlistRequest request) {
-        return service.changeWishlisted(PreferencesUtil.getToken(), userId, request);
+        return service.changeWishlisted(token, userId, request);
     }
 
     @Override
-    public Observable<Void> changeOwned(@NonNull Long userId, @NonNull OwnedRequest request) {
-        return service.changeOwned(PreferencesUtil.getToken(), userId, request);
+    public Observable<Void> changeOwned(@NonNull String token,
+                                        @NonNull Long userId,
+                                        @NonNull OwnedRequest request) {
+        return service.changeOwned(token, userId, request);
     }
 }

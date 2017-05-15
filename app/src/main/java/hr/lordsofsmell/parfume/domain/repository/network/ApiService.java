@@ -15,6 +15,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiService {
 
@@ -23,29 +24,27 @@ public interface ApiService {
     @POST("users/login")
     Observable<User> login(@Body LoginRequest request);
 
-    @POST("users")
+    @POST("users/register")
     Observable<User> register(@Body RegisterRequest request);
 
-    @GET("parfumes/{from}/{to}")
-    Observable<List<PerfumeItem>> getAllParfumes(@Path("from") int from, @Path("to") int to);
+    @GET("parfumes")
+    Observable<List<PerfumeItem>> getAllParfumes(@Header("X-Authorization") String token,
+                                                 @Query("page") int page);
 
-    @GET("users/{id}/favorited/{from}/{to}")
+    @GET("users/{id}/favorited")
     Observable<List<PerfumeItem>> getLikedParfumes(@Header("X-Authorization") String token,
                                                    @Path("id") long userId,
-                                                   @Path("from") int from,
-                                                   @Path("to") int to);
+                                                   @Query("page") int page);
 
-    @GET("users/{id}/wishlist/{from}/{to}")
+    @GET("users/{id}/wishlist")
     Observable<List<PerfumeItem>> getWishlistedParfumes(@Header("X-Authorization") String token,
                                                         @Path("id") long userId,
-                                                        @Path("from") int from,
-                                                        @Path("to") int to);
+                                                        @Query("page") int page);
 
-    @GET("users/{id}/owned/{from}/{to}")
+    @GET("users/{id}/owned")
     Observable<List<PerfumeItem>> getOwnedParfumes(@Header("X-Authorization") String token,
                                                    @Path("id") long userId,
-                                                   @Path("from") int from,
-                                                   @Path("to") int to);
+                                                   @Query("page") int page);
 
     @POST("users/{id}/favorited")
     Observable<Void> changeLiked(@Header("X-Authorization") String token,

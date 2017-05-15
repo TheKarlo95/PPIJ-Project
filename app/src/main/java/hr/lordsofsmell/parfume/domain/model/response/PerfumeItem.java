@@ -29,22 +29,22 @@ public abstract class PerfumeItem {
     @SerializedName("id")
     public abstract Long id();
 
-    @SerializedName("image")
+    @SerializedName("url")
     public abstract String image();
 
-    @SerializedName("company")
+    @SerializedName("manufacturerName")
     public abstract String company();
 
-    @SerializedName("model")
+    @SerializedName("name")
     public abstract String model();
 
     @SerializedName("year")
     public abstract String year();
 
-    @SerializedName("favorited")
+    @SerializedName("liked")
     public abstract Boolean favorited();
 
-    @SerializedName("wishlisted")
+    @SerializedName("wishes")
     public abstract Boolean wishlisted();
 
     @SerializedName("owned")

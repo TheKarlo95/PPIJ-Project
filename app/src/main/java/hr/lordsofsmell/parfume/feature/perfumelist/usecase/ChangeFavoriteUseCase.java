@@ -32,7 +32,7 @@ public class ChangeFavoriteUseCase extends UseCase<LikedRequestParams, Void>
         } else if (params.request().parfumeId() <= 0) {
             return Observable.error(new IllegalArgumentException("Parameter parfumeId can't be less than or equals to 0"));
         } else {
-            return repository.changeFavorite(params.userId(), params.request());
+            return repository.changeFavorite(params.token(), params.userId(), params.request());
         }
     }
 }

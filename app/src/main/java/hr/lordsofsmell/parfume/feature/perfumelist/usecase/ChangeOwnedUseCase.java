@@ -32,7 +32,7 @@ public class ChangeOwnedUseCase extends UseCase<OwnedRequestParams, Void>
         } else if (params.request().parfumeId() <= 0) {
             return Observable.error(new IllegalArgumentException("Parameter parfumeId can't be less than or equals to 0"));
         } else {
-            return repository.changeOwned(params.userId(), params.request());
+            return repository.changeOwned(params.token(), params.userId(), params.request());
         }
     }
 }

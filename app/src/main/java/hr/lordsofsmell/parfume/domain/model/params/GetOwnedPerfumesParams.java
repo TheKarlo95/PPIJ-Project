@@ -5,13 +5,13 @@ import com.google.auto.value.AutoValue;
 @AutoValue
 public abstract class GetOwnedPerfumesParams {
 
-    public static GetOwnedPerfumesParams create(long userId, int from, int numOfItems) {
-        return new AutoValue_GetOwnedPerfumesParams(userId, from, numOfItems);
+    public static GetOwnedPerfumesParams create(String token, long userId, int page) {
+        return new AutoValue_GetOwnedPerfumesParams(token, userId, page);
     }
+
+    public abstract String token();
 
     public abstract long userId();
 
-    public abstract int from();
-
-    public abstract int numOfItems();
+    public abstract int page();
 }

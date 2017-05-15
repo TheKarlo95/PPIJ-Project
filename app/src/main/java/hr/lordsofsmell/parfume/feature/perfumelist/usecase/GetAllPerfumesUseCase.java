@@ -33,7 +33,7 @@ public class GetAllPerfumesUseCase extends UseCase<GetAllPerfumesParams, List<Pe
         if (params == null) {
             return Observable.error(new NullPointerException("Parameters can't be null"));
         } else {
-            return repository.getAllParfumes(params.from(), params.numOfItems());
+            return repository.getAllParfumes(params.token(), params.page());
         }
     }
 }

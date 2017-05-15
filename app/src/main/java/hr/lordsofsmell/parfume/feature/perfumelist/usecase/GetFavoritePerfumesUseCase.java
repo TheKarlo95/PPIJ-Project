@@ -37,7 +37,7 @@ public class GetFavoritePerfumesUseCase extends UseCase<GetLikedPerfumesParams, 
             return Observable.error(new IllegalArgumentException(
                     "Parameter userId can't be less than or equals to 0"));
         } else {
-            return repository.getLikedParfumes(params.userId(), params.from(), params.numOfItems());
+            return repository.getLikedParfumes(params.token(), params.userId(), params.page());
         }
     }
 }

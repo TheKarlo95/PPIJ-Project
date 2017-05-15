@@ -32,7 +32,7 @@ public class ChangeWishlistedUseCase extends UseCase<WishlistedRequestParams, Vo
         } else if (params.request().parfumeId() <= 0) {
             return Observable.error(new IllegalArgumentException("Parameter parfumeId can't be less than or equals to 0"));
         } else {
-            return repository.changeWishlisted(params.userId(), params.request());
+            return repository.changeWishlisted(params.token(), params.userId(), params.request());
         }
     }
 }

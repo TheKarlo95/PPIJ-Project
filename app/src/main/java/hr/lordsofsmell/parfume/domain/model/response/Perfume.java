@@ -10,9 +10,9 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 @AutoValue
-public abstract class Parfume implements Parcelable {
+public abstract class Perfume implements Parcelable {
 
-    public static Parfume create(Long id,
+    public static Perfume create(Long id,
                                  String image,
                                  String company,
                                  String model,
@@ -22,7 +22,7 @@ public abstract class Parfume implements Parcelable {
                                  boolean wishlisted,
                                  String description,
                                  List<PerfumeItem> similarParfumes) {
-        return new AutoValue_Parfume(id,
+        return new AutoValue_Perfume(id,
                 image,
                 company,
                 model,
@@ -37,26 +37,26 @@ public abstract class Parfume implements Parcelable {
     @SerializedName("id")
     public abstract Long id();
 
-    @SerializedName("image")
+    @SerializedName("url")
     public abstract String image();
 
-    @SerializedName("company")
+    @SerializedName("manufacturerName")
     public abstract String company();
 
-    @SerializedName("model")
+    @SerializedName("name")
     public abstract String model();
 
     @SerializedName("year")
     public abstract String year();
 
-    @SerializedName("favorited")
-    public abstract Boolean liked();
+    @SerializedName("liked")
+    public abstract Boolean favorited();
+
+    @SerializedName("wishes")
+    public abstract Boolean wishlisted();
 
     @SerializedName("owned")
     public abstract Boolean owned();
-
-    @SerializedName("wishlisted")
-    public abstract Boolean wishlisted();
 
     @SerializedName("description")
     public abstract String description();
@@ -64,13 +64,13 @@ public abstract class Parfume implements Parcelable {
     @SerializedName("similarParfumes")
     public abstract List<PerfumeItem> similarParfumes();
 
-    public static TypeAdapter<Parfume> typeAdapter(Gson gson) {
-        return new AutoValue_Parfume.GsonTypeAdapter(gson);
+    public static TypeAdapter<Perfume> typeAdapter(Gson gson) {
+        return new AutoValue_Perfume.GsonTypeAdapter(gson);
     }
 
-    abstract Parfume withLiked(Boolean liked);
+    abstract Perfume withFavorited(Boolean favorited);
 
-    abstract Parfume withOwned(Boolean owned);
+    abstract Perfume withWishlisted(Boolean wishlisted);
 
-    abstract Parfume withWishlisted(Boolean wishlisted);
+    abstract Perfume withOwned(Boolean owned);
 }

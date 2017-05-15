@@ -36,7 +36,7 @@ public class GetWishlistedPerfumesUseCase extends UseCase<GetWishlistedPerfumesP
             return Observable.error(new IllegalArgumentException(
                     "Parameter userId can't be less than or equals to 0"));
         } else {
-            return repository.getWishlistedParfumes(params.userId(), params.from(), params.numOfItems());
+            return repository.getWishlistedParfumes(params.token(), params.userId(), params.page());
         }
     }
 }
