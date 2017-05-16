@@ -9,6 +9,7 @@ import hr.lordsofsmell.parfume.domain.model.request.LoginRequest;
 import hr.lordsofsmell.parfume.domain.model.request.OwnedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.RegisterRequest;
 import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
+import hr.lordsofsmell.parfume.domain.model.response.Parfume;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.domain.model.response.User;
 import hr.lordsofsmell.parfume.domain.repository.network.NetworkDataSource;
@@ -32,6 +33,16 @@ public class Repository implements IRepository {
     @Override
     public Observable<User> register(@NonNull RegisterRequest request) {
         return ObservableUtils.getFirstNonNull(network.register(request));
+    }
+
+    @Override
+    public Observable<Parfume> getPerfumeProfile(@NonNull long perfumeId) {
+        return ObservableUtils.getFirstNonNull(network.getPerfumeProfile(perfumeId));
+    }
+
+    @Override
+    public Observable<List<PerfumeItem>> getSimilarParfumes(@NonNull long perfumeId) {
+        return ObservableUtils.getFirstNonNull(network.getSimilarParfumes(perfumeId));
     }
 
     @Override

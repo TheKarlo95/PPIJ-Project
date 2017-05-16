@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import hr.lordsofsmell.parfume.R;
 import hr.lordsofsmell.parfume.domain.model.params.GetPerfumeProfileParams;
 import hr.lordsofsmell.parfume.domain.model.params.LikedRequestParams;
 import hr.lordsofsmell.parfume.domain.model.params.OwnedRequestParams;
@@ -20,7 +21,7 @@ import hr.lordsofsmell.parfume.feature.core.observer.Observer;
 import hr.lordsofsmell.parfume.feature.core.presenter.Presenter;
 import hr.lordsofsmell.parfume.feature.perfumeProfile.IPerfumeProfile;
 import hr.lordsofsmell.parfume.feature.perfumelist.IPerfumeList;
-import hr.lordsofsmell.parfume.feature.perfumelist.IPerfumeProfile;
+import hr.lordsofsmell.parfume.feature.perfumeProfile.IPerfumeProfile;
 import hr.lordsofsmell.parfume.utils.PreferencesUtil;
 
 /**
@@ -30,16 +31,11 @@ import hr.lordsofsmell.parfume.utils.PreferencesUtil;
 public class PerfumeProfilePresenter extends Presenter implements IPerfumeProfile.Presenter {
 
 
+    private static final String TAG = "PerfumeProfile";
     private IPerfumeList.ChangeLikedUseCase changeFavoriteUseCase;
     private IPerfumeList.ChangeWishlistedUseCase changeWishlistedUseCase;
     private IPerfumeList.ChangeOwnedUseCase changeOwnedUseCase;
     private IPerfumeProfile.PerfumeProfileUseCase perfumeProfileUseCase;
-
-
-    private int lastPerfumeIndex;
-    private boolean reachedLastPerfume;
-
-    private static final int LOAD_ITEMS = 5;
 
     @Inject
     PerfumeProfilePresenter(IPerfumeProfile.View view,
@@ -173,10 +169,6 @@ public class PerfumeProfilePresenter extends Presenter implements IPerfumeProfil
             @Override
             public void onNext(List<PerfumeItem> perfumes) {
                 super.onNext(perfumes);
-
-                lastPerfumeIndex += perfumes.size();
-                reachedLastPerfume = perfumes.size() < LOAD_ITEMS;
-
                 view.addPerfumes(perfumes, clearAdapter);
             }
 

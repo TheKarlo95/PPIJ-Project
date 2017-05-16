@@ -7,6 +7,7 @@ import hr.lordsofsmell.parfume.domain.model.request.LoginRequest;
 import hr.lordsofsmell.parfume.domain.model.request.OwnedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.RegisterRequest;
 import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
+import hr.lordsofsmell.parfume.domain.model.response.Parfume;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.domain.model.response.User;
 import io.reactivex.Observable;
@@ -25,6 +26,12 @@ public interface ApiService {
 
     @POST("users")
     Observable<User> register(@Body RegisterRequest request);
+
+    @GET("users")
+    Observable<Parfume> getPerfumeProfile(@Path("from") long perfumeId);
+
+    @GET("users")
+    Observable<List<PerfumeItem>> getSimilarPerfumes(@Path("from") long perfumeId);
 
     @GET("parfumes/{from}/{to}")
     Observable<List<PerfumeItem>> getAllParfumes(@Path("from") int from, @Path("to") int to);

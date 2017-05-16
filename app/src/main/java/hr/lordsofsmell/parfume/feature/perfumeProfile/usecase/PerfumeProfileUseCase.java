@@ -26,22 +26,18 @@ public class PerfumeProfileUseCase extends UseCase<GetPerfumeProfileParams, Parf
 
     private IRepository repository;
 
-    public PerfumeProfileUseCase(@NonNull ThreadExecutor threadExecutor, @NonNull PostExecutionThread postExecutionThread) {
+    public PerfumeProfileUseCase(@NonNull ThreadExecutor threadExecutor, @NonNull PostExecutionThread postExecutionThread,
+                                 @NonNull IRepository repository) {
         super(threadExecutor, postExecutionThread);
+        this.repository=repository;
     }
 
     @Override
-    protected Observable<Parfume> createObservable(GetPerfumeProfileParams getPerfumeProfileParams) {
-        return null;
-    }
-
-    @Override
-    public void execute(GetPerfumeProfileParams getPerfumeProfileParams, DisposableObserver<Parfume> observer) {
-
-    }
-
-    @Override
-    public Observable<Parfume> execute(GetPerfumeProfileParams getPerfumeProfileParams) {
-        return null;
+    protected Observable<Parfume> createObservable(GetPerfumeProfileParams params) {
+        if (params == null) {
+            return Observable.error(new NullPointerException("Parameters can't be null"));
+        } else {
+            return repository.getPerfumeProfile(params.perfumeId());
+        }
     }
 }
