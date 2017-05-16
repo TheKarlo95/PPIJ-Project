@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
@@ -23,6 +21,7 @@ import hr.lordsofsmell.parfume.domain.model.response.User;
 import hr.lordsofsmell.parfume.feature.core.view.ActivityView;
 import hr.lordsofsmell.parfume.feature.login.ILogin;
 import hr.lordsofsmell.parfume.feature.perfumelist.view.PerfumeListActivity;
+import hr.lordsofsmell.parfume.feature.register.view.RegisterActivity;
 import hr.lordsofsmell.parfume.utils.InputUtil;
 import hr.lordsofsmell.parfume.utils.PreferencesUtil;
 
@@ -52,6 +51,8 @@ public class LoginActivity extends ActivityView implements ILogin.View {
         return intent;
     }
 
+
+
     @Override
     public void loginSuccesful(User user) {
         PreferencesUtil.persistUser(user);
@@ -78,8 +79,27 @@ public class LoginActivity extends ActivityView implements ILogin.View {
         String username = InputUtil.getUsernameText(tilUsername);
         String password = InputUtil.getPasswordText(tilPassword);
 
-        if (username.equals(InputUtil.EMPTY) && password.equals(InputUtil.EMPTY)) {
+        if (!username.equals(InputUtil.EMPTY) && !password.equals(InputUtil.EMPTY)) {
             presenter.login(username, password);
+        }
+    }
+
+    @OnClick(R.id.btn_register)
+    public void registerClicked() {
+        Intent intent = getIntent();
+
+        if (intent == null) {
+            startActivity(RegisterActivity.createIntent(this,
+                    PerfumeListActivity.LIST_TYPE_ALL_PERFUMES));
+        } else {
+            int listType = intent.getIntExtra(PerfumeListActivity.EXTRA_LIST_TYPE,
+                    PerfumeListActivity.LIST_TYPE_ERROR);
+            int action = intent.getIntExtra(PerfumeListActivity.EXTRA_ACTION,
+                    PerfumeListActivity.ACTION_ERROR);
+            int position = intent.getIntExtra(PerfumeListActivity.EXTRA_POSITION,
+                    PerfumeListActivity.POSITION_ERROR);
+
+            startActivity(RegisterActivity.createIntent(this, listType, action, position));
         }
     }
 

@@ -14,10 +14,10 @@ import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.domain.model.response.User;
 import hr.lordsofsmell.parfume.domain.repository.network.NetworkDataSource;
 import hr.lordsofsmell.parfume.utils.ObservableUtils;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 public class Repository implements IRepository {
-
 
     private NetworkDataSource network;
 
@@ -36,50 +36,55 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getAllParfumes(@Nullable String token, int page) {
-        return ObservableUtils.getFirstNonNull(network.getAllParfumes(token == null ? "" : token,
-                page));
+    public Completable logout(@NonNull String token) {
+        return network.logout(token);
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getLikedParfumes(@NonNull String token,
-                                                          @NonNull Long userId,
-                                                          int page) {
-        return ObservableUtils.getFirstNonNull(network.getLikedParfumes(token, userId, page));
+    public Observable<List<PerfumeItem>> getAllParfumes(@Nullable String token,
+                                                        int page,
+                                                        @Nullable String company,
+                                                        @Nullable String model,
+                                                        @Nullable String year) {
+        return ObservableUtils.getFirstNonNull(
+                network.getAllParfumes(token, page, company, model, year));
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getWishlistedParfumes(@NonNull String token,
-                                                               @NonNull Long userId,
-                                                               int page) {
-        return ObservableUtils.getFirstNonNull(network.getWishlistedParfumes(token, userId, page));
+    public Observable<List<PerfumeItem>> getRecommendedParfumes(@Nullable String token, int page) {
+        return ObservableUtils.getFirstNonNull(network.getRecommendedParfumes(token, page));
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getOwnedParfumes(@NonNull String token,
-                                                          @NonNull Long userId,
-                                                          int page) {
-        return ObservableUtils.getFirstNonNull(network.getOwnedParfumes(token, userId, page));
+    public Observable<List<PerfumeItem>> getLikedParfumes(@NonNull String token, int page) {
+        return ObservableUtils.getFirstNonNull(network.getLikedParfumes(token, page));
     }
 
     @Override
-    public Observable<Void> changeFavorite(@NonNull String token,
-                                           @NonNull Long userId,
+    public Observable<List<PerfumeItem>> getWishlistedParfumes(@NonNull String token, int page) {
+        return ObservableUtils.getFirstNonNull(network.getWishlistedParfumes(token, page));
+    }
+
+    @Override
+    public Observable<List<PerfumeItem>> getOwnedParfumes(@NonNull String token, int page) {
+        return ObservableUtils.getFirstNonNull(network.getOwnedParfumes(token, page));
+    }
+
+    @Override
+    public Completable changeFavorite(@NonNull String token,
                                            @NonNull FavoriteRequest request) {
-        return ObservableUtils.getFirstNonNull(network.changeFavorite(token, userId, request));
+        return network.changeFavorite(token, request);
     }
 
     @Override
-    public Observable<Void> changeWishlisted(@NonNull String token,
-                                             @NonNull Long userId,
+    public Completable changeWishlisted(@NonNull String token,
                                              @NonNull WishlistRequest request) {
-        return ObservableUtils.getFirstNonNull(network.changeWishlisted(token, userId, request));
+        return network.changeWishlisted(token, request);
     }
 
     @Override
-    public Observable<Void> changeOwned(@NonNull String token,
-                                        @NonNull Long userId,
+    public Completable changeOwned(@NonNull String token,
                                         @NonNull OwnedRequest request) {
-        return ObservableUtils.getFirstNonNull(network.changeOwned(token, userId, request));
+        return network.changeOwned(token, request);
     }
 }

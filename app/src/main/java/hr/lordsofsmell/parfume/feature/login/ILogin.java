@@ -16,7 +16,6 @@ import hr.lordsofsmell.parfume.feature.login.usecase.LoginUseCase;
 public interface ILogin {
     interface View extends ICore.View {
         void loginSuccesful(User user);
-
     }
 
     interface Presenter extends ICore.Presenter {

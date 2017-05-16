@@ -7,13 +7,11 @@ import hr.lordsofsmell.parfume.domain.model.request.FavoriteRequest;
 @AutoValue
 public abstract class LikedRequestParams {
 
-    public static LikedRequestParams create(String token, Long userId, FavoriteRequest request) {
-        return new AutoValue_LikedRequestParams(token, userId, request);
+    public static LikedRequestParams create(String token, FavoriteRequest request) {
+        return new AutoValue_LikedRequestParams(token, request);
     }
 
     public abstract String token();
-
-    public abstract Long userId();
 
     public abstract FavoriteRequest request();
 }

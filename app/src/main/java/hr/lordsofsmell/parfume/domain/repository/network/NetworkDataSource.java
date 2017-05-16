@@ -13,6 +13,7 @@ import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.domain.model.response.User;
 import hr.lordsofsmell.parfume.domain.repository.IRepository;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 public class NetworkDataSource implements IRepository {
@@ -34,49 +35,54 @@ public class NetworkDataSource implements IRepository {
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getAllParfumes(@Nullable String token, int page) {
-        return service.getAllParfumes(token, page);
+    public Completable logout(@NonNull String token) {
+        return service.logout(token);
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getLikedParfumes(@NonNull String token,
-                                                          @NonNull Long userId,
-                                                          int page) {
-        return service.getLikedParfumes(token, userId, page);
+    public Observable<List<PerfumeItem>> getAllParfumes(@Nullable String token,
+                                                        int page,
+                                                        @Nullable String company,
+                                                        @Nullable String model,
+                                                        @Nullable String year) {
+        return service.getAllParfumes(token, page, company, model, year);
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getWishlistedParfumes(@NonNull String token,
-                                                               @NonNull Long userId,
-                                                               int page) {
-        return service.getWishlistedParfumes(token, userId, page);
+    public Observable<List<PerfumeItem>> getRecommendedParfumes(@Nullable String token, int page) {
+        return service.getRecommendedParfumes(token, page);
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getOwnedParfumes(@NonNull String token,
-                                                          @NonNull Long userId,
-                                                          int page) {
-        return service.getOwnedParfumes(token, userId, page);
+    public Observable<List<PerfumeItem>> getLikedParfumes(@NonNull String token, int page) {
+        return service.getLikedParfumes(token, page);
     }
 
     @Override
-    public Observable<Void> changeFavorite(@NonNull String token,
-                                           @NonNull Long userId,
-                                           @NonNull FavoriteRequest request) {
-        return service.changeLiked(token, userId, request);
+    public Observable<List<PerfumeItem>> getWishlistedParfumes(@NonNull String token, int page) {
+        return service.getWishlistedParfumes(token, page);
     }
 
     @Override
-    public Observable<Void> changeWishlisted(@NonNull String token,
-                                             @NonNull Long userId,
-                                             @NonNull WishlistRequest request) {
-        return service.changeWishlisted(token, userId, request);
+    public Observable<List<PerfumeItem>> getOwnedParfumes(@NonNull String token, int page) {
+        return service.getOwnedParfumes(token, page);
     }
 
     @Override
-    public Observable<Void> changeOwned(@NonNull String token,
-                                        @NonNull Long userId,
-                                        @NonNull OwnedRequest request) {
-        return service.changeOwned(token, userId, request);
+    public Completable changeFavorite(@NonNull String token,
+                                      @NonNull FavoriteRequest request) {
+        return service.changeLiked(token, request);
+    }
+
+    @Override
+    public Completable changeWishlisted(@NonNull String token,
+                                        @NonNull WishlistRequest request) {
+        return service.changeWishlisted(token, request);
+    }
+
+    @Override
+    public Completable changeOwned(@NonNull String token,
+                                   @NonNull OwnedRequest request) {
+        return service.changeOwned(token, request);
     }
 }

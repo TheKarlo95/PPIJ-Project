@@ -24,8 +24,7 @@ public interface IRegister extends ICore {
                       @NonNull String passwordConfirmation,
                       @NonNull String email,
                       @NonNull String name,
-                      @NonNull String surname,
-                      @NonNull Gender gender);
+                      @NonNull String surname);
     }
 
     interface RegisterUseCase extends ICore.Interactor<RegisterRequest, User> {

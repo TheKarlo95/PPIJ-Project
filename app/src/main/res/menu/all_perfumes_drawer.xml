@@ -13,6 +13,13 @@
     <item android:title="Perfumes">
         <menu>
             <item
+                android:id="@+id/nav_all_perfumes"
+                android:icon="@drawable/ic_nav_all_perfumes"
+                android:title="All perfumes"/>
+            <item
+                android:id="@+id/nav_recommended"
+                android:title="Recommended"/>
+            <item
                 android:id="@+id/nav_favorites"
                 android:icon="@drawable/ic_nav_favorite"
                 android:title="Favorites"/>
@@ -26,5 +33,4 @@
                 android:title="Owned"/>
         </menu>
     </item>
-
 </menu>

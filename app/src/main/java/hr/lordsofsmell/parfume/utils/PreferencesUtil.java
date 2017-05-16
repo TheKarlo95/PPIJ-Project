@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 
 import hr.lordsofsmell.parfume.AndroidApplication;
 import hr.lordsofsmell.parfume.BuildConfig;
-import hr.lordsofsmell.parfume.domain.model.Gender;
 import hr.lordsofsmell.parfume.domain.model.response.User;
 
 public class PreferencesUtil {
@@ -29,13 +28,11 @@ public class PreferencesUtil {
         AndroidApplication.getContext()
                 .getSharedPreferences(USER_PREFERENCES_KEY, Context.MODE_PRIVATE)
                 .edit()
-                .putLong(USER_ID, user.id())
                 .putString(USER_TOKEN, user.token())
                 .putString(USER_USERNAME, user.username())
                 .putString(USER_EMAIL, user.email())
                 .putString(USER_NAME, user.name())
                 .putString(USER_SURNAME, user.surname())
-                .putString(USER_GENDER, user.gender().toString())
                 .apply();
     }
 
@@ -58,16 +55,14 @@ public class PreferencesUtil {
                 .getSharedPreferences(USER_PREFERENCES_KEY, Context.MODE_PRIVATE);
         User user = null;
 
-        Long id = prefs.getLong(USER_ID, -1);
-        if (id != -1) {
-            String token = prefs.getString(USER_TOKEN, null);
+        String token = prefs.getString(USER_TOKEN, null);
+        if (token != null) {
             String username = prefs.getString(USER_USERNAME, null);
             String email = prefs.getString(USER_EMAIL, null);
             String name = prefs.getString(USER_NAME, null);
             String surname = prefs.getString(USER_SURNAME, null);
-            Gender gender = Gender.fromString(prefs.getString(USER_GENDER, null));
 
-            user = User.create(id, token, username, email, name, surname, gender);
+            user = User.create(token, username, email, name, surname);
         }
 
         return user;
@@ -77,12 +72,6 @@ public class PreferencesUtil {
         return AndroidApplication.getContext()
                 .getSharedPreferences(USER_PREFERENCES_KEY, Context.MODE_PRIVATE)
                 .getString(USER_TOKEN, null);
-    }
-
-    public static long getUserId() {
-        return AndroidApplication.getContext()
-                .getSharedPreferences(USER_PREFERENCES_KEY, Context.MODE_PRIVATE)
-                .getLong(USER_ID, -1);
     }
 
     public static boolean isLoggedIn() {

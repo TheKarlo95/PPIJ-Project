@@ -32,8 +32,15 @@ public class GetAllPerfumesUseCase extends UseCase<GetAllPerfumesParams, List<Pe
     protected Observable<List<PerfumeItem>> createObservable(GetAllPerfumesParams params) {
         if (params == null) {
             return Observable.error(new NullPointerException("Parameters can't be null"));
+        } else if (params.page() <= 0) {
+            return Observable.error(new IllegalArgumentException(
+                    "Parameter page can't be less than or equals to 0"));
         } else {
-            return repository.getAllParfumes(params.token(), params.page());
+            return repository.getAllParfumes(params.token(),
+                    params.page(),
+                    params.company(),
+                    params.model(),
+                    params.year());
         }
     }
 }

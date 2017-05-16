@@ -8,25 +8,17 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
 import hr.lordsofsmell.parfume.annotations.Redacted;
-import hr.lordsofsmell.parfume.domain.model.Gender;
-
-import static android.R.attr.password;
 
 @AutoValue
 public abstract class User implements Parcelable {
 
-    public static User create(Long id,
-                              String token,
+    public static User create(String token,
                               String username,
                               String email,
                               String name,
-                              String surname,
-                              Gender gender) {
-        return new AutoValue_User(id, token, username, email, name, surname, gender);
+                              String surname) {
+        return new AutoValue_User(token, username, email, name, surname);
     }
-
-    @SerializedName("id")
-    public abstract Long id();
 
     @SerializedName("token")
     @Redacted
@@ -43,9 +35,6 @@ public abstract class User implements Parcelable {
 
     @SerializedName("surname")
     public abstract String surname();
-
-    @SerializedName("gender")
-    public abstract Gender gender();
 
     public static TypeAdapter<User> typeAdapter(Gson gson) {
         return new AutoValue_User.GsonTypeAdapter(gson);

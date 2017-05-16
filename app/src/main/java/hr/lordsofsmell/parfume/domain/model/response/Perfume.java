@@ -9,6 +9,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import hr.lordsofsmell.parfume.domain.model.Gender;
+
 @AutoValue
 public abstract class Perfume implements Parcelable {
 
@@ -17,6 +19,7 @@ public abstract class Perfume implements Parcelable {
                                  String company,
                                  String model,
                                  String year,
+                                 Gender gender,
                                  boolean liked,
                                  boolean owned,
                                  boolean wishlisted,
@@ -27,6 +30,7 @@ public abstract class Perfume implements Parcelable {
                 company,
                 model,
                 year,
+                gender,
                 liked,
                 owned,
                 wishlisted,
@@ -48,6 +52,9 @@ public abstract class Perfume implements Parcelable {
 
     @SerializedName("year")
     public abstract String year();
+
+    @SerializedName("gender")
+    public abstract Gender gender();
 
     @SerializedName("liked")
     public abstract Boolean favorited();

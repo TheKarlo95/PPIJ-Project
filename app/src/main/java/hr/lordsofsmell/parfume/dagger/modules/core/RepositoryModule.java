@@ -14,7 +14,7 @@ import hr.lordsofsmell.parfume.domain.repository.network.NetworkDataSource;
 @Module
 public class RepositoryModule {
 
-    private static final boolean USE_MOCK_REPOSITORY = true;
+    private static final boolean USE_MOCK_REPOSITORY = false;
 
     @Provides
     @Singleton

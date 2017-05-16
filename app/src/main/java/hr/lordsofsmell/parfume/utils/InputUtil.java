@@ -3,12 +3,8 @@ package hr.lordsofsmell.parfume.utils;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.widget.EditText;
-import android.widget.RadioGroup;
 
 import org.apache.commons.validator.routines.EmailValidator;
-
-import hr.lordsofsmell.parfume.R;
-import hr.lordsofsmell.parfume.domain.model.Gender;
 
 public class InputUtil {
 
@@ -118,25 +114,6 @@ public class InputUtil {
         }
 
         return surname;
-    }
-
-    @NonNull
-    public static Gender getGender(@NonNull RadioGroup rgGender) {
-        Gender gender;
-
-        switch (rgGender.getCheckedRadioButtonId()) {
-            case R.id.rb_gender_male:
-                gender = Gender.MALE;
-                break;
-            case R.id.rb_gender_female:
-                gender = Gender.FEMALE;
-                break;
-            default:
-                gender = Gender.MALE;
-                break;
-        }
-
-        return gender;
     }
 
     @NonNull

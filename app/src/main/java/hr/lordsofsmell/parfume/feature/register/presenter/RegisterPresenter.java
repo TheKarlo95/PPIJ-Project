@@ -31,16 +31,14 @@ public class RegisterPresenter extends Presenter implements IRegister.Presenter 
                          @NonNull String passwordConfirmation,
                          @NonNull String email,
                          @NonNull String name,
-                         @NonNull String surname,
-                         @NonNull Gender gender) {
+                         @NonNull String surname) {
     final IRegister.View view=(IRegister.View)getView();
         if (password.equals(passwordConfirmation)) {
             RegisterRequest request = RegisterRequest.create(username,
                     UserUtils.hashPassword(password),
                     email,
                     name,
-                    surname,
-                    gender);
+                    surname);
             useCase.execute(request, new Observer<User>(view,TAG, R.string.register_error){
                 @Override
                 public void onNext(User value){

@@ -4,15 +4,15 @@ import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
 
-import hr.lordsofsmell.parfume.domain.interactor.UseCase;
+import hr.lordsofsmell.parfume.domain.interactor.CompletableUseCase;
 import hr.lordsofsmell.parfume.domain.model.params.LikedRequestParams;
 import hr.lordsofsmell.parfume.domain.repository.IRepository;
 import hr.lordsofsmell.parfume.feature.perfumelist.IPerfumeList;
 import hr.lordsofsmell.parfume.threads.PostExecutionThread;
 import hr.lordsofsmell.parfume.threads.ThreadExecutor;
-import io.reactivex.Observable;
+import io.reactivex.Completable;
 
-public class ChangeFavoriteUseCase extends UseCase<LikedRequestParams, Void>
+public class ChangeFavoriteUseCase extends CompletableUseCase<LikedRequestParams>
         implements IPerfumeList.ChangeLikedUseCase {
 
     private IRepository repository;
@@ -26,13 +26,13 @@ public class ChangeFavoriteUseCase extends UseCase<LikedRequestParams, Void>
     }
 
     @Override
-    protected Observable<Void> createObservable(LikedRequestParams params) {
+    protected Completable createCompletable(LikedRequestParams params) {
         if (params == null) {
-            return Observable.error(new NullPointerException("Parameter params can't be null"));
+            return Completable.error(new NullPointerException("Parameter params can't be null"));
         } else if (params.request().parfumeId() <= 0) {
-            return Observable.error(new IllegalArgumentException("Parameter parfumeId can't be less than or equals to 0"));
+            return Completable.error(new IllegalArgumentException("Parameter parfumeId can't be less than or equals to 0"));
         } else {
-            return repository.changeFavorite(params.token(), params.userId(), params.request());
+            return repository.changeFavorite(params.token(), params.request());
         }
     }
 }

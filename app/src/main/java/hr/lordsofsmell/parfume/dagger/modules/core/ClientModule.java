@@ -9,9 +9,6 @@ import dagger.Provides;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
-/**
- * Created by Karlo Vrbic on 03.03.17.
- */
 @Module
 public class ClientModule {
 
