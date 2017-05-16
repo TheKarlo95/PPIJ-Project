@@ -10,6 +10,7 @@ import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
 import hr.lordsofsmell.parfume.domain.model.response.Parfume;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.domain.model.response.User;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -21,10 +22,10 @@ public interface ApiService {
 
     // TODO add real URLs when possible
 
-    @POST("users/login")
+    @POST("Profile/Login")
     Observable<User> login(@Body LoginRequest request);
 
-    @POST("users")
+    @POST("Profile/Register")
     Observable<User> register(@Body RegisterRequest request);
 
     @GET("users")
@@ -33,39 +34,42 @@ public interface ApiService {
     @GET("users")
     Observable<List<PerfumeItem>> getSimilarPerfumes(@Path("from") long perfumeId);
 
-    @GET("parfumes/{from}/{to}")
-    Observable<List<PerfumeItem>> getAllParfumes(@Path("from") int from, @Path("to") int to);
+    @POST("Profile/Logout")
+    Completable logout(@Header("X-Authorization") String token);
 
-    @GET("users/{id}/favorited/{from}/{to}")
+    @GET("parfumes/{page}")
+    Observable<List<PerfumeItem>> getAllParfumes(@Header("X-Authorization") String token,
+                                                 @Path("page") int page,
+                                                 @Header("manufacturer") String company,
+                                                 @Header("name") String name,
+                                                 @Header("year") String year);
+
+    @GET("parfumes/{page}")
+    Observable<List<PerfumeItem>> getRecommendedParfumes(@Header("X-Authorization") String token,
+                                                 @Path("page") int page);
+
+
+    @GET("parfumes/GetLiked/{page}")
     Observable<List<PerfumeItem>> getLikedParfumes(@Header("X-Authorization") String token,
-                                                   @Path("id") long userId,
-                                                   @Path("from") int from,
-                                                   @Path("to") int to);
+                                                   @Path("page") int page);
 
-    @GET("users/{id}/wishlist/{from}/{to}")
+    @GET("parfumes/GetWish/{page}")
     Observable<List<PerfumeItem>> getWishlistedParfumes(@Header("X-Authorization") String token,
-                                                        @Path("id") long userId,
-                                                        @Path("from") int from,
-                                                        @Path("to") int to);
+                                                        @Path("page") int page);
 
-    @GET("users/{id}/owned/{from}/{to}")
+    @GET("parfumes/GetOwned/{page}")
     Observable<List<PerfumeItem>> getOwnedParfumes(@Header("X-Authorization") String token,
-                                                   @Path("id") long userId,
-                                                   @Path("from") int from,
-                                                   @Path("to") int to);
+                                                   @Path("page") int page);
 
-    @POST("users/{id}/favorited")
-    Observable<Void> changeLiked(@Header("X-Authorization") String token,
-                                 @Path("id") Long id,
+    @POST("Profile/AddToLikes")
+    Completable changeLiked(@Header("X-Authorization") String token,
                                  @Body FavoriteRequest request);
 
-    @POST("users/{id}/wishlist")
-    Observable<Void> changeWishlisted(@Header("X-Authorization") String token,
-                                      @Path("id") Long id,
+    @POST("Profile/AddToWishlist")
+    Completable changeWishlisted(@Header("X-Authorization") String token,
                                       @Body WishlistRequest request);
 
-    @POST("users/{id}/owned")
-    Observable<Void> changeOwned(@Header("X-Authorization") String token,
-                                 @Path("id") Long id,
+    @POST("Profile/AddToOwned")
+    Completable changeOwned(@Header("X-Authorization") String token,
                                  @Body OwnedRequest request);
 }

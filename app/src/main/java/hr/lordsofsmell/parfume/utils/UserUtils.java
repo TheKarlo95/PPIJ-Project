@@ -1,5 +1,6 @@
 package hr.lordsofsmell.parfume.utils;
 
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -24,7 +25,7 @@ public class UserUtils {
     }
 
     public static String hashPassword(String password) {
-        return new String(DigestUtils.sha(password));
+        return new String(Hex.encodeHex(DigestUtils.sha(password)));
     }
 
 }

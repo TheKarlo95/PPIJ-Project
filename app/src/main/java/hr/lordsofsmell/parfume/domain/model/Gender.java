@@ -2,19 +2,22 @@ package hr.lordsofsmell.parfume.domain.model;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by thekarlo95 on 5/6/17.
- */
-
 public enum Gender {
 
-    @SerializedName("M")
+    @SerializedName("Masculine")
     MALE,
-    @SerializedName("F")
-    FEMALE;
+    @SerializedName("Feminine")
+    FEMALE,
+    @SerializedName("Shared / Unisex")
+    UNISEX;
 
     private static final String GENDER_MALE = "M";
     private static final String GENDER_FEMALE = "F";
+    private static final String GENDER_UNISEX = "U";
+
+    private static final String GENDER_FULL_MALE = "male";
+    private static final String GENDER_FULL_FEMALE = "female";
+    private static final String GENDER_FULL_UNISEX = "unisex";
 
     public static Gender fromString(String str) {
         switch (str) {
@@ -22,6 +25,21 @@ public enum Gender {
                 return MALE;
             case GENDER_FEMALE:
                 return FEMALE;
+            case GENDER_UNISEX:
+                return UNISEX;
+            default:
+                return null;
+        }
+    }
+
+    public String toFullGenderName() {
+        switch (this) {
+            case MALE:
+                return GENDER_FULL_MALE;
+            case FEMALE:
+                return GENDER_FULL_FEMALE;
+            case UNISEX:
+                return GENDER_FULL_UNISEX;
             default:
                 return null;
         }
@@ -34,6 +52,8 @@ public enum Gender {
                 return GENDER_MALE;
             case FEMALE:
                 return GENDER_FEMALE;
+            case UNISEX:
+                return GENDER_UNISEX;
             default:
                 return null;
         }

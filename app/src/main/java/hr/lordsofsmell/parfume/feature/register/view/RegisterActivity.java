@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
-import android.widget.RadioGroup;
 
 import javax.inject.Inject;
 
@@ -18,7 +17,6 @@ import butterknife.Unbinder;
 import hr.lordsofsmell.parfume.R;
 import hr.lordsofsmell.parfume.dagger.components.AppComponent;
 import hr.lordsofsmell.parfume.dagger.modules.RegisterModule;
-import hr.lordsofsmell.parfume.domain.model.Gender;
 import hr.lordsofsmell.parfume.domain.model.response.User;
 import hr.lordsofsmell.parfume.feature.core.view.ActivityView;
 import hr.lordsofsmell.parfume.feature.perfumelist.view.PerfumeListActivity;
@@ -43,8 +41,6 @@ public class RegisterActivity extends ActivityView
     TextInputLayout tilName;
     @BindView(R.id.til_surname)
     TextInputLayout tilSurname;
-    @BindView(R.id.rg_gender)
-    RadioGroup rgGender;
 
     @Inject
     IRegister.Presenter presenter;
@@ -53,6 +49,13 @@ public class RegisterActivity extends ActivityView
         Intent intent = new Intent(context, RegisterActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         intent.putExtra(PerfumeListActivity.EXTRA_LIST_TYPE, listType);
+        return intent;
+    }
+
+    public static Intent createIntent(Context context, int listType, int action, int position) {
+        Intent intent = createIntent(context, listType);
+        intent.putExtra(PerfumeListActivity.EXTRA_ACTION, action);
+        intent.putExtra(PerfumeListActivity.EXTRA_POSITION, position);
         return intent;
     }
 
@@ -68,8 +71,12 @@ public class RegisterActivity extends ActivityView
         } else {
             int listType = intent.getIntExtra(PerfumeListActivity.EXTRA_LIST_TYPE,
                     PerfumeListActivity.LIST_TYPE_ERROR);
+            int action = intent.getIntExtra(PerfumeListActivity.EXTRA_ACTION,
+                    PerfumeListActivity.ACTION_ERROR);
+            int position = intent.getIntExtra(PerfumeListActivity.EXTRA_POSITION,
+                    PerfumeListActivity.POSITION_ERROR);
 
-            startActivity(PerfumeListActivity.createIntent(this, listType));
+            startActivity(PerfumeListActivity.createIntent(this, listType, action, position));
         }
     }
 
@@ -81,7 +88,6 @@ public class RegisterActivity extends ActivityView
         String email = InputUtil.getEmailText(tilEmail);
         String name = InputUtil.getNameText(tilName);
         String surname = InputUtil.getSurnameText(tilSurname);
-        Gender gender = InputUtil.getGender(rgGender);
 
         if (!username.equals(InputUtil.EMPTY)
                 && !password.equals(InputUtil.EMPTY)
@@ -94,8 +100,7 @@ public class RegisterActivity extends ActivityView
                     passwordConfirmation,
                     email,
                     name,
-                    surname,
-                    gender);
+                    surname);
         }
     }
 

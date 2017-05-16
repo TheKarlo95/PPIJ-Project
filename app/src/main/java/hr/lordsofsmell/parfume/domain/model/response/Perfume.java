@@ -9,24 +9,28 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-@AutoValue
-public abstract class Parfume implements Parcelable {
+import hr.lordsofsmell.parfume.domain.model.Gender;
 
-    public static Parfume create(Long id,
+@AutoValue
+public abstract class Perfume implements Parcelable {
+
+    public static Perfume create(Long id,
                                  String image,
                                  String company,
                                  String model,
                                  String year,
+                                 Gender gender,
                                  boolean liked,
                                  boolean owned,
                                  boolean wishlisted,
                                  String description,
                                  List<PerfumeItem> similarParfumes) {
-        return new AutoValue_Parfume(id,
+        return new AutoValue_Perfume(id,
                 image,
                 company,
                 model,
                 year,
+                gender,
                 liked,
                 owned,
                 wishlisted,
@@ -37,26 +41,29 @@ public abstract class Parfume implements Parcelable {
     @SerializedName("id")
     public abstract Long id();
 
-    @SerializedName("image")
+    @SerializedName("url")
     public abstract String image();
 
-    @SerializedName("company")
+    @SerializedName("manufacturerName")
     public abstract String company();
 
-    @SerializedName("model")
+    @SerializedName("name")
     public abstract String model();
 
     @SerializedName("year")
     public abstract String year();
 
-    @SerializedName("favorited")
-    public abstract Boolean liked();
+    @SerializedName("gender")
+    public abstract Gender gender();
+
+    @SerializedName("liked")
+    public abstract Boolean favorited();
+
+    @SerializedName("wishes")
+    public abstract Boolean wishlisted();
 
     @SerializedName("owned")
     public abstract Boolean owned();
-
-    @SerializedName("wishlisted")
-    public abstract Boolean wishlisted();
 
     @SerializedName("description")
     public abstract String description();
@@ -64,13 +71,13 @@ public abstract class Parfume implements Parcelable {
     @SerializedName("similarParfumes")
     public abstract List<PerfumeItem> similarParfumes();
 
-    public static TypeAdapter<Parfume> typeAdapter(Gson gson) {
-        return new AutoValue_Parfume.GsonTypeAdapter(gson);
+    public static TypeAdapter<Perfume> typeAdapter(Gson gson) {
+        return new AutoValue_Perfume.GsonTypeAdapter(gson);
     }
 
-    abstract Parfume withLiked(Boolean liked);
+    abstract Perfume withFavorited(Boolean favorited);
 
-    abstract Parfume withOwned(Boolean owned);
+    abstract Perfume withWishlisted(Boolean wishlisted);
 
-    abstract Parfume withWishlisted(Boolean wishlisted);
+    abstract Perfume withOwned(Boolean owned);
 }
