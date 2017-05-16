@@ -5,14 +5,14 @@ import android.support.annotation.NonNull;
 import javax.inject.Inject;
 
 import hr.lordsofsmell.parfume.domain.interactor.CompletableUseCase;
-import hr.lordsofsmell.parfume.domain.model.params.LikedRequestParams;
+import hr.lordsofsmell.parfume.domain.model.params.FavoriteRequestParams;
 import hr.lordsofsmell.parfume.domain.repository.IRepository;
 import hr.lordsofsmell.parfume.feature.perfumelist.IPerfumeList;
 import hr.lordsofsmell.parfume.threads.PostExecutionThread;
 import hr.lordsofsmell.parfume.threads.ThreadExecutor;
 import io.reactivex.Completable;
 
-public class ChangeFavoriteUseCase extends CompletableUseCase<LikedRequestParams>
+public class ChangeFavoriteUseCase extends CompletableUseCase<FavoriteRequestParams>
         implements IPerfumeList.ChangeLikedUseCase {
 
     private IRepository repository;
@@ -26,7 +26,7 @@ public class ChangeFavoriteUseCase extends CompletableUseCase<LikedRequestParams
     }
 
     @Override
-    protected Completable createCompletable(LikedRequestParams params) {
+    protected Completable createCompletable(FavoriteRequestParams params) {
         if (params == null) {
             return Completable.error(new NullPointerException("Parameter params can't be null"));
         } else if (params.request().parfumeId() <= 0) {

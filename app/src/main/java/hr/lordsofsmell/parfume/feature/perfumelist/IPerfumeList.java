@@ -1,6 +1,5 @@
 package hr.lordsofsmell.parfume.feature.perfumelist;
 
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
@@ -8,10 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 import hr.lordsofsmell.parfume.domain.model.params.GetAllPerfumesParams;
-import hr.lordsofsmell.parfume.domain.model.params.GetLikedPerfumesParams;
-import hr.lordsofsmell.parfume.domain.model.params.GetOwnedPerfumesParams;
-import hr.lordsofsmell.parfume.domain.model.params.GetWishlistedPerfumesParams;
-import hr.lordsofsmell.parfume.domain.model.params.LikedRequestParams;
+import hr.lordsofsmell.parfume.domain.model.params.FavoriteRequestParams;
 import hr.lordsofsmell.parfume.domain.model.params.OwnedRequestParams;
 import hr.lordsofsmell.parfume.domain.model.params.PerfumesListParams;
 import hr.lordsofsmell.parfume.domain.model.params.WishlistedRequestParams;
@@ -84,7 +80,7 @@ public interface IPerfumeList {
     interface GetOwnedPerfumesUseCase extends ICore.Interactor<PerfumesListParams, List<PerfumeItem>> {
     }
 
-    interface ChangeLikedUseCase extends ICore.CompletableInteractor<LikedRequestParams> {
+    interface ChangeLikedUseCase extends ICore.CompletableInteractor<FavoriteRequestParams> {
     }
 
     interface ChangeWishlistedUseCase extends ICore.CompletableInteractor<WishlistedRequestParams> {

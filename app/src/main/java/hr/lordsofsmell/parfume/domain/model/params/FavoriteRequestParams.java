@@ -5,10 +5,10 @@ import com.google.auto.value.AutoValue;
 import hr.lordsofsmell.parfume.domain.model.request.FavoriteRequest;
 
 @AutoValue
-public abstract class LikedRequestParams {
+public abstract class FavoriteRequestParams {
 
-    public static LikedRequestParams create(String token, FavoriteRequest request) {
-        return new AutoValue_LikedRequestParams(token, request);
+    public static FavoriteRequestParams create(String token, FavoriteRequest request) {
+        return new AutoValue_FavoriteRequestParams(token, request);
     }
 
     public abstract String token();

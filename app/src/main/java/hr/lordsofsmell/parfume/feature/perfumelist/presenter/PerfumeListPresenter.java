@@ -7,8 +7,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import hr.lordsofsmell.parfume.R;
+import hr.lordsofsmell.parfume.domain.model.params.FavoriteRequestParams;
 import hr.lordsofsmell.parfume.domain.model.params.GetAllPerfumesParams;
-import hr.lordsofsmell.parfume.domain.model.params.LikedRequestParams;
 import hr.lordsofsmell.parfume.domain.model.params.OwnedRequestParams;
 import hr.lordsofsmell.parfume.domain.model.params.PerfumesListParams;
 import hr.lordsofsmell.parfume.domain.model.params.WishlistedRequestParams;
@@ -147,10 +147,10 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
         view.showLoading();
 
         User user = PreferencesUtil.getUser();
-        LikedRequestParams params = null;
+        FavoriteRequestParams params = null;
 
         if (user != null) {
-            params = LikedRequestParams.create(user.token(), request);
+            params = FavoriteRequestParams.create(user.token(), request);
         }
 
         changeFavoriteUseCase.execute(params,
