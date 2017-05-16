@@ -1,41 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_perfume_root"
     android:layout_width="match_parent"
     android:layout_height="300dp"
-    app:cardCornerRadius="5dp">
+    android:layout_marginTop="@dimen/activity_vertical_margin_small"
+    android:layout_marginBottom="@dimen/activity_vertical_margin_small"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="5dp">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="300dp"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/iv_perfume_image"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="200dp"
-            android:src="@color/colorAccent"/>
+            android:background="@color/perfumeImageBackground"
+            android:contentDescription="@string/perfume_image"
+            android:src="@drawable/ic_perfume_no_image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            tools:src="@drawable/ic_perfume_no_image"/>
 
-        <TextView
-            android:id="@+id/tv_perfume_company"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Chanel"/>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="0dp"
+            android:background="@drawable/item_perfume_border"
+            android:padding="@dimen/perfume_item_padding"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_perfume_image">
 
-        <TextView
-            android:id="@+id/tv_perfume_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Nº 5"/>
+            <TextView
+                android:id="@+id/tv_perfume_company"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/primaryText"
+                android:textSize="@dimen/text_size_big"
+                tools:text="Chanel"/>
 
-        <TextView
-            android:id="@+id/tv_perfume_year"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="1921"/>
+            <TextView
+                android:id="@+id/tv_perfume_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_perfume_company"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/primaryText"
+                android:textSize="@dimen/text_size_normal"
+                tools:text="Nº 5"/>
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tv_perfume_year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:textColor="@color/secondaryText"
+                android:textSize="@dimen/text_size_normal"
+                tools:text="1921"/>
+
+            <CheckBox
+                android:id="@+id/cb_perfume_like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="@dimen/perfume_item_padding"
+                android:layout_toStartOf="@+id/cb_perfume_wishlist"
+                android:button="@drawable/ic_favorite"/>
+
+            <CheckBox
+                android:id="@+id/cb_perfume_wishlist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="0dp"
+                android:layout_marginStart="@dimen/perfume_item_padding"
+                android:layout_toStartOf="@+id/cb_perfume_owned"
+                android:button="@drawable/ic_wishlist"/>
+
+            <CheckBox
+                android:id="@+id/cb_perfume_owned"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="@dimen/perfume_item_padding"
+                android:button="@drawable/ic_owned"/>
+        </RelativeLayout>
+    </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

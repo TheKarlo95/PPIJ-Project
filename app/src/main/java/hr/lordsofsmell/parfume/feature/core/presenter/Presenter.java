@@ -1,7 +1,6 @@
 package hr.lordsofsmell.parfume.feature.core.presenter;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
 
 import hr.lordsofsmell.parfume.feature.core.ICore;
 
@@ -27,14 +26,12 @@ public abstract class Presenter implements ICore.Presenter {
 
     @Override
     public void onDestroy() {
-    }
-
-    @Override
-    public void onError(@StringRes int stringId) {
-        view.showError(stringId);
+        cancel();
     }
 
     protected ICore.View getView() {
         return view;
     }
+
+    protected abstract void cancel();
 }

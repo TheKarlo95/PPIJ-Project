@@ -5,6 +5,8 @@ import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
+import hr.lordsofsmell.parfume.domain.model.Gender;
+
 @AutoValue
 public abstract class PerfumeItem {
 
@@ -13,35 +15,53 @@ public abstract class PerfumeItem {
                                      String company,
                                      String model,
                                      String year,
-                                     boolean liked,
+                                     Gender gender,
+                                     boolean favorited,
                                      boolean owned,
                                      boolean wishlisted) {
-        return new AutoValue_PerfumeItem(id, image, company, model, year, liked, owned, wishlisted);
+        return new AutoValue_PerfumeItem(id,
+                image,
+                company,
+                model,
+                year,
+                gender,
+                favorited,
+                owned,
+                wishlisted);
     }
 
     @SerializedName("id")
     public abstract Long id();
 
-    @SerializedName("image")
+    @SerializedName("url")
     public abstract String image();
 
-    @SerializedName("company")
+    @SerializedName("manufacturerName")
     public abstract String company();
 
-    @SerializedName("model")
+    @SerializedName("name")
     public abstract String model();
 
     @SerializedName("year")
     public abstract String year();
 
+    @SerializedName("gender")
+    public abstract Gender gender();
+
     @SerializedName("liked")
-    public abstract Boolean liked();
+    public abstract boolean favorited();
+
+    @SerializedName("wishes")
+    public abstract boolean wishlisted();
 
     @SerializedName("owned")
-    public abstract Boolean owned();
+    public abstract boolean owned();
 
-    @SerializedName("wishlisted")
-    public abstract Boolean wishlisted();
+    public abstract PerfumeItem withFavorited(boolean favorited);
+
+    public abstract PerfumeItem withWishlisted(boolean wishlisted);
+
+    public abstract PerfumeItem withOwned(boolean owned);
 
     public static TypeAdapter<PerfumeItem> typeAdapter(Gson gson) {
         return new AutoValue_PerfumeItem.GsonTypeAdapter(gson);
