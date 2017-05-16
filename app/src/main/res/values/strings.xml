@@ -13,6 +13,7 @@
     <string name="logout_error">Error happened while logging out</string>
     <string name="login_error">Error happened while logging in</string>
     <string name="register_error">Error happened while registering</string>
+    <string name="get_perfume_profile_error">Error happened while gettin the perfume</string>
 
 
     <string name="title_activity_perfume_list">PerfumeListActivity</string>

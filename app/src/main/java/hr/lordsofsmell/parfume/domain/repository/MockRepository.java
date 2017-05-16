@@ -16,6 +16,7 @@ import hr.lordsofsmell.parfume.domain.model.request.LoginRequest;
 import hr.lordsofsmell.parfume.domain.model.request.OwnedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.RegisterRequest;
 import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
+import hr.lordsofsmell.parfume.domain.model.response.Parfume;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.domain.model.response.User;
 import io.reactivex.Completable;
@@ -137,6 +138,15 @@ public class MockRepository implements IRepository {
     }
 
     @Override
+    public Observable<Parfume> getPerfumeProfile(@NonNull long perfumeId) {
+        return Observable.empty();
+    }
+
+    @Override
+    public Observable<List<PerfumeItem>> getSimilarParfumes(@NonNull long perfumeId) {
+        return Observable.empty();
+    }
+
     public Completable logout(@NonNull String token) {
         return Completable.complete();
     }
