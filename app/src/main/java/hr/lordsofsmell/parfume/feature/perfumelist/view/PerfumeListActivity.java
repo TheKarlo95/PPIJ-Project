@@ -17,12 +17,17 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -60,6 +65,7 @@ public class PerfumeListActivity extends ActivityView
     public static final int LIST_TYPE_FAVORITES = 1;
     public static final int LIST_TYPE_WISHLIST = 2;
     public static final int LIST_TYPE_OWNED = 3;
+    public static final int LIST_TYPE_RECOMMENDED = 4;
 
     public static final String EXTRA_ACTION = "action_extra";
     public static final int ACTION_ERROR = -1;
@@ -70,20 +76,29 @@ public class PerfumeListActivity extends ActivityView
     public static final String EXTRA_POSITION = "action_position";
     public static final int POSITION_ERROR = -1;
 
+    public static final String EXTRA_SEARCH_COMPANY = "search_company";
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.drawer_layout)
-    DrawerLayout drawer;
-    @BindView(R.id.nav_view)
-    NavigationView navigationView;
+    public static final String EXTRA_SEARCH_MODEL = "search_model";
 
-    @BindView(R.id.srl_perfumes_list)
-    SwipeRefreshLayout srlPerfumesList;
-    @BindView(R.id.mrv_perfumes_list)
-    MjolnirRecyclerView mrvPerfumesList;
-    @BindView(R.id.empty_view_perfume_list)
-    View emptyView;
+    public static final String EXTRA_SEARCH_YEAR = "search_year";
+
+    public static final String EXTRA_SEARCH_GENDER = "search_gender";
+    public static final String GENDER_MALE = "male";
+    public static final String GENDER_FEMALE = "female";
+    public static final String GENDER_UNISEX = "unisex";
+
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.drawer_layout) DrawerLayout drawer;
+    @BindView(R.id.nav_view) NavigationView navigationView;
+
+    @BindView(R.id.tv_company) TextView tvCompany;
+    @BindView(R.id.tv_model) TextView tvModel;
+    @BindView(R.id.tv_year) TextView tvYear;
+    @BindView(R.id.tv_gender) TextView tvGender;
+    @BindView(R.id.srl_perfumes_list) SwipeRefreshLayout srlPerfumesList;
+    @BindView(R.id.mrv_perfumes_list) MjolnirRecyclerView mrvPerfumesList;
+    @BindView(R.id.empty_view_perfume_list) View emptyView;
+    @BindView(R.id.ll_search_options) LinearLayout llSearchOptions;
 
     @Inject
     IPerfumeList.Presenter presenter;
@@ -109,6 +124,20 @@ public class PerfumeListActivity extends ActivityView
     }
 
     @Override
+    public void logoutSuccesful() {
+        PreferencesUtil.removeUser();
+
+        // recreate activity
+        Intent intent = getIntent();
+        intent.removeExtra(EXTRA_LIST_TYPE);
+        intent.removeExtra(EXTRA_ACTION);
+        intent.removeExtra(EXTRA_POSITION);
+
+        finish();
+        startActivity(intent);
+    }
+
+    @Override
     public void addPerfumes(Collection<PerfumeItem> newPerfumes, boolean clearAdapter) {
         if (clearAdapter) {
             adapter.clear();
@@ -116,6 +145,22 @@ public class PerfumeListActivity extends ActivityView
         adapter.addAll(newPerfumes);
 
         doAction(getIntent());
+    }
+
+    @Override
+    public void search(@Nullable String company,
+                       @Nullable String model,
+                       @Nullable String year,
+                       @Nullable ArrayList<String> genders) {
+        setParameterText(company, model, year, genders);
+
+        Intent intent = getIntent();
+        intent.putExtra(EXTRA_SEARCH_COMPANY, company);
+        intent.putExtra(EXTRA_SEARCH_MODEL, model);
+        intent.putExtra(EXTRA_SEARCH_YEAR, year);
+        intent.putStringArrayListExtra(EXTRA_SEARCH_GENDER, genders);
+
+        presenter.loadPerfumes(true, company, model, year, genders);
     }
 
     @Override
@@ -132,7 +177,7 @@ public class PerfumeListActivity extends ActivityView
     public void favoriteChanged(long perfumeId, boolean isChecked) {
         int index = adapter.getIndexById(perfumeId);
 
-        if(!isChecked && getListType(getIntent()) == LIST_TYPE_FAVORITES){
+        if (!isChecked && getListType(getIntent()) == LIST_TYPE_FAVORITES) {
             adapter.remove(index);
         } else {
             PerfumeItem perfume = adapter.get(index).withFavorited(isChecked);
@@ -144,7 +189,7 @@ public class PerfumeListActivity extends ActivityView
     public void wishlistedChanged(long perfumeId, boolean isChecked) {
         int index = adapter.getIndexById(perfumeId);
 
-        if(!isChecked && getListType(getIntent()) == LIST_TYPE_WISHLIST){
+        if (!isChecked && getListType(getIntent()) == LIST_TYPE_WISHLIST) {
             adapter.remove(index);
         } else {
             PerfumeItem perfume = adapter.get(index).withWishlisted(isChecked);
@@ -156,7 +201,7 @@ public class PerfumeListActivity extends ActivityView
     public void ownedChanged(long perfumeId, boolean isChecked) {
         int index = adapter.getIndexById(perfumeId);
 
-        if(!isChecked && getListType(getIntent()) == LIST_TYPE_OWNED){
+        if (!isChecked && getListType(getIntent()) == LIST_TYPE_OWNED) {
             adapter.remove(index);
         } else {
             PerfumeItem perfume = adapter.get(index).withOwned(isChecked);
@@ -167,7 +212,8 @@ public class PerfumeListActivity extends ActivityView
     @Override
     public void onFavoriteClick(View view, PerfumeItem perfume, int position, boolean enabled) {
         if (enabled) {
-            presenter.changeFavorite(FavoriteRequest.create(!perfume.favorited(), perfume.id()));
+            presenter.changeFavorite(FavoriteRequest.create(!perfume.favorited(),
+                    perfume.id()));
         } else {
             startActivity(LoginActivity.createIntent(this,
                     presenter.getListType(),
@@ -179,7 +225,8 @@ public class PerfumeListActivity extends ActivityView
     @Override
     public void onWishlistClick(View view, PerfumeItem perfume, int position, boolean enabled) {
         if (enabled) {
-            presenter.changeWishlisted(WishlistRequest.create(!perfume.wishlisted(), perfume.id()));
+            presenter.changeWishlisted(WishlistRequest.create(!perfume.wishlisted(),
+                    perfume.id()));
         } else {
             startActivity(LoginActivity.createIntent(this,
                     presenter.getListType(),
@@ -191,7 +238,8 @@ public class PerfumeListActivity extends ActivityView
     @Override
     public void onOwnedClick(View view, PerfumeItem perfume, int position, boolean enabled) {
         if (enabled) {
-            presenter.changeOwned(OwnedRequest.create(!perfume.owned(), perfume.id()));
+            presenter.changeOwned(OwnedRequest.create(!perfume.owned(),
+                    perfume.id()));
         } else {
             startActivity(LoginActivity.createIntent(this,
                     presenter.getListType(),
@@ -238,7 +286,7 @@ public class PerfumeListActivity extends ActivityView
         mrvPerfumesList.addOnScrollListener(new OnScrollToBottomListener() {
             @Override
             public void onScrollToBottom(RecyclerView recyclerView, int dx, int dy) {
-                presenter.loadPerfumes(false, false);
+                presenter.loadPerfumes(false);
             }
         });
 
@@ -246,7 +294,7 @@ public class PerfumeListActivity extends ActivityView
             @Override
             public void onRefresh() {
                 Log.i(TAG, "onRefresh called from SwipeRefreshLayout");
-                presenter.loadPerfumes(true, true);
+                presenter.loadPerfumes(true);
             }
         });
 
@@ -255,8 +303,10 @@ public class PerfumeListActivity extends ActivityView
         presenter.init(listType);
         setMenu(listType);
         setActivityTitle(listType);
+        setSearchVisibility(listType);
+        setParameterText(intent);
 
-        presenter.loadPerfumes(false, false);
+        presenter.loadPerfumes(false);
     }
 
     @Override
@@ -350,8 +400,15 @@ public class PerfumeListActivity extends ActivityView
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (PreferencesUtil.isLoggedIn()) {
-            getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        if (!PreferencesUtil.isLoggedIn()) {
+            MenuItem logoutMenuItem = menu.findItem(R.id.action_logout);
+            logoutMenuItem.setVisible(false);
+        }
+
+        if (getListType(getIntent()) != LIST_TYPE_ALL_PERFUMES) {
+            MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+            searchMenuItem.setVisible(false);
         }
         return true;
     }
@@ -365,21 +422,18 @@ public class PerfumeListActivity extends ActivityView
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            PreferencesUtil.removeUser();
-
-                            // recreate activity
-                            Intent intent = getIntent();
-                            intent.removeExtra(EXTRA_ACTION);
-                            intent.removeExtra(EXTRA_POSITION);
-
-                            finish();
-                            startActivity(intent);
+                            presenter.logout();
                         }
                     }, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
                         }
                     });
+            return true;
+        }
+        if (id == R.id.action_search) {
+            new SearchDialog().show(getSupportFragmentManager(), "search_dialog");
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -411,21 +465,23 @@ public class PerfumeListActivity extends ActivityView
 
     private void setMenu(int listType) {
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.inflateMenu(R.menu.all_perfumes_drawer);
         switch (listType) {
             case LIST_TYPE_ALL_PERFUMES:
-                navigationView.inflateMenu(R.menu.all_perfumes_drawer);
+                navigationView.getMenu().findItem(R.id.nav_all_perfumes).setVisible(false);
                 break;
             case LIST_TYPE_FAVORITES:
-                navigationView.inflateMenu(R.menu.favorites_drawer);
+                navigationView.getMenu().findItem(R.id.nav_favorites).setVisible(false);
                 break;
             case LIST_TYPE_WISHLIST:
-                navigationView.inflateMenu(R.menu.wishlist_drawer);
+                navigationView.getMenu().findItem(R.id.nav_wishlist).setVisible(false);
                 break;
             case LIST_TYPE_OWNED:
-                navigationView.inflateMenu(R.menu.owned_perfumes_drawer);
+                navigationView.getMenu().findItem(R.id.nav_owned).setVisible(false);
                 break;
-            default:
-                navigationView.inflateMenu(R.menu.all_perfumes_drawer);
+            case LIST_TYPE_RECOMMENDED:
+                navigationView.getMenu().findItem(R.id.nav_recommended).setVisible(false);
+                break;
         }
     }
 
@@ -445,7 +501,18 @@ public class PerfumeListActivity extends ActivityView
                 case LIST_TYPE_OWNED:
                     actionBar.setTitle(R.string.owned_perfumes_title);
                     break;
+                case LIST_TYPE_RECOMMENDED:
+                    actionBar.setTitle(R.string.recommended_perfumes_title);
+                    break;
             }
+        }
+    }
+
+    private void setSearchVisibility(int listType) {
+        if(listType == LIST_TYPE_ALL_PERFUMES) {
+            llSearchOptions.setVisibility(View.VISIBLE);
+        } else {
+            llSearchOptions.setVisibility(View.GONE);
         }
     }
 
@@ -472,5 +539,58 @@ public class PerfumeListActivity extends ActivityView
                 }
             }
         }
+    }
+
+    public void setParameterText(Intent intent) {
+        String company = "";
+        String model = "";
+        String year = "";
+        ArrayList<String> genders = null;
+
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            company = extras.getString(EXTRA_SEARCH_COMPANY, "");
+            model = extras.getString(EXTRA_SEARCH_MODEL, "");
+            year = extras.getString(EXTRA_SEARCH_YEAR, "");
+            genders = extras.getStringArrayList(EXTRA_SEARCH_GENDER);
+        }
+
+        setParameterText(company, model, year, genders);
+    }
+
+    public void setParameterText(@Nullable String company,
+                                 @Nullable String model,
+                                 @Nullable String year,
+                                 @Nullable List<String> genders) {
+        String notSpecifiedText = getString(R.string.search_dialog_not_specified);
+        String allGenders = getString(R.string.search_dialog_all_genders);
+
+        String genderString = join(genders, ", ");
+
+        tvCompany.setText(TextUtils.isEmpty(company) ? notSpecifiedText : company);
+        tvModel.setText(TextUtils.isEmpty(model) ? notSpecifiedText : model);
+        tvYear.setText(TextUtils.isEmpty(year) ? notSpecifiedText : year);
+        tvGender.setText(TextUtils.isEmpty(genderString) ? allGenders : genderString);
+    }
+
+    private static String join(@Nullable List<String> strings, @Nullable String separator) {
+        String output = null;
+
+        if (strings != null && !strings.isEmpty()) {
+            StringBuilder sb = new StringBuilder(strings.size() * 5);
+
+            sb.append(" ");
+            for (int i = 0, size = strings.size(); i < size; i++) {
+                String str = strings.get(i);
+                sb.append(str);
+                if (separator != null && i < size - 1) {
+                    sb.append(separator);
+                }
+            }
+
+            output = sb.toString();
+        }
+
+        return output;
     }
 }

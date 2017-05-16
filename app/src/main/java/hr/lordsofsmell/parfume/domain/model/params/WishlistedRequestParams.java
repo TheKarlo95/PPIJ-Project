@@ -7,13 +7,11 @@ import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
 @AutoValue
 public abstract class WishlistedRequestParams {
 
-    public static WishlistedRequestParams create(String token, Long userId, WishlistRequest request) {
-        return new AutoValue_WishlistedRequestParams(token, userId, request);
+    public static WishlistedRequestParams create(String token, WishlistRequest request) {
+        return new AutoValue_WishlistedRequestParams(token, request);
     }
 
     public abstract String token();
-
-    public abstract Long userId();
 
     public abstract WishlistRequest request();
 }

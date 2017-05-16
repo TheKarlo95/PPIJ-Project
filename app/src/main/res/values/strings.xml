@@ -10,8 +10,10 @@
     <string name="change_liked_error">Error happened while changing like state of perfume</string>
     <string name="change_wishlisted_error">Error happened while changing wishlist state of perfume</string>
     <string name="change_owned_error">Error happened while changing owned state of perfume</string>
+    <string name="logout_error">Error happened while logging out</string>
     <string name="login_error">Error happened while logging in</string>
     <string name="register_error">Error happened while registering</string>
+    <string name="get_perfume_profile_error">Error happened while gettin the perfume</string>
 
 
     <string name="title_activity_perfume_list">PerfumeListActivity</string>
@@ -23,15 +25,33 @@
     <string name="favorite_perfumes_title">Favorites</string>
     <string name="wishlist_perfumes_title">Wishlist</string>
     <string name="owned_perfumes_title">Owned perfumes</string>
+    <string name="recommended_perfumes_title">Recommended perfumes</string>
     <string name="perfume_image">Perfume image</string>
     <string name="empty_perfumes_list">No perfumes</string>
 
+    <string name="perfume_list_search_label_company">Company:</string>
+    <string name="perfume_list_search_label_model">Model:</string>
+    <string name="perfume_list_search_label_year">Year:</string>
+    <string name="perfume_list_search_label_gender">Gender:</string>
+
     <string name="toolbar_logout">Logout</string>
+    <string name="toolbar_search">Search</string>
+
     <string name="logout_dialog_title">Logout</string>
     <string name="logout_dialog_message_login">You first need to logout before login.</string>
     <string name="logout_dialog_message">Are you sure you want to logout?</string>
     <string name="logout_ok_button">OK</string>
     <string name="logout_cancel_button">Cancel</string>
+
+    <string name="search_dialog_title">Search</string>
+    <string name="search_dialog_positive_button">OK</string>
+    <string name="search_dialog_cancel_button">Cancel</string>
+    <string name="search_dialog_hint_company">Company</string>
+    <string name="search_dialog_hint_model">Model</string>
+    <string name="search_dialog_hint_year">Year</string>
+    <string name="search_dialog_label_gender">Gender</string>
+    <string name="search_dialog_not_specified">\u0020Not Specified</string>
+    <string name="search_dialog_all_genders">\u0020male, female, unisex</string>
 
     <string name="title_activity_login">Login</string>
     <string name="login_username">Username</string>
@@ -49,4 +69,5 @@
     <string name="register_gender">Gender</string>
     <string name="register_register_button">Register</string>
     <string name="register_dialog_message">You first need to logout before registering another account.</string>
+    <string name="perfume_list_search_parameters">Search parameters</string>
 </resources>

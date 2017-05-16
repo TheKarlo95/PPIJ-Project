@@ -10,7 +10,9 @@ import hr.lordsofsmell.parfume.feature.perfumelist.usecase.ChangeWishlistedUseCa
 import hr.lordsofsmell.parfume.feature.perfumelist.usecase.GetAllPerfumesUseCase;
 import hr.lordsofsmell.parfume.feature.perfumelist.usecase.GetFavoritePerfumesUseCase;
 import hr.lordsofsmell.parfume.feature.perfumelist.usecase.GetOwnedPerfumesUseCase;
+import hr.lordsofsmell.parfume.feature.perfumelist.usecase.GetRecommendedPerfumesUseCase;
 import hr.lordsofsmell.parfume.feature.perfumelist.usecase.GetWishlistedPerfumesUseCase;
+import hr.lordsofsmell.parfume.feature.perfumelist.usecase.LogoutUseCase;
 
 @Module
 public class PerfumeListModule {
@@ -32,7 +34,17 @@ public class PerfumeListModule {
     }
 
     @Provides
+    public IPerfumeList.LogoutUseCase provideLogoutUseCase(LogoutUseCase useCase) {
+        return useCase;
+    }
+
+    @Provides
     public IPerfumeList.GetAllPerfumesUseCase provideGetAllPerfumesUseCase(GetAllPerfumesUseCase useCase) {
+        return useCase;
+    }
+
+    @Provides
+    public IPerfumeList.GetRecommendedPerfumesUseCase provideGetRecommendedPerfumesUseCase(GetRecommendedPerfumesUseCase useCase) {
         return useCase;
     }
 

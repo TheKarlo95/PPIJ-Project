@@ -20,7 +20,7 @@ public abstract class LoginRequest implements Parcelable {
     @Redacted
     public abstract String username();
 
-    @SerializedName("password")
+    @SerializedName("hash")
     @Redacted
     public abstract String password();
 

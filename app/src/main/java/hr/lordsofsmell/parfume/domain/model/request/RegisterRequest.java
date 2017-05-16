@@ -15,29 +15,25 @@ public abstract class RegisterRequest {
                                          String password,
                                          String email,
                                          String name,
-                                         String surname,
-                                         Gender gender) {
-        return new AutoValue_RegisterRequest(username, password, email, name, surname, gender);
+                                         String surname) {
+        return new AutoValue_RegisterRequest(username, password, email, name, surname);
     }
 
     @SerializedName("username")
     public abstract String username();
 
-    @SerializedName("password")
+    @SerializedName("hash")
     @Redacted
     public abstract String password();
 
-    @SerializedName("email")
+    @SerializedName("mail")
     public abstract String email();
 
-    @SerializedName("name")
+    @SerializedName("ime")
     public abstract String name();
 
-    @SerializedName("surname")
+    @SerializedName("prezime")
     public abstract String surname();
-
-    @SerializedName("gender")
-    public abstract Gender gender();
 
     public static TypeAdapter<RegisterRequest> typeAdapter(Gson gson) {
         return new AutoValue_RegisterRequest.GsonTypeAdapter(gson);

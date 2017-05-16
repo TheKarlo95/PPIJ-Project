@@ -15,15 +15,15 @@ import hr.lordsofsmell.parfume.threads.PostExecutionThread;
 import hr.lordsofsmell.parfume.threads.ThreadExecutor;
 import io.reactivex.Observable;
 
-public class GetFavoritePerfumesUseCase extends UseCase<PerfumesListParams, List<PerfumeItem>>
-        implements IPerfumeList.GetLikedPerfumesUseCase {
+public class GetRecommendedPerfumesUseCase extends UseCase<PerfumesListParams, List<PerfumeItem>>
+        implements IPerfumeList.GetRecommendedPerfumesUseCase {
 
     private IRepository repository;
 
     @Inject
-    GetFavoritePerfumesUseCase(@NonNull ThreadExecutor threadExecutor,
-                               @NonNull PostExecutionThread postExecutionThread,
-                               @NonNull IRepository repository) {
+    GetRecommendedPerfumesUseCase(@NonNull ThreadExecutor threadExecutor,
+                                  @NonNull PostExecutionThread postExecutionThread,
+                                  @NonNull IRepository repository) {
         super(threadExecutor, postExecutionThread);
         this.repository = repository;
     }
@@ -36,7 +36,7 @@ public class GetFavoritePerfumesUseCase extends UseCase<PerfumesListParams, List
             return Observable.error(new IllegalArgumentException(
                     "Parameter page can't be less than or equals to 0"));
         } else {
-            return repository.getLikedParfumes(params.token(), params.page());
+            return repository.getRecommendedParfumes(params.token(), params.page());
         }
     }
 }

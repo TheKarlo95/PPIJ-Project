@@ -7,18 +7,17 @@ import java.util.List;
 import javax.inject.Inject;
 
 import hr.lordsofsmell.parfume.R;
+import hr.lordsofsmell.parfume.domain.model.params.FavoriteRequestParams;
 import hr.lordsofsmell.parfume.domain.model.params.GetAllPerfumesParams;
-import hr.lordsofsmell.parfume.domain.model.params.GetLikedPerfumesParams;
-import hr.lordsofsmell.parfume.domain.model.params.GetOwnedPerfumesParams;
-import hr.lordsofsmell.parfume.domain.model.params.GetWishlistedPerfumesParams;
-import hr.lordsofsmell.parfume.domain.model.params.LikedRequestParams;
 import hr.lordsofsmell.parfume.domain.model.params.OwnedRequestParams;
+import hr.lordsofsmell.parfume.domain.model.params.PerfumesListParams;
 import hr.lordsofsmell.parfume.domain.model.params.WishlistedRequestParams;
 import hr.lordsofsmell.parfume.domain.model.request.FavoriteRequest;
 import hr.lordsofsmell.parfume.domain.model.request.OwnedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.domain.model.response.User;
+import hr.lordsofsmell.parfume.feature.core.observer.CompletableObserver;
 import hr.lordsofsmell.parfume.feature.core.observer.Observer;
 import hr.lordsofsmell.parfume.feature.core.presenter.Presenter;
 import hr.lordsofsmell.parfume.feature.perfumelist.IPerfumeList;
@@ -29,9 +28,9 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
 
     private static final String TAG = "PerfumeList";
 
-    private static final int LOAD_ITEMS = 5;
-
+    private final IPerfumeList.LogoutUseCase logoutUseCase;
     private IPerfumeList.GetAllPerfumesUseCase getAllPerfumesUseCase;
+    private IPerfumeList.GetRecommendedPerfumesUseCase getRecommendedPerfumesUseCase;
     private IPerfumeList.GetLikedPerfumesUseCase getLikedPerfumesUseCase;
     private IPerfumeList.GetWishlistedPerfumesUseCase getWishlistedPerfumesUseCase;
     private IPerfumeList.GetOwnedPerfumesUseCase getOwnedPerfumesUseCase;
@@ -40,12 +39,14 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
     private IPerfumeList.ChangeOwnedUseCase changeOwnedUseCase;
 
     private int listType;
-    private int lastPerfumeIndex;
+    private int lastPage;
     private boolean reachedLastPerfume;
 
     @Inject
     PerfumeListPresenter(IPerfumeList.View view,
+                         IPerfumeList.LogoutUseCase logoutUseCase,
                          IPerfumeList.GetAllPerfumesUseCase getAllPerfumesUseCase,
+                         IPerfumeList.GetRecommendedPerfumesUseCase getRecommendedPerfumesUseCase,
                          IPerfumeList.GetLikedPerfumesUseCase getLikedPerfumesUseCase,
                          IPerfumeList.GetWishlistedPerfumesUseCase getWishlistedPerfumesUseCase,
                          IPerfumeList.GetOwnedPerfumesUseCase getOwnedPerfumesUseCase,
@@ -53,7 +54,9 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
                          IPerfumeList.ChangeWishlistedUseCase changeWishlistedUseCase,
                          IPerfumeList.ChangeOwnedUseCase changeOwnedUseCase) {
         super(view);
+        this.logoutUseCase = logoutUseCase;
         this.getAllPerfumesUseCase = getAllPerfumesUseCase;
+        this.getRecommendedPerfumesUseCase = getRecommendedPerfumesUseCase;
         this.getLikedPerfumesUseCase = getLikedPerfumesUseCase;
         this.getWishlistedPerfumesUseCase = getWishlistedPerfumesUseCase;
         this.getOwnedPerfumesUseCase = getOwnedPerfumesUseCase;
@@ -62,8 +65,15 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
         this.changeOwnedUseCase = changeOwnedUseCase;
 
         listType = 0;
-        lastPerfumeIndex = 1;
+        lastPage = 1;
         reachedLastPerfume = false;
+    }
+
+
+    public void logout() {
+        String token = PreferencesUtil.getToken();
+        final IPerfumeList.View view = (IPerfumeList.View) getView();
+        logoutUseCase.execute(token, new CompletableObserver(view, TAG, R.string.logout_error));
     }
 
     @Override
@@ -74,62 +84,61 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
     @Override
     public void init(int listType) {
         this.listType = listType;
-        lastPerfumeIndex = 1;
+        lastPage = 1;
         reachedLastPerfume = false;
     }
 
     @Override
-    public void loadPerfumes(boolean clearAfter, boolean userSwipe) {
+    public void loadPerfumes(boolean clearAfter,
+                             String company,
+                             String model,
+                             String year,
+                             List<String> genders) {
         final IPerfumeList.View view = (IPerfumeList.View) getView();
-        if (userSwipe || (!reachedLastPerfume && !view.isRefreshing())) {
+        if (clearAfter || (!reachedLastPerfume && !view.isRefreshing())) {
             view.setRefreshing(true);
 
             if (clearAfter) {
-                lastPerfumeIndex = 1;
+                lastPage = 1;
                 reachedLastPerfume = false;
             }
 
-            long userId = PreferencesUtil.getUserId();
+            String token = PreferencesUtil.getToken();
+            PerfumesListParams params = PerfumesListParams.create(token, lastPage);
 
             switch (listType) {
                 case PerfumeListActivity.LIST_TYPE_ALL_PERFUMES:
-                    GetAllPerfumesParams allParams = GetAllPerfumesParams.create(lastPerfumeIndex,
-                            LOAD_ITEMS);
-                    getAllPerfumesUseCase.execute(allParams,
-                            getListObserver("GetAllPerfumesUseCase",
-                                    userSwipe,
-                                    R.string.get_all_perfumes_error));
+                    GetAllPerfumesParams allParams = GetAllPerfumesParams.create(token,
+                            lastPage,
+                            company,
+                            model,
+                            year);
+                    getAllPerfumesUseCase.execute(allParams, getListObserver(clearAfter,
+                            R.string.get_all_perfumes_error));
                     break;
                 case PerfumeListActivity.LIST_TYPE_FAVORITES:
-                    GetLikedPerfumesParams likedParams = GetLikedPerfumesParams.create(userId,
-                            lastPerfumeIndex,
-                            LOAD_ITEMS);
-                    getLikedPerfumesUseCase.execute(likedParams,
-                            getListObserver("GetFavoritePerfumesUseCase",
-                                    userSwipe,
-                                    R.string.get_liked_perfumes_error));
+                    getLikedPerfumesUseCase.execute(params, getListObserver(clearAfter,
+                            R.string.get_liked_perfumes_error));
                     break;
                 case PerfumeListActivity.LIST_TYPE_WISHLIST:
-                    GetWishlistedPerfumesParams wishlistedParams = GetWishlistedPerfumesParams.create(
-                            userId,
-                            lastPerfumeIndex,
-                            LOAD_ITEMS);
-                    getWishlistedPerfumesUseCase.execute(wishlistedParams,
-                            getListObserver("GetWishlistedPerfumesUseCase",
-                                    userSwipe,
-                                    R.string.get_wishlisted_perfumes_error));
+                    getWishlistedPerfumesUseCase.execute(params, getListObserver(clearAfter,
+                            R.string.get_wishlisted_perfumes_error));
                     break;
                 case PerfumeListActivity.LIST_TYPE_OWNED:
-                    GetOwnedPerfumesParams ownedParams = GetOwnedPerfumesParams.create(userId,
-                            lastPerfumeIndex,
-                            LOAD_ITEMS);
-                    getOwnedPerfumesUseCase.execute(ownedParams,
-                            getListObserver("GetOwnedPerfumesUseCase",
-                                    userSwipe,
-                                    R.string.get_owned_perfumes_error));
+                    getOwnedPerfumesUseCase.execute(params, getListObserver(clearAfter,
+                            R.string.get_owned_perfumes_error));
+                    break;
+                case PerfumeListActivity.LIST_TYPE_RECOMMENDED:
+                    getRecommendedPerfumesUseCase.execute(params, getListObserver(clearAfter,
+                            R.string.get_owned_perfumes_error));
                     break;
             }
         }
+    }
+
+    @Override
+    public void loadPerfumes(boolean clearAdapter) {
+        loadPerfumes(clearAdapter, null, null, null, null);
     }
 
     @Override
@@ -138,20 +147,14 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
         view.showLoading();
 
         User user = PreferencesUtil.getUser();
-        LikedRequestParams params = null;
+        FavoriteRequestParams params = null;
 
         if (user != null) {
-            params = LikedRequestParams.create(user.token(), user.id(), request);
+            params = FavoriteRequestParams.create(user.token(), request);
         }
-        changeFavoriteUseCase.execute(params,
-                new Observer<Void>(view,
-                        TAG + " ChangeFavoriteUseCase",
-                        R.string.change_liked_error) {
-                    @Override
-                    public void onNext(Void value) {
-                        super.onNext(value);
-                    }
 
+        changeFavoriteUseCase.execute(params,
+                new CompletableObserver(view, TAG, R.string.change_liked_error) {
                     @Override
                     public void onComplete() {
                         super.onComplete();
@@ -169,17 +172,11 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
         WishlistedRequestParams params = null;
 
         if (user != null) {
-            params = WishlistedRequestParams.create(user.token(), user.id(), request);
+            params = WishlistedRequestParams.create(user.token(), request);
         }
-        changeWishlistedUseCase.execute(params,
-                new Observer<Void>(view,
-                        TAG + " ChangeWishlistedUseCase",
-                        R.string.change_wishlisted_error) {
-                    @Override
-                    public void onNext(Void value) {
-                        super.onNext(value);
-                    }
 
+        changeWishlistedUseCase.execute(params,
+                new CompletableObserver(view, TAG, R.string.change_wishlisted_error) {
                     @Override
                     public void onComplete() {
                         super.onComplete();
@@ -197,17 +194,11 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
         OwnedRequestParams params = null;
 
         if (user != null) {
-            params = OwnedRequestParams.create(user.token(), user.id(), request);
+            params = OwnedRequestParams.create(user.token(), request);
         }
-        changeOwnedUseCase.execute(params,
-                new Observer<Void>(view,
-                        TAG + " ChangeOwnedUseCase",
-                        R.string.change_owned_error) {
-                    @Override
-                    public void onNext(Void value) {
-                        super.onNext(value);
-                    }
 
+        changeOwnedUseCase.execute(params,
+                new CompletableObserver(view, TAG, R.string.change_owned_error) {
                     @Override
                     public void onComplete() {
                         super.onComplete();
@@ -227,17 +218,16 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
         changeOwnedUseCase.cancel();
     }
 
-    private Observer<List<PerfumeItem>> getListObserver(String tagAppend,
-                                                        final boolean clearAdapter,
+    private Observer<List<PerfumeItem>> getListObserver(final boolean clearAdapter,
                                                         @StringRes int errorId) {
         final IPerfumeList.View view = (IPerfumeList.View) getView();
-        return new Observer<List<PerfumeItem>>(view, TAG + " " + tagAppend, errorId) {
+        return new Observer<List<PerfumeItem>>(view, TAG, errorId) {
             @Override
             public void onNext(List<PerfumeItem> perfumes) {
                 super.onNext(perfumes);
 
-                lastPerfumeIndex += perfumes.size();
-                reachedLastPerfume = perfumes.size() < LOAD_ITEMS;
+                lastPage++;
+                reachedLastPerfume = perfumes.size() < 10;
 
                 view.addPerfumes(perfumes, clearAdapter);
             }
