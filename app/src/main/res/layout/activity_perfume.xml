@@ -1,97 +1,111 @@
-<android.support.constraint.ConstraintLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_perfume"
     android:layout_width="match_parent"
-    android:layout_height="1000dp"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/iv_perfume_image"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
-        android:background="@color/perfumeImageBackground"
-        android:contentDescription="@string/perfume_image"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_perfume_no_image"
-        tools:src="@drawable/ic_perfume_no_image"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.5"
+        android:contentDescription="Activity background"
+        android:scaleType="centerCrop"
+        android:src="@drawable/background_flower"/>
 
-    <RelativeLayout
-        android:id="@+id/rl_perfume_info"
-        android:layout_width="0dp"
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/item_perfume_border"
-        android:minHeight="100dp"
-        android:padding="@dimen/perfume_item_padding"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_perfume_image">
+        android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/iv_perfume_gender"
-            android:layout_width="@dimen/gender_icon_size_small"
-            android:layout_height="@dimen/gender_icon_size_small"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:contentDescription="Perfume gender"
-            tools:src="@drawable/ic_gender_male_on"/>
+            android:id="@+id/iv_perfume_image"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:background="@color/perfumeImageBackground"
+            android:contentDescription="@string/perfume_image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/ic_perfume_no_image"
+            tools:src="@drawable/ic_perfume_no_image"/>
 
-        <TextView
-            android:id="@+id/tv_perfume_company"
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:id="@+id/rl_perfume_info"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textColor="@color/primaryText"
-            android:textSize="@dimen/text_size_big"
-            tools:text="Chanel"/>
+            android:background="@drawable/item_perfume_border"
+            android:minHeight="100dp"
+            android:padding="@dimen/perfume_item_padding"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_perfume_image">
 
-        <TextView
-            android:id="@+id/tv_perfume_model"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_perfume_company"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textColor="@color/primaryText"
-            android:textSize="@dimen/text_size_normal"
-            tools:text="Nº 5"/>
+            <ImageView
+                android:id="@+id/iv_perfume_gender"
+                android:layout_width="@dimen/gender_icon_size_small"
+                android:layout_height="@dimen/gender_icon_size_small"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:contentDescription="Perfume gender"
+                tools:src="@drawable/ic_gender_male_on"/>
 
-        <TextView
-            android:id="@+id/tv_perfume_year"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/tv_perfume_model"
-            android:textColor="@color/secondaryText"
-            android:textSize="@dimen/text_size_normal"
-            tools:text="1921"/>
+            <TextView
+                android:id="@+id/tv_perfume_company"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/primaryText"
+                android:textSize="@dimen/text_size_big"
+                tools:text="Chanel"/>
 
-        <TextView
-            android:id="@+id/tv_perfume_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/tv_perfume_year"
-            android:ellipsize="end"
-            android:textColor="@color/primaryText"
-            android:textSize="@dimen/text_size_normal"
-            tools:text="Description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."/>
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/tv_perfume_model"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_perfume_company"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/primaryText"
+                android:textSize="@dimen/text_size_normal"
+                tools:text="Nº 5"/>
 
-    <co.infinum.mjolnirrecyclerview.MjolnirRecyclerView
-        android:id="@+id/mrv_perfumes_list"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rl_perfume_info"/>
-</android.support.constraint.ConstraintLayout>
+            <TextView
+                android:id="@+id/tv_perfume_year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/tv_perfume_model"
+                android:textColor="@color/secondaryText"
+                android:textSize="@dimen/text_size_normal"
+                tools:text="1921"/>
+
+            <TextView
+                android:id="@+id/tv_perfume_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/tv_perfume_year"
+                android:ellipsize="end"
+                android:textColor="@color/primaryText"
+                android:textSize="@dimen/text_size_normal"
+                tools:text="Description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."/>
+        </RelativeLayout>
+
+        <co.infinum.mjolnirrecyclerview.MjolnirRecyclerView
+            android:id="@+id/mrv_perfumes_list"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rl_perfume_info"/>
+    </android.support.constraint.ConstraintLayout>
+</FrameLayout>

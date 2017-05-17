@@ -12,16 +12,6 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
-    signingConfigs {
-        release {
-            storeFile file("C:\\Users\\Karlo\\Documents\\Projects\\keystore.jks")
-            storePassword "sifra123"
-            keyAlias "user1"
-            keyPassword "sifra123"
-            v2SigningEnabled true
-        }
-    }
-
     buildTypes {
         release {
             minifyEnabled false

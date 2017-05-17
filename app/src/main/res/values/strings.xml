@@ -51,7 +51,7 @@
     <string name="search_dialog_hint_year">Year</string>
     <string name="search_dialog_label_gender">Gender</string>
     <string name="search_dialog_not_specified">\u0020Not Specified</string>
-    <string name="search_dialog_all_genders">\u0020male, female, unisex</string>
+    <string name="search_dialog_all_genders">\u0020Masculine, Feminine, Shared / Unisex</string>
 
     <string name="title_activity_login">Login</string>
     <string name="login_username">Username</string>
