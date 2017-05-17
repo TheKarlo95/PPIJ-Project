@@ -13,22 +13,22 @@ public class LoginModule {
 
     private final ILogin.View view;
 
-    public LoginModule( ILogin.View view, Context applicationContext) {
+    public LoginModule(ILogin.View view, Context applicationContext) {
         this.view = view;
     }
 
     @Provides
-    public  ILogin.View provideView() {
+    ILogin.View provideView() {
         return view;
     }
 
     @Provides
-    public  ILogin.Presenter providePresenter(LoginPresenter presenter) {
+    ILogin.Presenter providePresenter(LoginPresenter presenter) {
         return presenter;
     }
 
     @Provides
-    public  ILogin.LoginUseCase provideLoginUseCase(LoginUseCase useCase) {
+    ILogin.LoginUseCase provideLoginUseCase(LoginUseCase useCase) {
         return useCase;
     }
 }

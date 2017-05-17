@@ -22,6 +22,7 @@ public abstract class Presenter implements ICore.Presenter {
 
     @Override
     public void onStop() {
+        cancel();
     }
 
     @Override

@@ -6,8 +6,8 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import hr.lordsofsmell.parfume.domain.repository.IRepository;
-import hr.lordsofsmell.parfume.domain.repository.MockRepository;
 import hr.lordsofsmell.parfume.domain.repository.Repository;
+import hr.lordsofsmell.parfume.domain.repository.mock.MockRepository;
 import hr.lordsofsmell.parfume.domain.repository.network.ApiService;
 import hr.lordsofsmell.parfume.domain.repository.network.NetworkDataSource;
 

@@ -50,11 +50,6 @@ public abstract class CompletableUseCase<Params> implements ICore.CompletableInt
     }
 
     @Override
-    public Completable execute(Params params) {
-        return createCompletable(params);
-    }
-
-    @Override
     public void cancel() {
         if (compositeDisposable != null && !compositeDisposable.isDisposed()) {
             compositeDisposable.dispose();

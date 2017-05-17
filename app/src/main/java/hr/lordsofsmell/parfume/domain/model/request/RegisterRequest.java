@@ -6,7 +6,6 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
 import hr.lordsofsmell.parfume.annotations.Redacted;
-import hr.lordsofsmell.parfume.domain.model.Gender;
 
 @AutoValue
 public abstract class RegisterRequest {

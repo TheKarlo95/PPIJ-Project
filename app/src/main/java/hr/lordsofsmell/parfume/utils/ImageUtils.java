@@ -2,7 +2,6 @@ package hr.lordsofsmell.parfume.utils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
@@ -41,27 +40,5 @@ public class ImageUtils {
                     .crossFade()
                     .into(imageView);
         }
-    }
-
-    public static void loadImage(@NonNull Context context,
-                                 @NonNull ImageView imageView,
-                                 @DrawableRes int drawable) {
-        Glide.with(context)
-                .load(drawable)
-                .centerCrop()
-                .thumbnail(0.1f)
-                .crossFade()
-                .into(imageView);
-    }
-
-    public static void loadImage(@NonNull Activity activity,
-                                 @NonNull ImageView imageView,
-                                 @DrawableRes int drawable) {
-        Glide.with(activity)
-                .load(drawable)
-                .centerCrop()
-                .thumbnail(0.1f)
-                .crossFade()
-                .into(imageView);
     }
 }

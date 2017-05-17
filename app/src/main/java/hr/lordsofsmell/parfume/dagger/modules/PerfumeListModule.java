@@ -24,57 +24,62 @@ public class PerfumeListModule {
     }
 
     @Provides
-    public IPerfumeList.View provideView() {
+    IPerfumeList.View provideView() {
         return view;
     }
 
     @Provides
-    public IPerfumeList.Presenter providePresenter(PerfumeListPresenter presenter) {
+    IPerfumeList.Presenter providePresenter(PerfumeListPresenter presenter) {
         return presenter;
     }
 
     @Provides
-    public IPerfumeList.LogoutUseCase provideLogoutUseCase(LogoutUseCase useCase) {
+    IPerfumeList.LogoutUseCase provideLogoutUseCase(LogoutUseCase useCase) {
         return useCase;
     }
 
     @Provides
-    public IPerfumeList.GetAllPerfumesUseCase provideGetAllPerfumesUseCase(GetAllPerfumesUseCase useCase) {
+    IPerfumeList.GetAllPerfumesUseCase provideGetAllPerfumesUseCase(GetAllPerfumesUseCase useCase) {
         return useCase;
     }
 
     @Provides
-    public IPerfumeList.GetRecommendedPerfumesUseCase provideGetRecommendedPerfumesUseCase(GetRecommendedPerfumesUseCase useCase) {
+    IPerfumeList.GetRecommendedPerfumesUseCase provideGetRecommendedPerfumesUseCase(
+            GetRecommendedPerfumesUseCase useCase) {
         return useCase;
     }
 
     @Provides
-    public IPerfumeList.GetLikedPerfumesUseCase provideGetLikedPerfumesUseCase(GetFavoritePerfumesUseCase useCase) {
+    IPerfumeList.GetLikedPerfumesUseCase provideGetLikedPerfumesUseCase(
+            GetFavoritePerfumesUseCase useCase) {
         return useCase;
     }
 
     @Provides
-    public IPerfumeList.GetWishlistedPerfumesUseCase provideGetWishlistedPerfumesUseCase(GetWishlistedPerfumesUseCase useCase) {
+    IPerfumeList.GetWishlistedPerfumesUseCase provideGetWishlistedPerfumesUseCase(
+            GetWishlistedPerfumesUseCase useCase) {
         return useCase;
     }
 
     @Provides
-    public IPerfumeList.GetOwnedPerfumesUseCase provideGetOwnedPerfumesUseCase(GetOwnedPerfumesUseCase useCase) {
+    IPerfumeList.GetOwnedPerfumesUseCase provideGetOwnedPerfumesUseCase(
+            GetOwnedPerfumesUseCase useCase) {
         return useCase;
     }
 
     @Provides
-    public IPerfumeList.ChangeLikedUseCase provideChangeLikedUseCase(ChangeFavoriteUseCase useCase) {
+    IPerfumeList.ChangeLikedUseCase provideChangeLikedUseCase(ChangeFavoriteUseCase useCase) {
         return useCase;
     }
 
     @Provides
-    public IPerfumeList.ChangeWishlistedUseCase provideChangeWishlistedUseCase(ChangeWishlistedUseCase useCase) {
+    IPerfumeList.ChangeWishlistedUseCase provideChangeWishlistedUseCase(
+            ChangeWishlistedUseCase useCase) {
         return useCase;
     }
 
     @Provides
-    public IPerfumeList.ChangeOwnedUseCase provideChangeOwnedUseCase(ChangeOwnedUseCase useCase) {
+    IPerfumeList.ChangeOwnedUseCase provideChangeOwnedUseCase(ChangeOwnedUseCase useCase) {
         return useCase;
     }
 }

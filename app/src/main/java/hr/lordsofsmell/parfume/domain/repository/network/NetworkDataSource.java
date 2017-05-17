@@ -37,7 +37,7 @@ public class NetworkDataSource implements IRepository {
     }
 
     @Override
-    public Observable<Perfume> getPerfumeProfile(@NonNull String token, long perfumeId) {
+    public Observable<Perfume> getPerfumeProfile(@Nullable String token, long perfumeId) {
         return service.getPerfumeProfile(token, perfumeId);
     }
 

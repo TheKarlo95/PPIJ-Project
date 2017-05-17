@@ -25,7 +25,7 @@ public interface IRepository {
 
     Completable logout(@NonNull String token);
 
-    Observable<Perfume> getPerfumeProfile(@NonNull String token, long perfumeId);
+    Observable<Perfume> getPerfumeProfile(@Nullable String token, long perfumeId);
 
     Observable<Response<List<PerfumeItem>>> getSimilarParfumes(@Nullable String token, long perfumeId);
 

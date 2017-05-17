@@ -6,12 +6,12 @@ import android.util.Log;
 import hr.lordsofsmell.parfume.feature.core.ICore;
 import io.reactivex.disposables.Disposable;
 
-public class CompletableLoggingObserver implements io.reactivex.CompletableObserver {
+class CompletableLoggingObserver implements io.reactivex.CompletableObserver {
 
     @NonNull private ICore.View view;
     @NonNull private String tag;
 
-    public CompletableLoggingObserver(@NonNull ICore.View view, @NonNull String tag) {
+    CompletableLoggingObserver(@NonNull ICore.View view, @NonNull String tag) {
         this.view = view;
         this.tag = tag;
     }

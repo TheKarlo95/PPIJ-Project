@@ -1,4 +1,4 @@
-package hr.lordsofsmell.parfume.domain.repository;
+package hr.lordsofsmell.parfume.domain.repository.mock;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +19,7 @@ import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
 import hr.lordsofsmell.parfume.domain.model.response.Perfume;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.domain.model.response.User;
+import hr.lordsofsmell.parfume.domain.repository.IRepository;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.functions.Action;
@@ -143,7 +144,7 @@ public class MockRepository implements IRepository {
     }
 
     @Override
-    public Observable<Perfume> getPerfumeProfile(@NonNull String token, long perfumeId) {
+    public Observable<Perfume> getPerfumeProfile(@Nullable String token, long perfumeId) {
         return Observable.empty();
     }
 

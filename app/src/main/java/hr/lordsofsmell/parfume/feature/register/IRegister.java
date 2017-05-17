@@ -2,16 +2,12 @@ package hr.lordsofsmell.parfume.feature.register;
 
 import android.support.annotation.NonNull;
 
-import java.util.Collection;
-import java.util.List;
-
-import hr.lordsofsmell.parfume.domain.model.Gender;
 import hr.lordsofsmell.parfume.domain.model.request.RegisterRequest;
-import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.domain.model.response.User;
 import hr.lordsofsmell.parfume.feature.core.ICore;
 
 public interface IRegister extends ICore {
+
     interface View extends ICore.View {
         void registrationSuccessful(User user);
 

@@ -21,8 +21,6 @@ import retrofit2.http.Path;
 
 public interface ApiService {
 
-    // TODO add real URLs when possible
-
     @POST("Profile/Login")
     Observable<User> login(@Body LoginRequest request);
 

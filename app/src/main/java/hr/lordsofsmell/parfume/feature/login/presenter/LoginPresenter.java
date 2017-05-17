@@ -27,7 +27,7 @@ public class LoginPresenter extends Presenter implements ILogin.Presenter {
     @Override
     public void login(@NonNull String username, @NonNull String password) {
         LoginRequest loginRequest = LoginRequest.create(username, UserUtils.hashPassword(password));
-        final ILogin.View view=(ILogin.View)getView();
+        final ILogin.View view = (ILogin.View) getView();
         loginUseCase.execute(loginRequest, new Observer<User>(view, TAG, R.string.login_error) {
             @Override
             public void onNext(User value) {

@@ -12,15 +12,15 @@ public class UserUtils {
     private UserUtils() {
     }
 
-    public static boolean isValidUsername(String username) {
+    static boolean isValidUsername(String username) {
         return username.matches(USERNAME_PATTERN);
     }
 
-    public static boolean isValidPassword(String password) {
+    static boolean isValidPassword(String password) {
         return password.matches(PASSWORD_PATTERN);
     }
 
-    public static boolean isValidEmail(String email) {
+    static boolean isValidEmail(String email) {
         return EmailValidator.getInstance().isValid(email);
     }
 

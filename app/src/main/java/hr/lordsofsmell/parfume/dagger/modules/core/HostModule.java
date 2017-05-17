@@ -12,7 +12,6 @@ public class HostModule {
 
     private static final int DEBUG_NETWORK_TIMEOUT_SECONDS = 60;
     private static final int NETWORK_TIMEOUT_SECONDS = 5;
-    // TODO add real API URL
     private static final String API_URL = "http://perfumeapi.azurewebsites.net/api/";
 
     @Provides

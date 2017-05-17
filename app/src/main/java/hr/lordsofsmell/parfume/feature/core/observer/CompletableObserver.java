@@ -9,9 +9,9 @@ public class CompletableObserver extends CompletableLoggingObserver {
 
     @StringRes private int errorId;
 
-    public CompletableObserver(@NonNull ICore.View view,
-                               @NonNull String tag,
-                               @StringRes int errorId) {
+    protected CompletableObserver(@NonNull ICore.View view,
+                                  @NonNull String tag,
+                                  @StringRes int errorId) {
         super(view, tag);
         this.errorId = errorId;
     }

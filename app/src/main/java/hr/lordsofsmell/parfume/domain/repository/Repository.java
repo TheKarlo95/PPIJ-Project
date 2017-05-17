@@ -42,7 +42,7 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public Observable<Perfume> getPerfumeProfile(@NonNull String token, long perfumeId) {
+    public Observable<Perfume> getPerfumeProfile(@Nullable String token, long perfumeId) {
         return ObservableUtils.getFirstNonNull(network.getPerfumeProfile(token, perfumeId));
     }
 

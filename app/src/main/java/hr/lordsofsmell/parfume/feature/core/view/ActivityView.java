@@ -53,11 +53,6 @@ public abstract class ActivityView extends AppCompatActivity implements ICore.Vi
 
         Intent intent = getIntent();
         init(savedInstanceState, intent);
-        if (savedInstanceState != null) {
-            executeOnNonFirstRun(savedInstanceState, intent);
-        } else {
-            executeOnFirstRun(intent);
-        }
         Log.i(tag, "onCreate finished");
     }
 
@@ -123,19 +118,8 @@ public abstract class ActivityView extends AppCompatActivity implements ICore.Vi
     }
 
     @Override
-    public void showMessage(@StringRes int messageId) {
-        Toast.makeText(this, getString(messageId), Toast.LENGTH_LONG).show();
-    }
-
-    @Override
     public void showError(@StringRes int messageId) {
         Toast.makeText(this, getString(messageId), Toast.LENGTH_LONG).show();
-    }
-
-    protected void executeOnNonFirstRun(@NonNull Bundle savedInstanceState, Intent intent) {
-    }
-
-    protected void executeOnFirstRun(Intent intent) {
     }
 
     private void initProgressDialog() {

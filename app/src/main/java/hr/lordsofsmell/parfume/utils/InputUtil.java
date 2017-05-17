@@ -4,8 +4,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.widget.EditText;
 
-import org.apache.commons.validator.routines.EmailValidator;
-
 public class InputUtil {
 
     public static final String EMPTY = "";
@@ -74,7 +72,7 @@ public class InputUtil {
         if (email.isEmpty()) {
             tilEmail.setErrorEnabled(true);
             tilEmail.setError("Email field cannot be empty");
-        } else if (!EmailValidator.getInstance().isValid(email)) {
+        } else if (!UserUtils.isValidEmail(email)) {
             tilEmail.setErrorEnabled(true);
             tilEmail.setError("Invalid email");
             email = EMPTY;

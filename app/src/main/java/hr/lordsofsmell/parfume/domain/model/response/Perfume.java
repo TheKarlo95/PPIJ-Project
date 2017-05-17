@@ -67,10 +67,4 @@ public abstract class Perfume implements Parcelable {
     public static TypeAdapter<Perfume> typeAdapter(Gson gson) {
         return new AutoValue_Perfume.GsonTypeAdapter(gson);
     }
-
-    abstract Perfume withFavorited(Boolean favorited);
-
-    abstract Perfume withWishlisted(Boolean wishlisted);
-
-    abstract Perfume withOwned(Boolean owned);
 }

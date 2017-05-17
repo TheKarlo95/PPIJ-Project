@@ -20,24 +20,22 @@ public class RegisterModule {
     }
 
     @Provides
-    public IRegister.View provideView() {
+    IRegister.View provideView() {
         return view;
     }
 
     @Provides
-    public Context provideApplicationContext() {
+    Context provideApplicationContext() {
         return applicationContext;
     }
 
     @Provides
-    public IRegister.Presenter providePresenter(RegisterPresenter presenter) {
+    IRegister.Presenter providePresenter(RegisterPresenter presenter) {
         return presenter;
     }
 
     @Provides
-    public IRegister.RegisterUseCase provideGetAllPerfumesUseCase(RegisterUseCase useCase) {
+    IRegister.RegisterUseCase provideGetAllPerfumesUseCase(RegisterUseCase useCase) {
         return useCase;
     }
-
-
 }

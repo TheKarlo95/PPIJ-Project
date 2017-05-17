@@ -11,15 +11,11 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import hr.lordsofsmell.parfume.gson.AutoValueGsonFactory;
-import io.reactivex.Observable;
 import retrofit2.CallAdapter;
 import retrofit2.Converter;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-/**
- * Created by Karlo Vrbic on 03.03.17.
- */
 @Module
 public class ConverterModule {
 

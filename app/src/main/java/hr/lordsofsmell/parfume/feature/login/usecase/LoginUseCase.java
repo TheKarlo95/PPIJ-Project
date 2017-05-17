@@ -11,21 +11,17 @@ import hr.lordsofsmell.parfume.domain.repository.IRepository;
 import hr.lordsofsmell.parfume.feature.login.ILogin;
 import hr.lordsofsmell.parfume.threads.PostExecutionThread;
 import hr.lordsofsmell.parfume.threads.ThreadExecutor;
-import hr.lordsofsmell.parfume.utils.UserUtils;
 import io.reactivex.Observable;
-
-/**
- * Created by tea03 on 5/7/2017.
- */
 
 public class LoginUseCase extends UseCase<LoginRequest, User>
         implements ILogin.LoginUseCase {
+
     private IRepository repository;
 
     @Inject
-    public LoginUseCase(@NonNull ThreadExecutor threadExecutor,
-                        @NonNull PostExecutionThread postExecutionThread,
-                        @NonNull IRepository repository) {
+    LoginUseCase(@NonNull ThreadExecutor threadExecutor,
+                 @NonNull PostExecutionThread postExecutionThread,
+                 @NonNull IRepository repository) {
         super(threadExecutor, postExecutionThread);
         this.repository = repository;
     }

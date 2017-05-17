@@ -17,7 +17,8 @@ public abstract class UseCase<Params, T> implements ICore.Interactor<Params, T> 
 
     private CompositeDisposable compositeDisposable;
 
-    public UseCase(@NonNull ThreadExecutor threadExecutor, @NonNull PostExecutionThread postExecutionThread) {
+    public UseCase(@NonNull ThreadExecutor threadExecutor,
+                   @NonNull PostExecutionThread postExecutionThread) {
         this.compositeDisposable = new CompositeDisposable();
         this.threadExecutor = threadExecutor;
         this.postExecutionThread = postExecutionThread;
@@ -34,11 +35,6 @@ public abstract class UseCase<Params, T> implements ICore.Interactor<Params, T> 
                 .subscribeWith(observer);
 
         addDisposable(disposable);
-    }
-
-    @Override
-    public Observable<T> execute(Params params) {
-        return createObservable(params);
     }
 
     @Override
