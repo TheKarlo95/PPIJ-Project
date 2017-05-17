@@ -1,4 +1,4 @@
-package hr.lordsofsmell.parfume.feature.perfumeProfile.usecase;
+package hr.lordsofsmell.parfume.feature.perfume.usecase;
 
 import android.support.annotation.NonNull;
 
@@ -8,13 +8,13 @@ import hr.lordsofsmell.parfume.domain.interactor.UseCase;
 import hr.lordsofsmell.parfume.domain.model.params.PerfumeParams;
 import hr.lordsofsmell.parfume.domain.model.response.Perfume;
 import hr.lordsofsmell.parfume.domain.repository.IRepository;
-import hr.lordsofsmell.parfume.feature.perfumeProfile.IPerfumeProfile;
+import hr.lordsofsmell.parfume.feature.perfume.IPerfume;
 import hr.lordsofsmell.parfume.threads.PostExecutionThread;
 import hr.lordsofsmell.parfume.threads.ThreadExecutor;
 import io.reactivex.Observable;
 
 public class GetPerfumeUseCase extends UseCase<PerfumeParams, Perfume>
-        implements IPerfumeProfile.GetPerfumeUseCase {
+        implements IPerfume.GetPerfumeUseCase {
 
     private IRepository repository;
 

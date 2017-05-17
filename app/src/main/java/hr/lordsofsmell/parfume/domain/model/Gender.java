@@ -11,13 +11,9 @@ public enum Gender {
     @SerializedName("Shared / Unisex")
     UNISEX;
 
-    private static final String GENDER_MALE = "M";
-    private static final String GENDER_FEMALE = "F";
-    private static final String GENDER_UNISEX = "U";
-
-    private static final String GENDER_FULL_MALE = "male";
-    private static final String GENDER_FULL_FEMALE = "female";
-    private static final String GENDER_FULL_UNISEX = "unisex";
+    private static final String GENDER_MALE = "Masculine";
+    private static final String GENDER_FEMALE = "Feminine";
+    private static final String GENDER_UNISEX = "Shared / Unisex";
 
     public static Gender fromString(String str) {
         switch (str) {
@@ -27,19 +23,6 @@ public enum Gender {
                 return FEMALE;
             case GENDER_UNISEX:
                 return UNISEX;
-            default:
-                return null;
-        }
-    }
-
-    public String toFullGenderName() {
-        switch (this) {
-            case MALE:
-                return GENDER_FULL_MALE;
-            case FEMALE:
-                return GENDER_FULL_FEMALE;
-            case UNISEX:
-                return GENDER_FULL_UNISEX;
             default:
                 return null;
         }

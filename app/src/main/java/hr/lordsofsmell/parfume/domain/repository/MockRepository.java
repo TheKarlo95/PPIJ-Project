@@ -22,6 +22,7 @@ import hr.lordsofsmell.parfume.domain.model.response.User;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.functions.Action;
+import retrofit2.Response;
 
 public class MockRepository implements IRepository {
 
@@ -137,29 +138,31 @@ public class MockRepository implements IRepository {
                 request.surname()));
     }
 
+    public Completable logout(@NonNull String token) {
+        return Completable.complete();
+    }
+
     @Override
     public Observable<Perfume> getPerfumeProfile(@NonNull String token, long perfumeId) {
         return Observable.empty();
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getSimilarParfumes(@NonNull String token, long perfumeId) {
+    public Observable<Response<List<PerfumeItem>>> getSimilarParfumes(@Nullable String token,
+                                                                      long perfumeId) {
         return Observable.empty();
     }
 
-    public Completable logout(@NonNull String token) {
-        return Completable.complete();
-    }
-
     @Override
-    public Observable<List<PerfumeItem>> getAllParfumes(@Nullable String token,
-                                                        final int page,
-                                                        @Nullable final String company,
-                                                        @Nullable final String model,
-                                                        @Nullable final String year) {
-        return Observable.fromCallable(new Callable<List<PerfumeItem>>() {
+    public Observable<Response<List<PerfumeItem>>> getAllParfumes(@Nullable String token,
+                                                                  final int page,
+                                                                  @Nullable final String company,
+                                                                  @Nullable final String model,
+                                                                  @Nullable final String year,
+                                                                  @Nullable String[] genders) {
+        return Observable.fromCallable(new Callable<Response<List<PerfumeItem>>>() {
             @Override
-            public List<PerfumeItem> call() throws Exception {
+            public Response<List<PerfumeItem>> call() throws Exception {
                 List<PerfumeItem> filtered = filter(perfumes, new Predicate<PerfumeItem>() {
                     @Override
                     public boolean test(PerfumeItem perfumeItem) {
@@ -177,21 +180,22 @@ public class MockRepository implements IRepository {
                     }
                 });
 
-                return subList(filtered, page, LOAD_NUMBER);
+                return Response.success(subList(filtered, page, LOAD_NUMBER));
             }
         });
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getRecommendedParfumes(@Nullable String token) {
+    public Observable<Response<List<PerfumeItem>>> getRecommendedParfumes(@Nullable String token) {
         return Observable.empty();
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getLikedParfumes(@NonNull String token, final int page) {
-        return Observable.fromCallable(new Callable<List<PerfumeItem>>() {
+    public Observable<Response<List<PerfumeItem>>> getLikedParfumes(@NonNull String token,
+                                                                    final int page) {
+        return Observable.fromCallable(new Callable<Response<List<PerfumeItem>>>() {
             @Override
-            public List<PerfumeItem> call() throws Exception {
+            public Response<List<PerfumeItem>> call() throws Exception {
                 List<PerfumeItem> liked = new ArrayList<>(perfumes.size() / 2);
                 for (PerfumeItem perfume : perfumes) {
                     if (perfume.favorited()) {
@@ -199,17 +203,17 @@ public class MockRepository implements IRepository {
                     }
                 }
 
-                return subList(liked, page, LOAD_NUMBER);
+                return Response.success(subList(liked, page, LOAD_NUMBER));
             }
         });
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getWishlistedParfumes(@NonNull String token,
-                                                               final int page) {
-        return Observable.fromCallable(new Callable<List<PerfumeItem>>() {
+    public Observable<Response<List<PerfumeItem>>> getWishlistedParfumes(@NonNull String token,
+                                                                         final int page) {
+        return Observable.fromCallable(new Callable<Response<List<PerfumeItem>>>() {
             @Override
-            public List<PerfumeItem> call() throws Exception {
+            public Response<List<PerfumeItem>> call() throws Exception {
                 List<PerfumeItem> wishlisted = new ArrayList<>(perfumes.size() / 2);
                 for (PerfumeItem perfume : perfumes) {
                     if (perfume.wishlisted()) {
@@ -217,16 +221,16 @@ public class MockRepository implements IRepository {
                     }
                 }
 
-                return subList(wishlisted, page, LOAD_NUMBER);
+                return Response.success(subList(wishlisted, page, LOAD_NUMBER));
             }
         });
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getOwnedParfumes(@NonNull String token, final int page) {
-        return Observable.fromCallable(new Callable<List<PerfumeItem>>() {
+    public Observable<Response<List<PerfumeItem>>> getOwnedParfumes(@NonNull String token, final int page) {
+        return Observable.fromCallable(new Callable<Response<List<PerfumeItem>>>() {
             @Override
-            public List<PerfumeItem> call() throws Exception {
+            public Response<List<PerfumeItem>> call() throws Exception {
                 List<PerfumeItem> owned = new ArrayList<>(perfumes.size() / 2);
                 for (PerfumeItem perfume : perfumes) {
                     if (perfume.owned()) {
@@ -234,7 +238,7 @@ public class MockRepository implements IRepository {
                     }
                 }
 
-                return subList(owned, page, LOAD_NUMBER);
+                return Response.success(subList(owned, page, LOAD_NUMBER));
             }
         });
     }

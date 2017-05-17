@@ -29,7 +29,7 @@
             android:name=".feature.register.view.RegisterActivity"
             android:label="@string/title_activity_register"
             android:theme="@style/AppTheme"/>
-        <activity android:name=".feature.perfumeProfile.view.PerfumeActivity">
+        <activity android:name=".feature.perfume.view.PerfumeActivity">
         </activity>
     </application>
 

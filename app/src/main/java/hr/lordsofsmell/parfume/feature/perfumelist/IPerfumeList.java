@@ -16,6 +16,7 @@ import hr.lordsofsmell.parfume.domain.model.request.OwnedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.feature.core.ICore;
+import retrofit2.Response;
 
 public interface IPerfumeList {
 
@@ -65,19 +66,19 @@ public interface IPerfumeList {
     interface LogoutUseCase extends ICore.CompletableInteractor<String> {
     }
 
-    interface GetAllPerfumesUseCase extends ICore.Interactor<GetAllPerfumesParams, List<PerfumeItem>> {
+    interface GetAllPerfumesUseCase extends ICore.Interactor<GetAllPerfumesParams, Response<List<PerfumeItem>>> {
     }
 
-    interface GetRecommendedPerfumesUseCase extends ICore.Interactor<PerfumesListParams, List<PerfumeItem>> {
+    interface GetRecommendedPerfumesUseCase extends ICore.Interactor<PerfumesListParams, Response<List<PerfumeItem>>> {
     }
 
-    interface GetLikedPerfumesUseCase extends ICore.Interactor<PerfumesListParams, List<PerfumeItem>> {
+    interface GetLikedPerfumesUseCase extends ICore.Interactor<PerfumesListParams, Response<List<PerfumeItem>>> {
     }
 
-    interface GetWishlistedPerfumesUseCase extends ICore.Interactor<PerfumesListParams, List<PerfumeItem>> {
+    interface GetWishlistedPerfumesUseCase extends ICore.Interactor<PerfumesListParams, Response<List<PerfumeItem>>> {
     }
 
-    interface GetOwnedPerfumesUseCase extends ICore.Interactor<PerfumesListParams, List<PerfumeItem>> {
+    interface GetOwnedPerfumesUseCase extends ICore.Interactor<PerfumesListParams, Response<List<PerfumeItem>>> {
     }
 
     interface ChangeLikedUseCase extends ICore.CompletableInteractor<FavoriteRequestParams> {

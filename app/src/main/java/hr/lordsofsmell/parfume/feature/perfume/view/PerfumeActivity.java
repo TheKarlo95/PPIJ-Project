@@ -1,4 +1,4 @@
-package hr.lordsofsmell.parfume.feature.perfumeProfile.view;
+package hr.lordsofsmell.parfume.feature.perfume.view;
 
 import android.content.Context;
 import android.content.Intent;
@@ -31,12 +31,12 @@ import hr.lordsofsmell.parfume.domain.model.response.Perfume;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.feature.core.adapter.PerfumeAdapter;
 import hr.lordsofsmell.parfume.feature.core.view.ActivityView;
-import hr.lordsofsmell.parfume.feature.perfumeProfile.IPerfumeProfile;
+import hr.lordsofsmell.parfume.feature.perfume.IPerfume;
 import hr.lordsofsmell.parfume.utils.ImageUtils;
 import hr.lordsofsmell.parfume.utils.PreferencesUtil;
 
 public class PerfumeActivity extends ActivityView
-        implements IPerfumeProfile.View,
+        implements IPerfume.View,
         PerfumeAdapter.OnPerfumeImageClickListener,
         PerfumeAdapter.OnPerfumeFavoriteClickListener,
         PerfumeAdapter.OnPerfumeWishlistClickListener,
@@ -55,7 +55,7 @@ public class PerfumeActivity extends ActivityView
     @BindView(R.id.mrv_perfumes_list) MjolnirRecyclerView mrvSimilarPerfumes;
 
     @Inject
-    IPerfumeProfile.Presenter presenter;
+    IPerfume.Presenter presenter;
 
     private PerfumeAdapter adapter;
 
@@ -83,7 +83,9 @@ public class PerfumeActivity extends ActivityView
     @Override
     public void setSimilarPerfumes(Collection<PerfumeItem> perfumes) {
         adapter.clear();
-        adapter.addAll(perfumes);
+        if (perfumes != null && !perfumes.isEmpty()) {
+            adapter.addAll(perfumes);
+        }
     }
 
     @Override

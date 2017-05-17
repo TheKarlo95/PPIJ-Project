@@ -17,6 +17,7 @@ import hr.lordsofsmell.parfume.domain.repository.network.NetworkDataSource;
 import hr.lordsofsmell.parfume.utils.ObservableUtils;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import retrofit2.Response;
 
 public class Repository implements IRepository {
 
@@ -36,47 +37,52 @@ public class Repository implements IRepository {
         return ObservableUtils.getFirstNonNull(network.register(request));
     }
 
-    @Override
-    public Observable<Perfume> getPerfumeProfile(@NonNull String token , long perfumeId) {
-        return ObservableUtils.getFirstNonNull(network.getPerfumeProfile(token ,perfumeId));
-    }
-
-    @Override
-    public Observable<List<PerfumeItem>> getSimilarParfumes(@NonNull String token , long perfumeId) {
-        return ObservableUtils.getFirstNonNull(network.getSimilarParfumes(token ,perfumeId));
-    }
-
     public Completable logout(@NonNull String token) {
         return network.logout(token);
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getAllParfumes(@Nullable String token,
-                                                        int page,
-                                                        @Nullable String company,
-                                                        @Nullable String model,
-                                                        @Nullable String year) {
-        return ObservableUtils.getFirstNonNull(
-                network.getAllParfumes(token, page, company, model, year));
+    public Observable<Perfume> getPerfumeProfile(@NonNull String token, long perfumeId) {
+        return ObservableUtils.getFirstNonNull(network.getPerfumeProfile(token, perfumeId));
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getRecommendedParfumes(@Nullable String token) {
+    public Observable<Response<List<PerfumeItem>>> getSimilarParfumes(@Nullable String token,
+                                                                      long perfumeId) {
+        return ObservableUtils.getFirstNonNull(network.getSimilarParfumes(token, perfumeId));
+    }
+
+    @Override
+    public Observable<Response<List<PerfumeItem>>> getAllParfumes(@Nullable String token,
+                                                                  int page,
+                                                                  @Nullable String company,
+                                                                  @Nullable String model,
+                                                                  @Nullable String year,
+                                                                  @Nullable String[] genders) {
+        return ObservableUtils.getFirstNonNull(
+                network.getAllParfumes(token, page, company, model, year, genders));
+    }
+
+    @Override
+    public Observable<Response<List<PerfumeItem>>> getRecommendedParfumes(@Nullable String token) {
         return ObservableUtils.getFirstNonNull(network.getRecommendedParfumes(token));
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getLikedParfumes(@NonNull String token, int page) {
+    public Observable<Response<List<PerfumeItem>>> getLikedParfumes(@NonNull String token,
+                                                                    int page) {
         return ObservableUtils.getFirstNonNull(network.getLikedParfumes(token, page));
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getWishlistedParfumes(@NonNull String token, int page) {
+    public Observable<Response<List<PerfumeItem>>> getWishlistedParfumes(@NonNull String token,
+                                                                         int page) {
         return ObservableUtils.getFirstNonNull(network.getWishlistedParfumes(token, page));
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getOwnedParfumes(@NonNull String token, int page) {
+    public Observable<Response<List<PerfumeItem>>> getOwnedParfumes(@NonNull String token,
+                                                                    int page) {
         return ObservableUtils.getFirstNonNull(network.getOwnedParfumes(token, page));
     }
 

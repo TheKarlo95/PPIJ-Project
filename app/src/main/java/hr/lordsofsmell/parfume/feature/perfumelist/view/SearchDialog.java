@@ -16,6 +16,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import hr.lordsofsmell.parfume.R;
+import hr.lordsofsmell.parfume.domain.model.Gender;
 
 public class SearchDialog extends DialogFragment {
 
@@ -71,13 +72,13 @@ public class SearchDialog extends DialogFragment {
     public ArrayList<String> getGenders() {
         ArrayList<String> genders = new ArrayList<>(3);
         if (cbMale.isChecked()) {
-            genders.add(PerfumeListActivity.GENDER_MALE);
+            genders.add(Gender.MALE.toString());
         }
         if (cbFemale.isChecked()) {
-            genders.add(PerfumeListActivity.GENDER_FEMALE);
+            genders.add(Gender.FEMALE.toString());
         }
         if (cbUnisex.isChecked()) {
-            genders.add(PerfumeListActivity.GENDER_UNISEX);
+            genders.add(Gender.UNISEX.toString());
         }
         return genders;
     }

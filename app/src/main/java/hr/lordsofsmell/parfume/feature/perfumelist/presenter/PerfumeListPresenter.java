@@ -22,6 +22,7 @@ import hr.lordsofsmell.parfume.feature.core.presenter.Presenter;
 import hr.lordsofsmell.parfume.feature.perfumelist.IPerfumeList;
 import hr.lordsofsmell.parfume.feature.perfumelist.view.PerfumeListActivity;
 import hr.lordsofsmell.parfume.utils.PreferencesUtil;
+import retrofit2.Response;
 
 public class PerfumeListPresenter extends Presenter implements IPerfumeList.Presenter {
 
@@ -72,7 +73,7 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
     public void logout() {
         String token = PreferencesUtil.getToken();
         final IPerfumeList.View view = (IPerfumeList.View) getView();
-        logoutUseCase.execute(token, new CompletableObserver(view, TAG, R.string.logout_error){
+        logoutUseCase.execute(token, new CompletableObserver(view, TAG, R.string.logout_error) {
             @Override
             public void onComplete() {
                 super.onComplete();
@@ -117,27 +118,28 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
                             lastPage,
                             company,
                             model,
-                            year);
+                            year,
+                            genders);
                     getAllPerfumesUseCase.execute(allParams, getListObserver(clearAfter,
                             R.string.get_all_perfumes_error));
                     break;
                 case PerfumeListActivity.LIST_TYPE_FAVORITES:
-                    params=PerfumesListParams.create(token, lastPage);
+                    params = PerfumesListParams.create(token, lastPage);
                     getLikedPerfumesUseCase.execute(params, getListObserver(clearAfter,
                             R.string.get_liked_perfumes_error));
                     break;
                 case PerfumeListActivity.LIST_TYPE_WISHLIST:
-                    params=PerfumesListParams.create(token, lastPage);
+                    params = PerfumesListParams.create(token, lastPage);
                     getWishlistedPerfumesUseCase.execute(params, getListObserver(clearAfter,
                             R.string.get_wishlisted_perfumes_error));
                     break;
                 case PerfumeListActivity.LIST_TYPE_OWNED:
-                    params=PerfumesListParams.create(token, lastPage);
+                    params = PerfumesListParams.create(token, lastPage);
                     getOwnedPerfumesUseCase.execute(params, getListObserver(clearAfter,
                             R.string.get_owned_perfumes_error));
                     break;
                 case PerfumeListActivity.LIST_TYPE_RECOMMENDED:
-                    params=PerfumesListParams.create(token, lastPage);
+                    params = PerfumesListParams.create(token, lastPage);
                     getRecommendedPerfumesUseCase.execute(params, getListObserver(clearAfter,
                             R.string.get_owned_perfumes_error));
                     break;
@@ -229,16 +231,18 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
         changeOwnedUseCase.cancel();
     }
 
-    private Observer<List<PerfumeItem>> getListObserver(final boolean clearAdapter,
-                                                        @StringRes int errorId) {
+    private Observer<Response<List<PerfumeItem>>> getListObserver(final boolean clearAdapter,
+                                                                  @StringRes int errorId) {
         final IPerfumeList.View view = (IPerfumeList.View) getView();
-        return new Observer<List<PerfumeItem>>(view, TAG, errorId) {
+        return new Observer<Response<List<PerfumeItem>>>(view, TAG, errorId) {
             @Override
-            public void onNext(List<PerfumeItem> perfumes) {
-                super.onNext(perfumes);
+            public void onNext(Response<List<PerfumeItem>> response) {
+                super.onNext(response);
 
+                List<PerfumeItem> perfumes = response.body();
                 lastPage++;
-                reachedLastPerfume = perfumes.size() < 10
+                reachedLastPerfume = perfumes == null
+                        || perfumes.size() < 10
                         || listType == PerfumeListActivity.LIST_TYPE_RECOMMENDED;
 
                 view.addPerfumes(perfumes, clearAdapter);

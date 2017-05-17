@@ -46,7 +46,7 @@ import hr.lordsofsmell.parfume.feature.core.OnScrollToBottomListener;
 import hr.lordsofsmell.parfume.feature.core.adapter.PerfumeAdapter;
 import hr.lordsofsmell.parfume.feature.core.view.ActivityView;
 import hr.lordsofsmell.parfume.feature.login.view.LoginActivity;
-import hr.lordsofsmell.parfume.feature.perfumeProfile.view.PerfumeActivity;
+import hr.lordsofsmell.parfume.feature.perfume.view.PerfumeActivity;
 import hr.lordsofsmell.parfume.feature.perfumelist.IPerfumeList;
 import hr.lordsofsmell.parfume.feature.register.view.RegisterActivity;
 import hr.lordsofsmell.parfume.utils.PreferencesUtil;
@@ -79,15 +79,9 @@ public class PerfumeListActivity extends ActivityView
     public static final int POSITION_ERROR = -1;
 
     public static final String EXTRA_SEARCH_COMPANY = "search_company";
-
     public static final String EXTRA_SEARCH_MODEL = "search_model";
-
     public static final String EXTRA_SEARCH_YEAR = "search_year";
-
-    public static final String EXTRA_SEARCH_GENDER = "search_gender";
-    public static final String GENDER_MALE = "male";
-    public static final String GENDER_FEMALE = "female";
-    public static final String GENDER_UNISEX = "unisex";
+    public static final String EXTRA_SEARCH_GENDERS = "search_genders";
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
@@ -144,7 +138,9 @@ public class PerfumeListActivity extends ActivityView
         if (clearAdapter) {
             adapter.clear();
         }
-        adapter.addAll(newPerfumes);
+        if (newPerfumes != null && !newPerfumes.isEmpty()) {
+            adapter.addAll(newPerfumes);
+        }
 
         doAction(getIntent());
     }
@@ -160,7 +156,8 @@ public class PerfumeListActivity extends ActivityView
         intent.putExtra(EXTRA_SEARCH_COMPANY, company);
         intent.putExtra(EXTRA_SEARCH_MODEL, model);
         intent.putExtra(EXTRA_SEARCH_YEAR, year);
-        intent.putStringArrayListExtra(EXTRA_SEARCH_GENDER, genders);
+        intent.putExtra(EXTRA_SEARCH_GENDERS, genders);
+        intent.putStringArrayListExtra(EXTRA_SEARCH_GENDERS, genders);
 
         presenter.loadPerfumes(true, company, model, year, genders);
     }
@@ -272,7 +269,7 @@ public class PerfumeListActivity extends ActivityView
     }
 
     @Override
-    protected void init(Bundle savedInstanceState, Intent intent) {
+    protected void init(Bundle savedInstanceState, final Intent intent) {
         setSupportActionBar(toolbar);
         setPresenter(presenter);
 
@@ -293,7 +290,16 @@ public class PerfumeListActivity extends ActivityView
         mrvPerfumesList.addOnScrollListener(new OnScrollToBottomListener() {
             @Override
             public void onScrollToBottom(RecyclerView recyclerView, int dx, int dy) {
-                presenter.loadPerfumes(false);
+                if (intent != null) {
+                    String company = intent.getStringExtra(EXTRA_SEARCH_COMPANY);
+                    String model = intent.getStringExtra(EXTRA_SEARCH_MODEL);
+                    String year = intent.getStringExtra(EXTRA_SEARCH_YEAR);
+                    ArrayList<String> genders = intent.getStringArrayListExtra(EXTRA_SEARCH_GENDERS);
+
+                    presenter.loadPerfumes(false, company, model, year, genders);
+                } else {
+                    presenter.loadPerfumes(false);
+                }
             }
         });
 
@@ -565,7 +571,7 @@ public class PerfumeListActivity extends ActivityView
             company = extras.getString(EXTRA_SEARCH_COMPANY, "");
             model = extras.getString(EXTRA_SEARCH_MODEL, "");
             year = extras.getString(EXTRA_SEARCH_YEAR, "");
-            genders = extras.getStringArrayList(EXTRA_SEARCH_GENDER);
+            genders = extras.getStringArrayList(EXTRA_SEARCH_GENDERS);
         }
 
         setParameterText(company, model, year, genders);

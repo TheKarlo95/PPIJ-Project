@@ -14,8 +14,9 @@ import hr.lordsofsmell.parfume.feature.perfumelist.IPerfumeList;
 import hr.lordsofsmell.parfume.threads.PostExecutionThread;
 import hr.lordsofsmell.parfume.threads.ThreadExecutor;
 import io.reactivex.Observable;
+import retrofit2.Response;
 
-public class GetWishlistedPerfumesUseCase extends UseCase<PerfumesListParams, List<PerfumeItem>>
+public class GetWishlistedPerfumesUseCase extends UseCase<PerfumesListParams, Response<List<PerfumeItem>>>
         implements IPerfumeList.GetWishlistedPerfumesUseCase {
 
     private IRepository repository;
@@ -29,7 +30,7 @@ public class GetWishlistedPerfumesUseCase extends UseCase<PerfumesListParams, Li
     }
 
     @Override
-    protected Observable<List<PerfumeItem>> createObservable(PerfumesListParams params) {
+    protected Observable<Response<List<PerfumeItem>>> createObservable(PerfumesListParams params) {
         if (params == null) {
             return Observable.error(new NullPointerException("Parameters can't be null"));
         } else if (params.page() <= 0) {

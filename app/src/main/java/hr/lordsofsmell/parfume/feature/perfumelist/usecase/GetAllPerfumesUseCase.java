@@ -14,8 +14,9 @@ import hr.lordsofsmell.parfume.feature.perfumelist.IPerfumeList;
 import hr.lordsofsmell.parfume.threads.PostExecutionThread;
 import hr.lordsofsmell.parfume.threads.ThreadExecutor;
 import io.reactivex.Observable;
+import retrofit2.Response;
 
-public class GetAllPerfumesUseCase extends UseCase<GetAllPerfumesParams, List<PerfumeItem>>
+public class GetAllPerfumesUseCase extends UseCase<GetAllPerfumesParams, Response<List<PerfumeItem>>>
         implements IPerfumeList.GetAllPerfumesUseCase {
 
     private IRepository repository;
@@ -29,7 +30,7 @@ public class GetAllPerfumesUseCase extends UseCase<GetAllPerfumesParams, List<Pe
     }
 
     @Override
-    protected Observable<List<PerfumeItem>> createObservable(GetAllPerfumesParams params) {
+    protected Observable<Response<List<PerfumeItem>>> createObservable(GetAllPerfumesParams params) {
         if (params == null) {
             return Observable.error(new NullPointerException("Parameters can't be null"));
         } else if (params.page() <= 0) {
@@ -40,7 +41,16 @@ public class GetAllPerfumesUseCase extends UseCase<GetAllPerfumesParams, List<Pe
                     params.page(),
                     params.company(),
                     params.model(),
-                    params.year());
+                    params.year(),
+                    toArray(params.genders()));
         }
+    }
+
+    private static String[] toArray(List<String> list) {
+        String[] array = null;
+        if(list != null && !list.isEmpty()) {
+            array = list.toArray(new String[0]);
+        }
+        return array;
     }
 }

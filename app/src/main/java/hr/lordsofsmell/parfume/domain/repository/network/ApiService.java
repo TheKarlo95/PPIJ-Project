@@ -12,6 +12,7 @@ import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.domain.model.response.User;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -33,44 +34,45 @@ public interface ApiService {
                                           @Path("perfumeId") long perfumeId);
 
     @GET("parfumes/Similar/{perfumeId}")
-    Observable<List<PerfumeItem>> getSimilarPerfumes(@Header("X-Authorization") String token,
+    Observable<Response<List<PerfumeItem>>> getSimilarPerfumes(@Header("X-Authorization") String token,
                                                      @Path("perfumeId") long perfumeId);
 
     @POST("Profile/Logout")
     Completable logout(@Header("X-Authorization") String token);
 
     @GET("parfumes/{page}")
-    Observable<List<PerfumeItem>> getAllParfumes(@Header("X-Authorization") String token,
-                                                 @Path("page") int page,
-                                                 @Header("manufacturer") String company,
-                                                 @Header("name") String name,
-                                                 @Header("year") String year);
+    Observable<Response<List<PerfumeItem>>> getAllParfumes(@Header("X-Authorization") String token,
+                                                           @Path("page") int page,
+                                                           @Header("manufacturer") String company,
+                                                           @Header("name") String name,
+                                                           @Header("year") String year,
+                                                           @Header("gender") String[] genders);
 
     @GET("parfumes/recommendations")
-    Observable<List<PerfumeItem>> getRecommendedParfumes(@Header("X-Authorization") String token);
+    Observable<Response<List<PerfumeItem>>> getRecommendedParfumes(@Header("X-Authorization") String token);
 
 
     @GET("parfumes/GetLiked/{page}")
-    Observable<List<PerfumeItem>> getLikedParfumes(@Header("X-Authorization") String token,
-                                                   @Path("page") int page);
+    Observable<Response<List<PerfumeItem>>> getLikedParfumes(@Header("X-Authorization") String token,
+                                                             @Path("page") int page);
 
     @GET("parfumes/GetWish/{page}")
-    Observable<List<PerfumeItem>> getWishlistedParfumes(@Header("X-Authorization") String token,
-                                                        @Path("page") int page);
+    Observable<Response<List<PerfumeItem>>> getWishlistedParfumes(@Header("X-Authorization") String token,
+                                                                  @Path("page") int page);
 
     @GET("parfumes/GetOwned/{page}")
-    Observable<List<PerfumeItem>> getOwnedParfumes(@Header("X-Authorization") String token,
-                                                   @Path("page") int page);
+    Observable<Response<List<PerfumeItem>>> getOwnedParfumes(@Header("X-Authorization") String token,
+                                                             @Path("page") int page);
 
     @POST("Profile/AddToLikes")
     Completable changeLiked(@Header("X-Authorization") String token,
-                                 @Body FavoriteRequest request);
+                            @Body FavoriteRequest request);
 
     @POST("Profile/AddToWishlist")
     Completable changeWishlisted(@Header("X-Authorization") String token,
-                                      @Body WishlistRequest request);
+                                 @Body WishlistRequest request);
 
     @POST("Profile/AddToOwned")
     Completable changeOwned(@Header("X-Authorization") String token,
-                                 @Body OwnedRequest request);
+                            @Body OwnedRequest request);
 }

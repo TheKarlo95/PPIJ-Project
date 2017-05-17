@@ -16,6 +16,7 @@ import hr.lordsofsmell.parfume.domain.model.response.User;
 import hr.lordsofsmell.parfume.domain.repository.IRepository;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import retrofit2.Response;
 
 public class NetworkDataSource implements IRepository {
 
@@ -41,7 +42,7 @@ public class NetworkDataSource implements IRepository {
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getSimilarParfumes(@NonNull String token, long perfumeId) {
+    public Observable<Response<List<PerfumeItem>>> getSimilarParfumes(@Nullable String token, long perfumeId) {
         return service.getSimilarPerfumes(token, perfumeId);
     }
 
@@ -50,31 +51,32 @@ public class NetworkDataSource implements IRepository {
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getAllParfumes(@Nullable String token,
-                                                        int page,
-                                                        @Nullable String company,
-                                                        @Nullable String model,
-                                                        @Nullable String year) {
-        return service.getAllParfumes(token, page, company, model, year);
+    public Observable<Response<List<PerfumeItem>>> getAllParfumes(@Nullable String token,
+                                                                  int page,
+                                                                  @Nullable String company,
+                                                                  @Nullable String model,
+                                                                  @Nullable String year,
+                                                                  @Nullable String[] genders) {
+        return service.getAllParfumes(token, page, company, model, year, genders);
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getRecommendedParfumes(@Nullable String token) {
+    public Observable<Response<List<PerfumeItem>>> getRecommendedParfumes(@Nullable String token) {
         return service.getRecommendedParfumes(token);
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getLikedParfumes(@NonNull String token, int page) {
+    public Observable<Response<List<PerfumeItem>>> getLikedParfumes(@NonNull String token, int page) {
         return service.getLikedParfumes(token, page);
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getWishlistedParfumes(@NonNull String token, int page) {
+    public Observable<Response<List<PerfumeItem>>> getWishlistedParfumes(@NonNull String token, int page) {
         return service.getWishlistedParfumes(token, page);
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getOwnedParfumes(@NonNull String token, int page) {
+    public Observable<Response<List<PerfumeItem>>> getOwnedParfumes(@NonNull String token, int page) {
         return service.getOwnedParfumes(token, page);
     }
 

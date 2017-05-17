@@ -1,4 +1,4 @@
-package hr.lordsofsmell.parfume.feature.perfumeProfile;
+package hr.lordsofsmell.parfume.feature.perfume;
 
 import java.util.Collection;
 import java.util.List;
@@ -10,8 +10,9 @@ import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
 import hr.lordsofsmell.parfume.domain.model.response.Perfume;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.feature.core.ICore;
+import retrofit2.Response;
 
-public interface IPerfumeProfile {
+public interface IPerfume {
 
     interface View extends ICore.View {
 
@@ -42,6 +43,6 @@ public interface IPerfumeProfile {
     interface GetPerfumeUseCase extends ICore.Interactor<PerfumeParams, Perfume> {
     }
 
-    interface GetSimilarPerfumesUseCase extends ICore.Interactor<PerfumeParams, List<PerfumeItem>> {
+    interface GetSimilarPerfumesUseCase extends ICore.Interactor<PerfumeParams, Response<List<PerfumeItem>>> {
     }
 }

@@ -15,6 +15,7 @@ import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.domain.model.response.User;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import retrofit2.Response;
 
 public interface IRepository {
 
@@ -22,25 +23,26 @@ public interface IRepository {
 
     Observable<User> register(@NonNull RegisterRequest request);
 
-    Observable<Perfume> getPerfumeProfile(@NonNull String token, long perfumeId);
-
-    Observable<List<PerfumeItem>> getSimilarParfumes(@NonNull String token, long perfumeId);
-
     Completable logout(@NonNull String token);
 
-    Observable<List<PerfumeItem>> getAllParfumes(@Nullable String token,
-                                                 int page,
-                                                 @Nullable String company,
-                                                 @Nullable String model,
-                                                 @Nullable String year);
+    Observable<Perfume> getPerfumeProfile(@NonNull String token, long perfumeId);
 
-    Observable<List<PerfumeItem>> getRecommendedParfumes(@Nullable String token);
+    Observable<Response<List<PerfumeItem>>> getSimilarParfumes(@Nullable String token, long perfumeId);
 
-    Observable<List<PerfumeItem>> getLikedParfumes(@NonNull String token, int page);
+    Observable<Response<List<PerfumeItem>>> getAllParfumes(@Nullable String token,
+                                                           int page,
+                                                           @Nullable String company,
+                                                           @Nullable String model,
+                                                           @Nullable String year,
+                                                           @Nullable String[] genders);
 
-    Observable<List<PerfumeItem>> getWishlistedParfumes(@NonNull String token, int page);
+    Observable<Response<List<PerfumeItem>>> getRecommendedParfumes(@Nullable String token);
 
-    Observable<List<PerfumeItem>> getOwnedParfumes(@NonNull String token, int page);
+    Observable<Response<List<PerfumeItem>>> getLikedParfumes(@NonNull String token, int page);
+
+    Observable<Response<List<PerfumeItem>>> getWishlistedParfumes(@NonNull String token, int page);
+
+    Observable<Response<List<PerfumeItem>>> getOwnedParfumes(@NonNull String token, int page);
 
     Completable changeFavorite(@NonNull String token, @NonNull FavoriteRequest request);
 

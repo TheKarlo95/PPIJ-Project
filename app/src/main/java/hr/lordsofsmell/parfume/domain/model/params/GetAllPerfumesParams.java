@@ -5,6 +5,8 @@ import android.text.TextUtils;
 
 import com.google.auto.value.AutoValue;
 
+import java.util.List;
+
 @AutoValue
 public abstract class GetAllPerfumesParams {
 
@@ -12,7 +14,8 @@ public abstract class GetAllPerfumesParams {
                                               int page,
                                               String company,
                                               String model,
-                                              String year) {
+                                              String year,
+                                              List<String> genders) {
         if (TextUtils.isEmpty(token)) {
             token = null;
         }
@@ -25,7 +28,10 @@ public abstract class GetAllPerfumesParams {
         if (TextUtils.isEmpty(year)) {
             year = null;
         }
-        return new AutoValue_GetAllPerfumesParams(token, page, company, model, year);
+        if (genders != null && genders.isEmpty()) {
+            genders = null;
+        }
+        return new AutoValue_GetAllPerfumesParams(token, page, company, model, year, genders);
     }
 
     @Nullable
@@ -41,4 +47,7 @@ public abstract class GetAllPerfumesParams {
 
     @Nullable
     public abstract String year();
+
+    @Nullable
+    public abstract List<String> genders();
 }
