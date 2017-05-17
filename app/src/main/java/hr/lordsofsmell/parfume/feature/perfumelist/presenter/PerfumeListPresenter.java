@@ -16,7 +16,6 @@ import hr.lordsofsmell.parfume.domain.model.request.FavoriteRequest;
 import hr.lordsofsmell.parfume.domain.model.request.OwnedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
-import hr.lordsofsmell.parfume.domain.model.response.User;
 import hr.lordsofsmell.parfume.feature.core.observer.CompletableObserver;
 import hr.lordsofsmell.parfume.feature.core.observer.Observer;
 import hr.lordsofsmell.parfume.feature.core.presenter.Presenter;
@@ -73,7 +72,13 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
     public void logout() {
         String token = PreferencesUtil.getToken();
         final IPerfumeList.View view = (IPerfumeList.View) getView();
-        logoutUseCase.execute(token, new CompletableObserver(view, TAG, R.string.logout_error));
+        logoutUseCase.execute(token, new CompletableObserver(view, TAG, R.string.logout_error){
+            @Override
+            public void onComplete() {
+                super.onComplete();
+                view.logoutSuccesful();
+            }
+        });
     }
 
     @Override
@@ -104,7 +109,7 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
             }
 
             String token = PreferencesUtil.getToken();
-            PerfumesListParams params = PerfumesListParams.create(token, lastPage);
+            PerfumesListParams params;
 
             switch (listType) {
                 case PerfumeListActivity.LIST_TYPE_ALL_PERFUMES:
@@ -117,18 +122,22 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
                             R.string.get_all_perfumes_error));
                     break;
                 case PerfumeListActivity.LIST_TYPE_FAVORITES:
+                    params=PerfumesListParams.create(token, lastPage);
                     getLikedPerfumesUseCase.execute(params, getListObserver(clearAfter,
                             R.string.get_liked_perfumes_error));
                     break;
                 case PerfumeListActivity.LIST_TYPE_WISHLIST:
+                    params=PerfumesListParams.create(token, lastPage);
                     getWishlistedPerfumesUseCase.execute(params, getListObserver(clearAfter,
                             R.string.get_wishlisted_perfumes_error));
                     break;
                 case PerfumeListActivity.LIST_TYPE_OWNED:
+                    params=PerfumesListParams.create(token, lastPage);
                     getOwnedPerfumesUseCase.execute(params, getListObserver(clearAfter,
                             R.string.get_owned_perfumes_error));
                     break;
                 case PerfumeListActivity.LIST_TYPE_RECOMMENDED:
+                    params=PerfumesListParams.create(token, lastPage);
                     getRecommendedPerfumesUseCase.execute(params, getListObserver(clearAfter,
                             R.string.get_owned_perfumes_error));
                     break;
