@@ -12,6 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -27,6 +30,7 @@ import hr.lordsofsmell.parfume.domain.model.params.PerfumeParams;
 import hr.lordsofsmell.parfume.domain.model.request.FavoriteRequest;
 import hr.lordsofsmell.parfume.domain.model.request.OwnedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
+import hr.lordsofsmell.parfume.domain.model.response.Note;
 import hr.lordsofsmell.parfume.domain.model.response.Perfume;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.feature.core.adapter.PerfumeAdapter;
@@ -52,12 +56,14 @@ public class PerfumeActivity extends ActivityView
     @BindView(R.id.tv_perfume_model) TextView tvModel;
     @BindView(R.id.tv_perfume_year) TextView tvYear;
     @BindView(R.id.tv_perfume_description) TextView tvDescription;
+    @BindView(R.id.tv_perfume_notes) TextView tvNotes;
     @BindView(R.id.mrv_perfumes_list) MjolnirRecyclerView mrvSimilarPerfumes;
 
     @Inject
     IPerfume.Presenter presenter;
 
     private PerfumeAdapter adapter;
+    private List<Note> notes;
 
     public static Intent createIntent(Context context, PerfumeItem perfume) {
         Intent intent = new Intent(context, PerfumeActivity.class);
@@ -74,6 +80,8 @@ public class PerfumeActivity extends ActivityView
         tvModel.setText(perfume.model());
         tvYear.setText(perfume.year());
         tvDescription.setText(perfume.description());
+
+        setNotes(perfume.notes());
 
         String token = PreferencesUtil.getToken();
         long perfumeId = perfume.id();
@@ -207,6 +215,28 @@ public class PerfumeActivity extends ActivityView
             case UNISEX:
                 ivGender.setImageResource(R.drawable.ic_gender_unisex_on);
                 break;
+        }
+    }
+
+    public void setNotes(List<Note> notes) {
+        if (notes != null && notes.size() == 3) {
+            Collections.sort(notes, new Comparator<Note>() {
+                @Override
+                public int compare(Note o1, Note o2) {
+                    if (o1.level() < o2.level()) {
+                        return -1;
+                    } else if (o1.level() > o2.level()) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            });
+
+            tvNotes.setText(getString(R.string.perfume_profile_notes,
+                    notes.get(0).name(),
+                    notes.get(1).name(),
+                    notes.get(2).name()));
         }
     }
 }

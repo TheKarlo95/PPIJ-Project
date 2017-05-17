@@ -1,6 +1,7 @@
 package hr.lordsofsmell.parfume.feature.core.view;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -47,9 +48,9 @@ public abstract class ActivityView extends AppCompatActivity implements ICore.Vi
         injectDependencies(((AndroidApplication) getApplication()).getApplicationComponent());
         setContentView(getLayoutResId());
 
-        initProgressDialog();
-
         unbinder = bind();
+
+        dialog = initProgressDialog(this);
 
         Intent intent = getIntent();
         init(savedInstanceState, intent);
@@ -72,6 +73,10 @@ public abstract class ActivityView extends AppCompatActivity implements ICore.Vi
         super.onPause();
         if (presenter != null) {
             presenter.onPause();
+        }
+        if (dialog != null) {
+            dialog.dismiss();
+            dialog = null;
         }
         Log.i(tag, "onPause finished");
     }
@@ -112,7 +117,7 @@ public abstract class ActivityView extends AppCompatActivity implements ICore.Vi
     @Override
     public void hideLoading() {
         if (dialog != null) {
-            dialog.hide();
+            dialog.dismiss();
             Log.i(tag, "Dialog hidden");
         }
     }
@@ -122,10 +127,11 @@ public abstract class ActivityView extends AppCompatActivity implements ICore.Vi
         Toast.makeText(this, getString(messageId), Toast.LENGTH_LONG).show();
     }
 
-    private void initProgressDialog() {
-        dialog = new ProgressDialog(this);
-        dialog.setMessage(getResources().getString(R.string.loading_message));
+    private static ProgressDialog initProgressDialog(Context context) {
+        ProgressDialog dialog = new ProgressDialog(context);
+        dialog.setMessage(context.getResources().getString(R.string.loading_message));
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         dialog.setCancelable(false);
+        return dialog;
     }
 }

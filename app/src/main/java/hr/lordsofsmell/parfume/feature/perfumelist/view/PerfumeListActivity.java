@@ -210,6 +210,7 @@ public class PerfumeListActivity extends ActivityView
 
     @Override
     public void onImageClick(View view, PerfumeItem perfume, int position) {
+        hideLoading();
         startActivity(PerfumeActivity.createIntent(this, perfume));
     }
 
