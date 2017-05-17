@@ -10,7 +10,7 @@ import hr.lordsofsmell.parfume.domain.model.request.LoginRequest;
 import hr.lordsofsmell.parfume.domain.model.request.OwnedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.RegisterRequest;
 import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
-import hr.lordsofsmell.parfume.domain.model.response.Parfume;
+import hr.lordsofsmell.parfume.domain.model.response.Perfume;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.domain.model.response.User;
 import io.reactivex.Completable;
@@ -22,9 +22,9 @@ public interface IRepository {
 
     Observable<User> register(@NonNull RegisterRequest request);
 
-    Observable<Parfume> getPerfumeProfile(@NonNull long perfumeId);
+    Observable<Perfume> getPerfumeProfile(@NonNull String token, long perfumeId);
 
-    Observable<List<PerfumeItem>> getSimilarParfumes(@NonNull long perfumeId);
+    Observable<List<PerfumeItem>> getSimilarParfumes(@NonNull String token, long perfumeId);
 
     Completable logout(@NonNull String token);
 
@@ -34,7 +34,7 @@ public interface IRepository {
                                                  @Nullable String model,
                                                  @Nullable String year);
 
-    Observable<List<PerfumeItem>> getRecommendedParfumes(@Nullable String token, int page);
+    Observable<List<PerfumeItem>> getRecommendedParfumes(@Nullable String token);
 
     Observable<List<PerfumeItem>> getLikedParfumes(@NonNull String token, int page);
 

@@ -36,7 +36,7 @@ public class GetRecommendedPerfumesUseCase extends UseCase<PerfumesListParams, L
             return Observable.error(new IllegalArgumentException(
                     "Parameter page can't be less than or equals to 0"));
         } else {
-            return repository.getRecommendedParfumes(params.token(), params.page());
+            return repository.getRecommendedParfumes(params.token());
         }
     }
 }

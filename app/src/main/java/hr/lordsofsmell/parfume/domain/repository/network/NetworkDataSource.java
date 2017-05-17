@@ -10,7 +10,7 @@ import hr.lordsofsmell.parfume.domain.model.request.LoginRequest;
 import hr.lordsofsmell.parfume.domain.model.request.OwnedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.RegisterRequest;
 import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
-import hr.lordsofsmell.parfume.domain.model.response.Parfume;
+import hr.lordsofsmell.parfume.domain.model.response.Perfume;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.domain.model.response.User;
 import hr.lordsofsmell.parfume.domain.repository.IRepository;
@@ -36,13 +36,13 @@ public class NetworkDataSource implements IRepository {
     }
 
     @Override
-    public Observable<Parfume> getPerfumeProfile(@NonNull long perfumeId) {
-        return service.getPerfumeProfile(perfumeId);
+    public Observable<Perfume> getPerfumeProfile(@NonNull String token, long perfumeId) {
+        return service.getPerfumeProfile(token, perfumeId);
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getSimilarParfumes(@NonNull long perfumeId) {
-        return service.getSimilarPerfumes(perfumeId);
+    public Observable<List<PerfumeItem>> getSimilarParfumes(@NonNull String token, long perfumeId) {
+        return service.getSimilarPerfumes(token, perfumeId);
     }
 
     public Completable logout(@NonNull String token) {
@@ -59,8 +59,8 @@ public class NetworkDataSource implements IRepository {
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getRecommendedParfumes(@Nullable String token, int page) {
-        return service.getRecommendedParfumes(token, page);
+    public Observable<List<PerfumeItem>> getRecommendedParfumes(@Nullable String token) {
+        return service.getRecommendedParfumes(token);
     }
 
     @Override

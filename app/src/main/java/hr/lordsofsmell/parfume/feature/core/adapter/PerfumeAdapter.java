@@ -17,25 +17,28 @@ import butterknife.ButterKnife;
 import co.infinum.mjolnirrecyclerview.MjolnirRecyclerAdapter;
 import co.infinum.mjolnirrecyclerview.MjolnirViewHolder;
 import hr.lordsofsmell.parfume.R;
+import hr.lordsofsmell.parfume.domain.model.Gender;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.utils.ImageUtils;
 import hr.lordsofsmell.parfume.utils.PreferencesUtil;
 
 public class PerfumeAdapter extends MjolnirRecyclerAdapter<PerfumeItem> {
 
+    private OnPerfumeImageClickListener imageListener;
     private OnPerfumeFavoriteClickListener favoriteListener;
     private OnPerfumeWishlistClickListener wishlistListener;
     private OnPerfumeOwnedClickListener ownedListener;
 
     public PerfumeAdapter(Context context,
+                          OnPerfumeImageClickListener imageListener,
                           OnPerfumeFavoriteClickListener favoriteListener,
                           OnPerfumeWishlistClickListener wishlistListener,
                           OnPerfumeOwnedClickListener ownedListener) {
         super(context, Collections.<PerfumeItem>emptyList());
+        this.imageListener = imageListener;
         this.favoriteListener = favoriteListener;
         this.wishlistListener = wishlistListener;
         this.ownedListener = ownedListener;
-
     }
 
     public void update(PerfumeItem newPerfume) {
@@ -65,10 +68,6 @@ public class PerfumeAdapter extends MjolnirRecyclerAdapter<PerfumeItem> {
         return index;
     }
 
-    public PerfumeItem getById(long id) {
-        return get(getIndexById(id));
-    }
-
     @Override
     protected MjolnirViewHolder<PerfumeItem> onCreateItemViewHolder(ViewGroup parent,
                                                                     int viewType) {
@@ -83,6 +82,7 @@ public class PerfumeAdapter extends MjolnirRecyclerAdapter<PerfumeItem> {
         @BindView(R.id.item_perfume_root) View rootView;
 
         @BindView(R.id.iv_perfume_image) ImageView ivImage;
+        @BindView(R.id.iv_perfume_gender) ImageView ivGender;
         @BindView(R.id.tv_perfume_company) TextView tvCompany;
         @BindView(R.id.tv_perfume_name) TextView tvModel;
         @BindView(R.id.tv_perfume_year) TextView tvYear;
@@ -118,6 +118,7 @@ public class PerfumeAdapter extends MjolnirRecyclerAdapter<PerfumeItem> {
 
         private void bind(PerfumeItem perfume, int position) {
             ImageUtils.loadImage(getContext(), ivImage, perfume.image());
+            setGenderIcon(perfume.gender());
 
             tvCompany.setText(perfume.company());
             tvModel.setText(perfume.model());
@@ -134,6 +135,20 @@ public class PerfumeAdapter extends MjolnirRecyclerAdapter<PerfumeItem> {
             }
 
             setListeners(perfume, position);
+        }
+
+        void setGenderIcon(Gender gender) {
+            switch (gender) {
+                case MALE:
+                    ivGender.setImageResource(R.drawable.ic_gender_male_on);
+                    break;
+                case FEMALE:
+                    ivGender.setImageResource(R.drawable.ic_gender_female_on);
+                    break;
+                case UNISEX:
+                    ivGender.setImageResource(R.drawable.ic_gender_unisex_on);
+                    break;
+            }
         }
 
         private void setEnabled(boolean enabled) {
@@ -156,6 +171,14 @@ public class PerfumeAdapter extends MjolnirRecyclerAdapter<PerfumeItem> {
         }
 
         private void setListeners(final PerfumeItem perfume, final int position) {
+            if (imageListener != null) {
+                ivImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        imageListener.onImageClick(itemView, perfume, position);
+                    }
+                });
+            }
             if (favoriteListener != null) {
                 cbFavorite.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -190,6 +213,10 @@ public class PerfumeAdapter extends MjolnirRecyclerAdapter<PerfumeItem> {
                 });
             }
         }
+    }
+
+    public interface OnPerfumeImageClickListener {
+        void onImageClick(View view, PerfumeItem perfume, int position);
     }
 
     public interface OnPerfumeFavoriteClickListener {

@@ -146,11 +146,11 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
         final IPerfumeList.View view = (IPerfumeList.View) getView();
         view.showLoading();
 
-        User user = PreferencesUtil.getUser();
+        String token = PreferencesUtil.getToken();
         FavoriteRequestParams params = null;
 
-        if (user != null) {
-            params = FavoriteRequestParams.create(user.token(), request);
+        if (token != null) {
+            params = FavoriteRequestParams.create(token, request);
         }
 
         changeFavoriteUseCase.execute(params,
@@ -168,11 +168,11 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
         final IPerfumeList.View view = (IPerfumeList.View) getView();
         view.showLoading();
 
-        User user = PreferencesUtil.getUser();
+        String token = PreferencesUtil.getToken();
         WishlistedRequestParams params = null;
 
-        if (user != null) {
-            params = WishlistedRequestParams.create(user.token(), request);
+        if (token != null) {
+            params = WishlistedRequestParams.create(token, request);
         }
 
         changeWishlistedUseCase.execute(params,
@@ -190,11 +190,11 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
         final IPerfumeList.View view = (IPerfumeList.View) getView();
         view.showLoading();
 
-        User user = PreferencesUtil.getUser();
+        String token = PreferencesUtil.getToken();
         OwnedRequestParams params = null;
 
-        if (user != null) {
-            params = OwnedRequestParams.create(user.token(), request);
+        if (token != null) {
+            params = OwnedRequestParams.create(token, request);
         }
 
         changeOwnedUseCase.execute(params,
@@ -209,7 +209,9 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
 
     @Override
     protected void cancel() {
+        logoutUseCase.cancel();
         getAllPerfumesUseCase.cancel();
+        getRecommendedPerfumesUseCase.cancel();
         getLikedPerfumesUseCase.cancel();
         getWishlistedPerfumesUseCase.cancel();
         getOwnedPerfumesUseCase.cancel();
@@ -227,7 +229,8 @@ public class PerfumeListPresenter extends Presenter implements IPerfumeList.Pres
                 super.onNext(perfumes);
 
                 lastPage++;
-                reachedLastPerfume = perfumes.size() < 10;
+                reachedLastPerfume = perfumes.size() < 10
+                        || listType == PerfumeListActivity.LIST_TYPE_RECOMMENDED;
 
                 view.addPerfumes(perfumes, clearAdapter);
             }

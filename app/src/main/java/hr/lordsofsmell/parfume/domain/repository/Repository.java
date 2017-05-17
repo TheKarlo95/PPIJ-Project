@@ -10,7 +10,7 @@ import hr.lordsofsmell.parfume.domain.model.request.LoginRequest;
 import hr.lordsofsmell.parfume.domain.model.request.OwnedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.RegisterRequest;
 import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
-import hr.lordsofsmell.parfume.domain.model.response.Parfume;
+import hr.lordsofsmell.parfume.domain.model.response.Perfume;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.domain.model.response.User;
 import hr.lordsofsmell.parfume.domain.repository.network.NetworkDataSource;
@@ -37,13 +37,13 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public Observable<Parfume> getPerfumeProfile(@NonNull long perfumeId) {
-        return ObservableUtils.getFirstNonNull(network.getPerfumeProfile(perfumeId));
+    public Observable<Perfume> getPerfumeProfile(@NonNull String token , long perfumeId) {
+        return ObservableUtils.getFirstNonNull(network.getPerfumeProfile(token ,perfumeId));
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getSimilarParfumes(@NonNull long perfumeId) {
-        return ObservableUtils.getFirstNonNull(network.getSimilarParfumes(perfumeId));
+    public Observable<List<PerfumeItem>> getSimilarParfumes(@NonNull String token , long perfumeId) {
+        return ObservableUtils.getFirstNonNull(network.getSimilarParfumes(token ,perfumeId));
     }
 
     public Completable logout(@NonNull String token) {
@@ -61,8 +61,8 @@ public class Repository implements IRepository {
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getRecommendedParfumes(@Nullable String token, int page) {
-        return ObservableUtils.getFirstNonNull(network.getRecommendedParfumes(token, page));
+    public Observable<List<PerfumeItem>> getRecommendedParfumes(@Nullable String token) {
+        return ObservableUtils.getFirstNonNull(network.getRecommendedParfumes(token));
     }
 
     @Override
@@ -82,19 +82,19 @@ public class Repository implements IRepository {
 
     @Override
     public Completable changeFavorite(@NonNull String token,
-                                           @NonNull FavoriteRequest request) {
+                                      @NonNull FavoriteRequest request) {
         return network.changeFavorite(token, request);
     }
 
     @Override
     public Completable changeWishlisted(@NonNull String token,
-                                             @NonNull WishlistRequest request) {
+                                        @NonNull WishlistRequest request) {
         return network.changeWishlisted(token, request);
     }
 
     @Override
     public Completable changeOwned(@NonNull String token,
-                                        @NonNull OwnedRequest request) {
+                                   @NonNull OwnedRequest request) {
         return network.changeOwned(token, request);
     }
 }

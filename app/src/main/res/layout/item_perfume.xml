@@ -27,7 +27,7 @@
             android:layout_height="200dp"
             android:background="@color/perfumeImageBackground"
             android:contentDescription="@string/perfume_image"
-            android:src="@drawable/ic_perfume_no_image"
+            app:srcCompat="@drawable/ic_perfume_no_image"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -49,6 +49,15 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_perfume_image">
+
+            <ImageView
+                android:id="@+id/iv_perfume_gender"
+                android:layout_width="@dimen/gender_icon_size_small"
+                android:layout_height="@dimen/gender_icon_size_small"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                tools:src="@drawable/ic_gender_male_on"
+                android:contentDescription="Perfume gender"/>
 
             <TextView
                 android:id="@+id/tv_perfume_company"

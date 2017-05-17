@@ -7,8 +7,6 @@ import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 import hr.lordsofsmell.parfume.domain.model.Gender;
 
 @AutoValue
@@ -23,8 +21,7 @@ public abstract class Perfume implements Parcelable {
                                  boolean liked,
                                  boolean owned,
                                  boolean wishlisted,
-                                 String description,
-                                 List<PerfumeItem> similarParfumes) {
+                                 String description) {
         return new AutoValue_Perfume(id,
                 image,
                 company,
@@ -34,8 +31,7 @@ public abstract class Perfume implements Parcelable {
                 liked,
                 owned,
                 wishlisted,
-                description,
-                similarParfumes);
+                description);
     }
 
     @SerializedName("id")
@@ -65,11 +61,8 @@ public abstract class Perfume implements Parcelable {
     @SerializedName("owned")
     public abstract Boolean owned();
 
-    @SerializedName("description")
+    @SerializedName("details")
     public abstract String description();
-
-    @SerializedName("similarParfumes")
-    public abstract List<PerfumeItem> similarParfumes();
 
     public static TypeAdapter<Perfume> typeAdapter(Gson gson) {
         return new AutoValue_Perfume.GsonTypeAdapter(gson);

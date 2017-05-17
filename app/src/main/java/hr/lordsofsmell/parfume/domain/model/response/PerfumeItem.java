@@ -1,5 +1,7 @@
 package hr.lordsofsmell.parfume.domain.model.response;
 
+import android.os.Parcelable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
@@ -8,9 +10,9 @@ import com.google.gson.annotations.SerializedName;
 import hr.lordsofsmell.parfume.domain.model.Gender;
 
 @AutoValue
-public abstract class PerfumeItem {
+public abstract class PerfumeItem implements Parcelable {
 
-    public static PerfumeItem create(Long id,
+    public static PerfumeItem create(long id,
                                      String image,
                                      String company,
                                      String model,
@@ -31,7 +33,7 @@ public abstract class PerfumeItem {
     }
 
     @SerializedName("id")
-    public abstract Long id();
+    public abstract long id();
 
     @SerializedName("url")
     public abstract String image();

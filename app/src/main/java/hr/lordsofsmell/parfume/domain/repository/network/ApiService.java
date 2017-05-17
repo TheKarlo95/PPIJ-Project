@@ -7,7 +7,7 @@ import hr.lordsofsmell.parfume.domain.model.request.LoginRequest;
 import hr.lordsofsmell.parfume.domain.model.request.OwnedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.RegisterRequest;
 import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
-import hr.lordsofsmell.parfume.domain.model.response.Parfume;
+import hr.lordsofsmell.parfume.domain.model.response.Perfume;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.domain.model.response.User;
 import io.reactivex.Completable;
@@ -28,11 +28,13 @@ public interface ApiService {
     @POST("Profile/Register")
     Observable<User> register(@Body RegisterRequest request);
 
-    @GET("users")
-    Observable<Parfume> getPerfumeProfile(@Path("from") long perfumeId);
+    @GET("parfumes/Details/{perfumeId}")
+    Observable<Perfume> getPerfumeProfile(@Header("X-Authorization") String token,
+                                          @Path("perfumeId") long perfumeId);
 
-    @GET("users")
-    Observable<List<PerfumeItem>> getSimilarPerfumes(@Path("from") long perfumeId);
+    @GET("parfumes/Similar/{perfumeId}")
+    Observable<List<PerfumeItem>> getSimilarPerfumes(@Header("X-Authorization") String token,
+                                                     @Path("perfumeId") long perfumeId);
 
     @POST("Profile/Logout")
     Completable logout(@Header("X-Authorization") String token);
@@ -44,9 +46,8 @@ public interface ApiService {
                                                  @Header("name") String name,
                                                  @Header("year") String year);
 
-    @GET("parfumes/{page}")
-    Observable<List<PerfumeItem>> getRecommendedParfumes(@Header("X-Authorization") String token,
-                                                 @Path("page") int page);
+    @GET("parfumes/recommendations")
+    Observable<List<PerfumeItem>> getRecommendedParfumes(@Header("X-Authorization") String token);
 
 
     @GET("parfumes/GetLiked/{page}")

@@ -16,7 +16,7 @@ import hr.lordsofsmell.parfume.domain.model.request.LoginRequest;
 import hr.lordsofsmell.parfume.domain.model.request.OwnedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.RegisterRequest;
 import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
-import hr.lordsofsmell.parfume.domain.model.response.Parfume;
+import hr.lordsofsmell.parfume.domain.model.response.Perfume;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
 import hr.lordsofsmell.parfume.domain.model.response.User;
 import io.reactivex.Completable;
@@ -138,12 +138,12 @@ public class MockRepository implements IRepository {
     }
 
     @Override
-    public Observable<Parfume> getPerfumeProfile(@NonNull long perfumeId) {
+    public Observable<Perfume> getPerfumeProfile(@NonNull String token, long perfumeId) {
         return Observable.empty();
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getSimilarParfumes(@NonNull long perfumeId) {
+    public Observable<List<PerfumeItem>> getSimilarParfumes(@NonNull String token, long perfumeId) {
         return Observable.empty();
     }
 
@@ -183,7 +183,7 @@ public class MockRepository implements IRepository {
     }
 
     @Override
-    public Observable<List<PerfumeItem>> getRecommendedParfumes(@Nullable String token, int page) {
+    public Observable<List<PerfumeItem>> getRecommendedParfumes(@Nullable String token) {
         return Observable.empty();
     }
 
@@ -248,7 +248,7 @@ public class MockRepository implements IRepository {
                 for (int i = 0, max = perfumes.size(); i < max; i++) {
                     PerfumeItem perfume = perfumes.get(i);
 
-                    if (perfume.id().equals(request.parfumeId())) {
+                    if (perfume.id() == request.parfumeId()) {
                         PerfumeItem changedPerfume = perfume.withFavorited(request.favorited());
                         perfumes.remove(i);
                         perfumes.add(i, changedPerfume);
@@ -268,7 +268,7 @@ public class MockRepository implements IRepository {
                 for (int i = 0, max = perfumes.size(); i < max; i++) {
                     PerfumeItem perfume = perfumes.get(i);
 
-                    if (perfume.id().equals(request.parfumeId())) {
+                    if (perfume.id() == request.parfumeId()) {
                         PerfumeItem changedPerfume = perfume.withWishlisted(request.wishlisted());
                         perfumes.remove(i);
                         perfumes.add(i, changedPerfume);
@@ -288,7 +288,7 @@ public class MockRepository implements IRepository {
                 for (int i = 0, max = perfumes.size(); i < max; i++) {
                     PerfumeItem perfume = perfumes.get(i);
 
-                    if (perfume.id().equals(request.parfumeId())) {
+                    if (perfume.id() == request.parfumeId()) {
                         PerfumeItem changedPerfume = perfume.withOwned(request.owned());
                         perfumes.remove(i);
                         perfumes.add(i, changedPerfume);

@@ -2,6 +2,7 @@ package hr.lordsofsmell.parfume.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
@@ -14,7 +15,9 @@ public class ImageUtils {
     private ImageUtils() {
     }
 
-    public static void loadImage(@NonNull Context context, @NonNull ImageView imageView, String url) {
+    public static void loadImage(@NonNull Context context,
+                                 @NonNull ImageView imageView,
+                                 String url) {
         if (url != null) {
             Glide.with(context)
                     .load(url)
@@ -26,7 +29,9 @@ public class ImageUtils {
         }
     }
 
-    public static void loadImage(@NonNull Activity activity, @NonNull ImageView imageView, String url) {
+    public static void loadImage(@NonNull Activity activity,
+                                 @NonNull ImageView imageView,
+                                 String url) {
         if (url != null) {
             Glide.with(activity)
                     .load(url)
@@ -36,5 +41,27 @@ public class ImageUtils {
                     .crossFade()
                     .into(imageView);
         }
+    }
+
+    public static void loadImage(@NonNull Context context,
+                                 @NonNull ImageView imageView,
+                                 @DrawableRes int drawable) {
+        Glide.with(context)
+                .load(drawable)
+                .centerCrop()
+                .thumbnail(0.1f)
+                .crossFade()
+                .into(imageView);
+    }
+
+    public static void loadImage(@NonNull Activity activity,
+                                 @NonNull ImageView imageView,
+                                 @DrawableRes int drawable) {
+        Glide.with(activity)
+                .load(drawable)
+                .centerCrop()
+                .thumbnail(0.1f)
+                .crossFade()
+                .into(imageView);
     }
 }

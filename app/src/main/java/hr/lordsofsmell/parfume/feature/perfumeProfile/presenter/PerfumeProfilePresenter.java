@@ -1,80 +1,78 @@
 package hr.lordsofsmell.parfume.feature.perfumeProfile.presenter;
 
-import android.support.annotation.StringRes;
+import android.support.annotation.NonNull;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
 import hr.lordsofsmell.parfume.R;
-import hr.lordsofsmell.parfume.domain.model.params.GetPerfumeProfileParams;
-import hr.lordsofsmell.parfume.domain.model.params.LikedRequestParams;
+import hr.lordsofsmell.parfume.domain.model.params.FavoriteRequestParams;
 import hr.lordsofsmell.parfume.domain.model.params.OwnedRequestParams;
+import hr.lordsofsmell.parfume.domain.model.params.PerfumeParams;
 import hr.lordsofsmell.parfume.domain.model.params.WishlistedRequestParams;
 import hr.lordsofsmell.parfume.domain.model.request.FavoriteRequest;
 import hr.lordsofsmell.parfume.domain.model.request.OwnedRequest;
 import hr.lordsofsmell.parfume.domain.model.request.WishlistRequest;
-import hr.lordsofsmell.parfume.domain.model.response.Parfume;
+import hr.lordsofsmell.parfume.domain.model.response.Perfume;
 import hr.lordsofsmell.parfume.domain.model.response.PerfumeItem;
-import hr.lordsofsmell.parfume.domain.model.response.User;
+import hr.lordsofsmell.parfume.feature.core.ICore;
+import hr.lordsofsmell.parfume.feature.core.observer.CompletableObserver;
 import hr.lordsofsmell.parfume.feature.core.observer.Observer;
 import hr.lordsofsmell.parfume.feature.core.presenter.Presenter;
 import hr.lordsofsmell.parfume.feature.perfumeProfile.IPerfumeProfile;
 import hr.lordsofsmell.parfume.feature.perfumelist.IPerfumeList;
-import hr.lordsofsmell.parfume.feature.perfumeProfile.IPerfumeProfile;
 import hr.lordsofsmell.parfume.utils.PreferencesUtil;
-
-/**
- * Created by tea03 on 5/16/2017.
- */
 
 public class PerfumeProfilePresenter extends Presenter implements IPerfumeProfile.Presenter {
 
-
     private static final String TAG = "PerfumeProfile";
+
+    private IPerfumeProfile.GetPerfumeUseCase perfumeProfileUseCase;
+    private IPerfumeProfile.GetSimilarPerfumesUseCase getSimilarPerfumesUseCase;
     private IPerfumeList.ChangeLikedUseCase changeFavoriteUseCase;
     private IPerfumeList.ChangeWishlistedUseCase changeWishlistedUseCase;
     private IPerfumeList.ChangeOwnedUseCase changeOwnedUseCase;
-    private IPerfumeProfile.PerfumeProfileUseCase perfumeProfileUseCase;
 
     @Inject
-    PerfumeProfilePresenter(IPerfumeProfile.View view,
+    PerfumeProfilePresenter(@NonNull IPerfumeProfile.View view,
+                            IPerfumeProfile.GetPerfumeUseCase perfumeProfileUseCase,
+                            IPerfumeProfile.GetSimilarPerfumesUseCase getSimilarPerfumesUseCase,
                             IPerfumeList.ChangeLikedUseCase changeFavoriteUseCase,
                             IPerfumeList.ChangeWishlistedUseCase changeWishlistedUseCase,
-                            IPerfumeList.ChangeOwnedUseCase changeOwnedUseCase,
-                            IPerfumeProfile.PerfumeProfileUseCase perfumeProfileUseCase) {
+                            IPerfumeList.ChangeOwnedUseCase changeOwnedUseCase) {
         super(view);
+        this.perfumeProfileUseCase = perfumeProfileUseCase;
+        this.getSimilarPerfumesUseCase = getSimilarPerfumesUseCase;
         this.changeFavoriteUseCase = changeFavoriteUseCase;
         this.changeWishlistedUseCase = changeWishlistedUseCase;
         this.changeOwnedUseCase = changeOwnedUseCase;
-        this.perfumeProfileUseCase = perfumeProfileUseCase;
     }
 
     @Override
-    protected void cancel() {
-        changeFavoriteUseCase.cancel();
-        changeWishlistedUseCase.cancel();
-        changeOwnedUseCase.cancel();
-        perfumeProfileUseCase.cancel();
-    }
-
-
-    @Override
-    public void getSimilarPerfumes(List<PerfumeItem> similarPerfumes) {
-
-    }
-
-    @Override
-    public void presentsPerfumeProfile(GetPerfumeProfileParams params) {
+    public void getSimilarPerfumes(PerfumeParams params) {
         final IPerfumeProfile.View view = (IPerfumeProfile.View) getView();
-        long perfumeId = params.perfumeId();
-        perfumeProfileUseCase.execute(params, new Observer<Parfume>(view, "perfumeProfileUseCase", R.string.get_perfume_profile_error) {
-            @Override
-            public void onNext(Parfume value) {
-                super.onNext(value);
-                view.setPerfumeProfile(value);
-            }
-        });
+        getSimilarPerfumesUseCase.execute(params,
+                new Observer<List<PerfumeItem>>(view, TAG, R.string.get_similar_perfumes_error) {
+                    @Override
+                    public void onNext(List<PerfumeItem> perfumes) {
+                        super.onNext(perfumes);
+                        view.setSimilarPerfumes(perfumes);
+                    }
+                });
+    }
+
+    @Override
+    public void getPerfumeProfile(PerfumeParams params) {
+        final IPerfumeProfile.View view = (IPerfumeProfile.View) getView();
+        perfumeProfileUseCase.execute(params,
+                new Observer<Perfume>(view, TAG, R.string.get_perfume_profile_error) {
+                    @Override
+                    public void onNext(Perfume value) {
+                        super.onNext(value);
+                        view.setPerfumeProfile(value);
+                    }
+                });
     }
 
     @Override
@@ -82,21 +80,15 @@ public class PerfumeProfilePresenter extends Presenter implements IPerfumeProfil
         final IPerfumeProfile.View view = (IPerfumeProfile.View) getView();
         view.showLoading();
 
-        User user = PreferencesUtil.getUser();
-        LikedRequestParams params = null;
+        String token = PreferencesUtil.getToken();
+        FavoriteRequestParams params = null;
 
-        if (user != null) {
-            params = LikedRequestParams.create(user.token(), user.id(), request);
+        if (token != null) {
+            params = FavoriteRequestParams.create(token, request);
         }
-        changeFavoriteUseCase.execute(params,
-                new Observer<Void>(view,
-                        TAG + " ChangeFavoriteUseCase",
-                        R.string.change_liked_error) {
-                    @Override
-                    public void onNext(Void value) {
-                        super.onNext(value);
-                    }
 
+        changeFavoriteUseCase.execute(params,
+                new CompletableObserver(view, TAG, R.string.change_liked_error) {
                     @Override
                     public void onComplete() {
                         super.onComplete();
@@ -110,21 +102,15 @@ public class PerfumeProfilePresenter extends Presenter implements IPerfumeProfil
         final IPerfumeProfile.View view = (IPerfumeProfile.View) getView();
         view.showLoading();
 
-        User user = PreferencesUtil.getUser();
+        String token = PreferencesUtil.getToken();
         WishlistedRequestParams params = null;
 
-        if (user != null) {
-            params = WishlistedRequestParams.create(user.token(), user.id(), request);
+        if (token != null) {
+            params = WishlistedRequestParams.create(token, request);
         }
-        changeWishlistedUseCase.execute(params,
-                new Observer<Void>(view,
-                        TAG + " ChangeWishlistedUseCase",
-                        R.string.change_wishlisted_error) {
-                    @Override
-                    public void onNext(Void value) {
-                        super.onNext(value);
-                    }
 
+        changeWishlistedUseCase.execute(params,
+                new CompletableObserver(view, TAG, R.string.change_wishlisted_error) {
                     @Override
                     public void onComplete() {
                         super.onComplete();
@@ -138,21 +124,15 @@ public class PerfumeProfilePresenter extends Presenter implements IPerfumeProfil
         final IPerfumeProfile.View view = (IPerfumeProfile.View) getView();
         view.showLoading();
 
-        User user = PreferencesUtil.getUser();
+        String token = PreferencesUtil.getToken();
         OwnedRequestParams params = null;
 
-        if (user != null) {
-            params = OwnedRequestParams.create(user.token(), user.id(), request);
+        if (token != null) {
+            params = OwnedRequestParams.create(token, request);
         }
-        changeOwnedUseCase.execute(params,
-                new Observer<Void>(view,
-                        TAG + " ChangeOwnedUseCase",
-                        R.string.change_owned_error) {
-                    @Override
-                    public void onNext(Void value) {
-                        super.onNext(value);
-                    }
 
+        changeOwnedUseCase.execute(params,
+                new CompletableObserver(view, TAG, R.string.change_owned_error) {
                     @Override
                     public void onComplete() {
                         super.onComplete();
@@ -161,28 +141,11 @@ public class PerfumeProfilePresenter extends Presenter implements IPerfumeProfil
                 });
     }
 
-    private Observer<List<PerfumeItem>> getListObserver(String tagAppend,
-                                                        final boolean clearAdapter,
-                                                        @StringRes int errorId) {
-        final IPerfumeList.View view = (IPerfumeList.View) getView();
-        return new Observer<List<PerfumeItem>>(view, TAG + " " + tagAppend, errorId) {
-            @Override
-            public void onNext(List<PerfumeItem> perfumes) {
-                super.onNext(perfumes);
-                view.addPerfumes(perfumes, clearAdapter);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                super.onError(e);
-                view.setRefreshing(false);
-            }
-
-            @Override
-            public void onComplete() {
-                super.onComplete();
-                view.setRefreshing(false);
-            }
-        };
+    @Override
+    protected void cancel() {
+        changeFavoriteUseCase.cancel();
+        changeWishlistedUseCase.cancel();
+        changeOwnedUseCase.cancel();
+        perfumeProfileUseCase.cancel();
     }
 }

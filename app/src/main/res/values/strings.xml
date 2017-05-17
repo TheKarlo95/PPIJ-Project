@@ -13,8 +13,8 @@
     <string name="logout_error">Error happened while logging out</string>
     <string name="login_error">Error happened while logging in</string>
     <string name="register_error">Error happened while registering</string>
-    <string name="get_perfume_profile_error">Error happened while gettin the perfume</string>
-
+    <string name="get_perfume_profile_error">Error happened while getting the perfume info</string>
+    <string name="get_similar_perfumes_error">Error happened while getting list of similar perfumes</string>
 
     <string name="title_activity_perfume_list">PerfumeListActivity</string>
 
@@ -70,4 +70,6 @@
     <string name="register_register_button">Register</string>
     <string name="register_dialog_message">You first need to logout before registering another account.</string>
     <string name="perfume_list_search_parameters">Search parameters</string>
+
+    <string name="perfume_profile_title">%1$s - %2$s</string>
 </resources>

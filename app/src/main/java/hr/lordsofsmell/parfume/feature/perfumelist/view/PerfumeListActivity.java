@@ -46,6 +46,7 @@ import hr.lordsofsmell.parfume.feature.core.OnScrollToBottomListener;
 import hr.lordsofsmell.parfume.feature.core.adapter.PerfumeAdapter;
 import hr.lordsofsmell.parfume.feature.core.view.ActivityView;
 import hr.lordsofsmell.parfume.feature.login.view.LoginActivity;
+import hr.lordsofsmell.parfume.feature.perfumeProfile.view.PerfumeActivity;
 import hr.lordsofsmell.parfume.feature.perfumelist.IPerfumeList;
 import hr.lordsofsmell.parfume.feature.register.view.RegisterActivity;
 import hr.lordsofsmell.parfume.utils.PreferencesUtil;
@@ -53,6 +54,7 @@ import hr.lordsofsmell.parfume.utils.PreferencesUtil;
 public class PerfumeListActivity extends ActivityView
         implements IPerfumeList.View,
         NavigationView.OnNavigationItemSelectedListener,
+        PerfumeAdapter.OnPerfumeImageClickListener,
         PerfumeAdapter.OnPerfumeFavoriteClickListener,
         PerfumeAdapter.OnPerfumeWishlistClickListener,
         PerfumeAdapter.OnPerfumeOwnedClickListener {
@@ -210,6 +212,11 @@ public class PerfumeListActivity extends ActivityView
     }
 
     @Override
+    public void onImageClick(View view, PerfumeItem perfume, int position) {
+        startActivity(PerfumeActivity.createIntent(this, perfume));
+    }
+
+    @Override
     public void onFavoriteClick(View view, PerfumeItem perfume, int position, boolean enabled) {
         if (enabled) {
             presenter.changeFavorite(FavoriteRequest.create(!perfume.favorited(),
@@ -281,7 +288,7 @@ public class PerfumeListActivity extends ActivityView
         mrvPerfumesList.setLayoutManager(new LinearLayoutManager(this));
         mrvPerfumesList.setEmptyView(emptyView);
 
-        adapter = new PerfumeAdapter(this, this, this, this);
+        adapter = new PerfumeAdapter(this, this, this, this, this);
         mrvPerfumesList.setAdapter(adapter);
         mrvPerfumesList.addOnScrollListener(new OnScrollToBottomListener() {
             @Override
@@ -373,6 +380,12 @@ public class PerfumeListActivity extends ActivityView
             }
         } else if (id == R.id.nav_all_perfumes) {
             startActivity(PerfumeListActivity.createIntent(this, LIST_TYPE_ALL_PERFUMES));
+        } else if (id == R.id.nav_recommended) {
+            if (PreferencesUtil.isLoggedIn()) {
+                startActivity(PerfumeListActivity.createIntent(this, LIST_TYPE_RECOMMENDED));
+            } else {
+                startActivity(LoginActivity.createIntent(this, LIST_TYPE_RECOMMENDED));
+            }
         } else if (id == R.id.nav_favorites) {
             if (PreferencesUtil.isLoggedIn()) {
                 startActivity(PerfumeListActivity.createIntent(this, LIST_TYPE_FAVORITES));
@@ -509,7 +522,7 @@ public class PerfumeListActivity extends ActivityView
     }
 
     private void setSearchVisibility(int listType) {
-        if(listType == LIST_TYPE_ALL_PERFUMES) {
+        if (listType == LIST_TYPE_ALL_PERFUMES) {
             llSearchOptions.setVisibility(View.VISIBLE);
         } else {
             llSearchOptions.setVisibility(View.GONE);
